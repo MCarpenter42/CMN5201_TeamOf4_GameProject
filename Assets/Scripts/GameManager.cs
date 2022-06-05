@@ -10,8 +10,11 @@ public class GameManager : Core
     #region [ OBJECTS ]
 
     private static GameManager instance = null;
+    private Controls controlsInstance;
 
     public static Player Player;
+
+    public static LevelController LevelController;
 
     #endregion
 
@@ -85,6 +88,8 @@ public class GameManager : Core
     void Update()
     {
         CalcFPS();
+        HandleInputs();
+
         DebugOnUpdate();
     }
 
@@ -94,15 +99,17 @@ public class GameManager : Core
 
     private void Setup()
     {
+        controlsInstance = gameObject.AddComponent<Controls>();
+        Controls = controlsInstance;
+
         Player = GameObject.FindGameObjectWithTag("Player").GetComponent<Player>();
+        LevelController = FindObjectOfType<LevelController>();
 
         if (firstLoad)
         {
             firstLoad = false;
             OnFirstLoad();
         }
-
-
     }
 
     private void OnFirstLoad()
@@ -123,6 +130,11 @@ public class GameManager : Core
             total += f;
         }
         FPS = (int)((float)frameTimes.Count / total);
+    }
+
+    private void HandleInputs()
+    {
+        LevelController.LevelInputs();
     }
 
     #region [ SETTINGS ]

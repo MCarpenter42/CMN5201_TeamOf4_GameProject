@@ -16,7 +16,13 @@ public class Core : MonoBehaviour
 
     #region [ PROPERTIES ]
 
+    public enum ObjectTypes { Empty, Static, Player, StartDoor, Movable };
 
+    #endregion
+
+    #region [ DELEGATES ]
+
+    public delegate void VoidDelegate();
 
     #endregion
 
@@ -221,6 +227,16 @@ public class Core : MonoBehaviour
         }
     }
 
+    public static List<T> ArrayToList<T>(T[] array)
+    {
+        List<T> listOut = new List<T>();
+        foreach (T item in array)
+        {
+            listOut.Add(item);
+        }
+        return listOut;
+    }
+
     #endregion
 
     #region [ OBJECT HANDLING ]
@@ -262,6 +278,44 @@ public class Core : MonoBehaviour
         }
         return childrenWithTag;
     }
+    
+    // I makes lists of children with a specific component often enough that
+    // this was worth creating as a static function.
+    public static List<GameObject> GetListItemsWithComponent<T>(List<GameObject> objects)
+    {
+        List<GameObject> itemsWithComponent = new List<GameObject>();
+        if (objects.Count > 0)
+        {
+            for (int i = 0; i < objects.Count; i++)
+            {
+                GameObject item = objects[i];
+                T itemComponent = item.GetComponent<T>();
+                if (!itemComponent.Equals(null))
+                {
+                    itemsWithComponent.Add(item);
+                }
+            }
+        }
+        return itemsWithComponent;
+    }
+
+    // Pretty much the same deal here as with the "children with component" function.
+    public static List<GameObject> GetListItemsWithTag(List<GameObject> objects, string tag)
+    {
+        List<GameObject> itemsWithTag = new List<GameObject>();
+        if (objects.Count > 0)
+        {
+            for (int i = 0; i < objects.Count; i++)
+            {
+                GameObject item = objects[0];
+                if (item.CompareTag(tag))
+                {
+                    itemsWithTag.Add(item);
+                }
+            }
+        }
+        return itemsWithTag;
+    }
 
     public static object GetProperty(object obj, string propertyName)
     {
@@ -291,6 +345,7 @@ public class Core : MonoBehaviour
     {
         return Input.GetKeyUp(input.Key);
     }
-    
+
     #endregion
+
 }

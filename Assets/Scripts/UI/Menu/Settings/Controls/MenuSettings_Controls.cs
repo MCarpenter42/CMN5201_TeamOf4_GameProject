@@ -107,15 +107,20 @@ public class MenuSettings_Controls : Menu
         {
             foreach (KeyValuePair<KeyCode, string> kvp in Controls.KeyNames)
             {
-                if (kvp.Key == KeyCode.Escape)
-                {
-                    setNewKey = false;
-                    break;
-                }
-                else
+                if (Input.GetKeyDown(kvp.Key))
                 {
                     pressedKey = kvp.Key;
+                    if (kvp.Key == KeyCode.Escape)
+                    {
+                        setNewKey = false;
+                    }
+                    break;
                 }
+            }
+
+            if (pressedKey != KeyCode.None)
+            {
+                break;
             }
 
             yield return new WaitForEndOfFrame();

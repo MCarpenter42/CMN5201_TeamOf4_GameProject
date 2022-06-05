@@ -6,6 +6,7 @@ public static class InterpDelta
 {
     public static float CosCurve(float deltaIn)
     {
+        deltaIn = Mathf.Clamp(deltaIn, 0.0f, 1.0f);
         float rad = deltaIn * Mathf.PI;
         float cos = -Mathf.Cos(rad);
         return (cos + 1.0f) * 0.5f;

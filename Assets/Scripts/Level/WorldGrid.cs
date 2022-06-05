@@ -10,71 +10,41 @@ public class WorldGrid : Core
 {
     #region [ PROPERTIES ]
 
-    [SerializeField] float gridCellSize = 2.0f;
-    private LevelObject[,] worldGrid;
-    [SerializeField] Vector2Int worldGridSize;
-    [SerializeField] Vector3 worldGridOffset;
-
-    #endregion
+    public int[] gridSize = new int[] { 0, 0 };
+    public Vector3 gridOffset = new Vector3();
+	
+	#endregion
 
     /* - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
-
-    #region [ BUILT-IN UNITY FUNCTIONS ]
-
-    void Awake()
+	
+    public void GetGridSize(List<FloorTile> tiles)
     {
-        GridSetup();
-    }
-
-    #endregion
-
-    /* - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
-
-    private void GridSetup()
-    {
-        int cellsX = worldGridSize.x;
-        int cellsZ = worldGridSize.y;
-        worldGrid = new LevelObject[cellsX, cellsZ];
-
-        for (int i = 0; i < cellsX; i++)
+        List<float> xVals = new List<float>();
+        List<float> zVals = new List<float>();
+        
+        foreach (FloorTile tile in tiles)
         {
-            for (int j = 0; j < cellsZ; j++)
+            float x = tile.transform.position.x;
+            float z = tile.transform.position.z;
+            if (!xVals.Contains(x))
             {
-                worldGrid[i, j] = null;
+                xVals.Add(x);
+            }
+            if (!zVals.Contains(z))
+            {
+                zVals.Add(z);
             }
         }
 
-        worldGridOffset[0] = -0.5f * (float)worldGridSize.x * gridCellSize;
-        worldGridOffset[1] = -0.5f * (float)worldGridSize.x * gridCellSize;
+        gridSize[0] = xVals.Count;
+        gridSize[1] = zVals.Count;
     }
 
-    public bool MoveObject(int[] gridPos, int[] direction)
+    public void OffsetFromScale(float scale)
     {
-        bool moveSucceeded = true;
-
-        int[] newPos = gridPos;
-        newPos[0] += direction[0];
-        newPos[1] += direction[1];
-
-        if (newPos[0] >= 0 && newPos[0] < worldGrid.GetLength(0) && newPos[1] >= 0 && newPos[1] < worldGrid.GetLength(1))
-        {
-            if (worldGrid[newPos[0], newPos[1]] != null)
-            {
-                moveSucceeded = false;
-            }
-        }
-        else
-        {
-            moveSucceeded = false;
-        }
-
-        if (moveSucceeded)
-        {
-            LevelObject moveObj = worldGrid[gridPos[0], gridPos[1]];
-            worldGrid[gridPos[0], gridPos[1]] = null;
-            worldGrid[newPos[0], newPos[1]] = moveObj;
-        }
-
-        return moveSucceeded;
+        float width = (float)(gridSize[0] - 1) * scale;
+        float depth = (float)(gridSize[1] - 1) * scale;
+        gridOffset.x = width * -0.5f;
+        gridOffset.z = depth * -0.5f;
     }
 }
