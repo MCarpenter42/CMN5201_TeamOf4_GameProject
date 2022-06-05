@@ -154,6 +154,18 @@ public class LevelController : Core
             {
                 player.PlayerMove(-Vector3.right, playerMoveTime);
             }
+
+            if (GetInputDown(Controls.Interaction.GrabRelease))
+            {
+                if (player.objectMoving != null)
+                {
+                    player.Release();
+                }
+                else if (player.canGrabFacing && player.objectMoving == null)
+                {
+                    player.Grab();
+                }
+            }
         }
     }
 

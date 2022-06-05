@@ -16,6 +16,8 @@ public class GameManager : Core
 
     public static LevelController LevelController;
 
+    public static UIController UIController;
+
     #endregion
 
     #region [ PROPERTIES ]
@@ -104,6 +106,7 @@ public class GameManager : Core
 
         Player = GameObject.FindGameObjectWithTag("Player").GetComponent<Player>();
         LevelController = FindObjectOfType<LevelController>();
+        UIController = FindObjectOfType<UIController>();
 
         if (firstLoad)
         {

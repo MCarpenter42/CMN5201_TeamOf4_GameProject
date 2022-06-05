@@ -5,6 +5,7 @@ TagManager:
   serializedVersion: 2
   tags:
   - WorldSpace
+  - Text
   layers:
   - Default
   - TransparentFX

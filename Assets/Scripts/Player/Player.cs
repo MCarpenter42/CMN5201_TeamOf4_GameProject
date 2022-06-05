@@ -80,13 +80,36 @@ public class Player : LevelObject
         }
         else
         {
-            if (gridMovement.normalized == -objectDir)
+            Debug.Log(gridMovement.normalized + " | " + objectDir.normalized);
+            if (gridMovement.normalized == -objectDir.normalized)
             {
-
+                bool obstructed = Physics.Raycast(transform.position, dir, GameManager.LevelController.gridCellScale * 1.45f);
+                if (!obstructed)
+                {
+                    Vector3 targetPos = transform.position + dir * GameManager.LevelController.gridCellScale;
+                    bool walkable = Physics.Raycast(targetPos, Vector3.down, GameManager.LevelController.gridCellScale * 1.10f);
+                    if (walkable)
+                    {
+                        Move(gridMovement, animTime);
+                        objectMoving.Move(gridMovement, animTime);
+                        StartCoroutine(DelayedCheckObjectPushable(gridMovement, animTime));
+                    }
+                }
             }
-            else if (gridMovement.normalized == objectDir)
+            else if (gridMovement.normalized == objectDir.normalized)
             {
-
+                bool obstructed = Physics.Raycast(objectMoving.transform.position, dir, GameManager.LevelController.gridCellScale * 1.45f);
+                if (!obstructed)
+                {
+                    Vector3 targetPos = objectMoving.transform.position + dir * GameManager.LevelController.gridCellScale;
+                    bool walkable = Physics.Raycast(targetPos, Vector3.down, GameManager.LevelController.gridCellScale * 1.10f);
+                    if (walkable)
+                    {
+                        Move(gridMovement, animTime);
+                        objectMoving.Move(gridMovement, animTime);
+                        StartCoroutine(DelayedCheckObjectPushable(gridMovement, animTime));
+                    }
+                }
             }
         }
         ChangeFacing(gridMovement);
@@ -94,23 +117,22 @@ public class Player : LevelObject
 
     public void ChangeFacing(Vector3 dir)
     {
-        float angleFromUp = 0.0f;
         if (dir.x >= 0.0f)
         {
-            angleFromUp = ToDeg(Mathf.Acos(dir.z / dir.magnitude));
+            facingDir = ToDeg(Mathf.Acos(dir.z / dir.magnitude));
         }
         else
         {
-            angleFromUp = 360.0f - ToDeg(Mathf.Acos(dir.z / dir.magnitude));
+            facingDir = 360.0f - ToDeg(Mathf.Acos(dir.z / dir.magnitude));
         }
 
         if (dirInd == null)
         {
-            Debug.Log(angleFromUp);
+            Debug.Log(facingDir);
         }
         else
         {
-            dirInd.transform.eulerAngles = new Vector3(0.0f, angleFromUp, 0.0f);
+            dirInd.transform.eulerAngles = new Vector3(0.0f, facingDir, 0.0f);
         }
 
         CheckObjectPushable(dir);
@@ -118,6 +140,7 @@ public class Player : LevelObject
 
     public void CheckObjectPushable(Vector3 dir)
     {
+
         RaycastHit hit;
         Physics.Raycast(transform.position, dir, out hit, GameManager.LevelController.gridCellScale * 1.10f);
         if (hit.collider != null)
@@ -137,12 +160,46 @@ public class Player : LevelObject
             canGrabFacing = false;
         }
 
-        Debug.Log(canGrabFacing);
+        Prompt interactPrompt;
+        GameManager.UIController.hud.prompts.TryGetValue("Interact", out interactPrompt);
+
+        if (canGrabFacing && objectMoving == null)
+        {
+            interactPrompt.gameObject.SetActive(true);
+        }
+        else
+        {
+            interactPrompt.gameObject.SetActive(false);
+        }
     }
 
     public IEnumerator DelayedCheckObjectPushable(Vector3 dir, float time)
     {
         yield return new WaitForSecondsRealtime(time);
         CheckObjectPushable(dir);
+    }
+
+    public bool Grab()
+    {
+        bool grabSuccess = false;
+        Vector3 grabDir = new Vector3(Mathf.Sin(ToRad(facingDir)), 0.0f, Mathf.Cos(ToRad(facingDir)));
+        Debug.Log(facingDir + ", " + grabDir);
+        RaycastHit hit;
+        Physics.Raycast(transform.position, grabDir, out hit, GameManager.LevelController.gridCellScale * 1.0f);
+        GameObject hitObject = hit.collider.gameObject;
+        if (hitObject.GetComponent<LevelObject>() != null)
+        {
+            grabSuccess = true;
+            objectMoving = hitObject.GetComponent<LevelObject>();
+            objectDir = grabDir;
+            CheckObjectPushable(grabDir);
+        }
+        return grabSuccess;
+    }
+
+    public void Release()
+    {
+        objectMoving = null;
+        objectDir = Vector3.zero;
     }
 }
