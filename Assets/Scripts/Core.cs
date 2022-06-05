@@ -237,6 +237,14 @@ public class Core : MonoBehaviour
         return listOut;
     }
 
+    public static void CopyListData<T>(List<T> source, List<T> destination)
+    {
+        for (int i = 0; i < source.Count; i++)
+        {
+            destination.Add(source[i]);
+        }
+    }
+
     #endregion
 
     #region [ OBJECT HANDLING ]

@@ -14,6 +14,7 @@ public class Player : LevelObject
     [HideInInspector] public bool canGrabFacing = false;
     [HideInInspector] public LevelObject objectMoving = null;
     [HideInInspector] public Vector3 objectDir = Vector3.zero;
+    private Vector3 checkOffset = new Vector3(0.0f, -0.9f, 0.0f);
 
     #endregion
 
@@ -66,11 +67,11 @@ public class Player : LevelObject
         Vector3 dir = gridMovement.normalized;
         if (objectMoving == null)
         {
-            bool obstructed = Physics.Raycast(transform.position, dir, GameManager.LevelController.gridCellScale * 1.45f);
+            bool obstructed = Physics.Raycast(transform.position + checkOffset, dir, GameManager.LevelController.gridCellScale * 1.45f);
             if (!obstructed)
             {
-                Vector3 targetPos = transform.position + dir * GameManager.LevelController.gridCellScale;
-                bool walkable = Physics.Raycast(targetPos, Vector3.down, GameManager.LevelController.gridCellScale * 1.10f);
+                Vector3 targetPos = transform.position + checkOffset + dir * GameManager.LevelController.gridCellScale;
+                bool walkable = Physics.Raycast(targetPos, Vector3.down, GameManager.LevelController.gridCellScale * 0.20f);
                 if (walkable)
                 {
                     Move(gridMovement, animTime);
@@ -80,14 +81,13 @@ public class Player : LevelObject
         }
         else
         {
-            Debug.Log(gridMovement.normalized + " | " + objectDir.normalized);
             if (gridMovement.normalized == -objectDir.normalized)
             {
-                bool obstructed = Physics.Raycast(transform.position, dir, GameManager.LevelController.gridCellScale * 1.45f);
+                bool obstructed = Physics.Raycast(transform.position + checkOffset, dir, GameManager.LevelController.gridCellScale * 1.45f);
                 if (!obstructed)
                 {
-                    Vector3 targetPos = transform.position + dir * GameManager.LevelController.gridCellScale;
-                    bool walkable = Physics.Raycast(targetPos, Vector3.down, GameManager.LevelController.gridCellScale * 1.10f);
+                    Vector3 targetPos = transform.position + checkOffset + dir * GameManager.LevelController.gridCellScale;
+                    bool walkable = Physics.Raycast(targetPos, Vector3.down, GameManager.LevelController.gridCellScale * 0.20f);
                     if (walkable)
                     {
                         Move(gridMovement, animTime);
@@ -98,11 +98,11 @@ public class Player : LevelObject
             }
             else if (gridMovement.normalized == objectDir.normalized)
             {
-                bool obstructed = Physics.Raycast(objectMoving.transform.position, dir, GameManager.LevelController.gridCellScale * 1.45f);
+                bool obstructed = Physics.Raycast(objectMoving.transform.position + checkOffset, dir, GameManager.LevelController.gridCellScale * 1.45f);
                 if (!obstructed)
                 {
-                    Vector3 targetPos = objectMoving.transform.position + dir * GameManager.LevelController.gridCellScale;
-                    bool walkable = Physics.Raycast(targetPos, Vector3.down, GameManager.LevelController.gridCellScale * 1.10f);
+                    Vector3 targetPos = objectMoving.transform.position + checkOffset + dir * GameManager.LevelController.gridCellScale;
+                    bool walkable = Physics.Raycast(targetPos, Vector3.down, GameManager.LevelController.gridCellScale * 0.20f);
                     if (walkable)
                     {
                         Move(gridMovement, animTime);
@@ -140,9 +140,8 @@ public class Player : LevelObject
 
     public void CheckObjectPushable(Vector3 dir)
     {
-
         RaycastHit hit;
-        Physics.Raycast(transform.position, dir, out hit, GameManager.LevelController.gridCellScale * 1.10f);
+        Physics.Raycast(transform.position + checkOffset, dir, out hit, GameManager.LevelController.gridCellScale * 1.10f);
         if (hit.collider != null)
         {
             LevelObject obj = hit.collider.gameObject.GetComponent<LevelObject>();
@@ -183,9 +182,8 @@ public class Player : LevelObject
     {
         bool grabSuccess = false;
         Vector3 grabDir = new Vector3(Mathf.Sin(ToRad(facingDir)), 0.0f, Mathf.Cos(ToRad(facingDir)));
-        Debug.Log(facingDir + ", " + grabDir);
         RaycastHit hit;
-        Physics.Raycast(transform.position, grabDir, out hit, GameManager.LevelController.gridCellScale * 1.0f);
+        Physics.Raycast(transform.position + checkOffset, grabDir, out hit, GameManager.LevelController.gridCellScale * 1.0f);
         GameObject hitObject = hit.collider.gameObject;
         if (hitObject.GetComponent<LevelObject>() != null)
         {

@@ -101,7 +101,6 @@ public class LevelController : Core
     private void SetTileColours()
     {
         FloorTile[,] sortedTiles = new FloorTile[worldGrid.gridSize[0], worldGrid.gridSize[1]];
-        Debug.Log(worldGrid.gridSize[0] + ", " + worldGrid.gridSize[1]);
         foreach (FloorTile tile in floorTiles)
         {
             int a = (int)tile.gridPos.x;
