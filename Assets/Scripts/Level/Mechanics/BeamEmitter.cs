@@ -11,6 +11,7 @@ public class BeamEmitter : Core
     #region [ PROPERTIES ]
 
     [SerializeField] GameObject beamPrefab;
+    [SerializeField] int beamID = 0;
 
     public bool isEmitting = true;
 
@@ -18,6 +19,9 @@ public class BeamEmitter : Core
     private List<Vector3> beamPath = new List<Vector3>();
     private GameObject beamObj;
     private LineRenderer lightBeam;
+
+    private bool validTriggerHit = false;
+    private LightTrigger triggerCurrent = null;
 	
 	#endregion
 
@@ -69,22 +73,6 @@ public class BeamEmitter : Core
 
     /* - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
 	
-    /*private void EmitBeam()
-    {
-        beamPoints.Clear();
-        beamPoints.Add(transform.position);
-        int n = 0;
-        Vector3[] output = new Vector3[] { transform.position, transform.forward };
-        bool castAgain = true;
-        while (castAgain)
-        {
-            output = BeamCast(output[0], output[1], n);
-            n++;
-            castAgain = !(output[1] == Vector3.zero);
-        }
-        DrawBeam();
-    }*/
-    
     private void EmitBeam()
     {
         beamPoints.Clear();
@@ -122,6 +110,20 @@ public class BeamEmitter : Core
             }
             else
             {
+                if (triggerCurrent == null && hitObj.GetComponent<LightTrigger>() != null)
+                {
+                    LightTrigger triggerHit = hitObj.GetComponent<LightTrigger>();
+                    if (triggerHit.IDCheck(beamID))
+                    {
+                        triggerCurrent = triggerHit;
+                        triggerCurrent.ChangeTriggerState(true);
+                    }
+                }
+                else if (triggerCurrent != null && hitObj.GetComponent<LightTrigger>() == null)
+                {
+                    triggerCurrent.ChangeTriggerState(false);
+                    triggerCurrent = null;
+                }
                 return new Vector3[] { hit.point, Vector3.zero };
             }
         }
@@ -131,11 +133,11 @@ public class BeamEmitter : Core
         }
     }
 
-    private void DrawIfNew()
+    private bool CheckNew()
     {
+        bool pathChanged = false;
         if (beamPoints.Count == beamPath.Count)
         {
-            bool pathChanged = false;
             for (int i = 0; i < beamPoints.Count; i++)
             {
                 if (beamPoints[i].x != beamPath[i].x || beamPoints[i].z != beamPath[i].z)
@@ -144,15 +146,12 @@ public class BeamEmitter : Core
                     break;
                 }
             }
-            if (pathChanged)
-            {
-                DrawBeam();
-            }
         }
         else
         {
-            DrawBeam();
+            pathChanged = true;
         }
+        return pathChanged;
     }
 
     private void DrawBeam()

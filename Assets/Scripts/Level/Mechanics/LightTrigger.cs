@@ -3,14 +3,19 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.Events;
 using UnityEditor;
 using TMPro;
 
 public class LightTrigger : Core
 {
-	#region [ PROPERTIES ]
-	
-	
+    #region [ PROPERTIES ]
+
+    [SerializeField] int validID = 0;
+    private bool triggerState;
+
+    [SerializeField] UnityEvent falseEvent;
+    [SerializeField] UnityEvent trueEvent;
 	
 	#endregion
 
@@ -18,28 +23,39 @@ public class LightTrigger : Core
 
 	#region [ BUILT-IN UNITY FUNCTIONS ]
 
-    void Awake()
-    {
-        
-    }
-
     void Start()
     {
-        
+        ChangeTriggerState(false);
     }
 	
-    void Update()
-    {
-        
-    }
-
-    void FixedUpdate()
-    {
-        
-    }
-
 	#endregion
 
     /* - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
 	
+    public bool IDCheck(int beamID)
+    {
+        return (beamID == validID);
+    }
+
+    public void ChangeTriggerState(bool state)
+    {
+        if (triggerState != state)
+        {
+            if (state)
+            {
+                if (trueEvent != null)
+                {
+                    trueEvent.Invoke();
+                }
+            }
+            else
+            {
+                if (falseEvent != null)
+                {
+                    falseEvent.Invoke();
+                }
+            }
+            triggerState = state;
+        }
+    }
 }
