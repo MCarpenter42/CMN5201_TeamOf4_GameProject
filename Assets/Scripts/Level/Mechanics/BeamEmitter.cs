@@ -173,7 +173,6 @@ public class BeamEmitter : Core
             }
             endPos = beamPath[i];
         }
-        Debug.Log(beamLength + " | " + endPos);
         lightBeam.SetPositions(positions);
     }
 }

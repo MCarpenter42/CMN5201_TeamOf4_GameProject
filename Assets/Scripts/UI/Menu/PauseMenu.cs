@@ -5,40 +5,51 @@ using UnityEngine.SceneManagement;
 
 public class PauseMenu : Core
 {
-    public static bool gamePaused = false;
+    // Having a cariable local to this script to log whether the game is paused isn't
+    // necessary - use GameManager.isPaused instead!
+    //public static bool gamePaused = false;
     public GameObject pauseMenuUI;
+
     // Update is called once per frame
     void Update()
     {
-        if (Input.GetKeyDown(KeyCode.P))
+        if (Input.GetKeyDown(Controls.General.Pause.Key))
         {
-            if (gamePaused)
+            if (GameManager.isPaused)
             {
-                Resume();
+                PauseMenuResume();
             }
             else
             {
-                Pause();
+                PauseMenuPause();
             }
         }
  
     }
-    public void Resume()
+
+    public void PauseMenuResume()
     {
-        pauseMenuUI.SetActive(false);
+        /*pauseMenuUI.SetActive(false);
         Time.timeScale = 1f;
-        gamePaused = false;
+        gamePaused = false;*/
+        pauseMenuUI.SetActive(false);
+        Resume();
     }
-    public void Pause()
+
+    public void PauseMenuPause()
     {
-        pauseMenuUI.SetActive(true);
+        /*pauseMenuUI.SetActive(true);
         Time.timeScale = 0f;
-        gamePaused = true;
+        gamePaused = true;*/
+        Pause();
+        pauseMenuUI.SetActive(true);
     }
+
     public void LoadMenu()
     {
         Debug.Log("Test");
     }
+
     public void Quit()
     {
         Application.Quit();
