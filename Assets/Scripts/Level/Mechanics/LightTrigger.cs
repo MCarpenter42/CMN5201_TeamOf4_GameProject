@@ -32,11 +32,6 @@ public class LightTrigger : Core
 
     /* - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
 	
-    public bool IDCheck(int beamID)
-    {
-        return (beamID == validID);
-    }
-    
     public bool ColourCheck(BeamColours colour)
     {
         return (colour == triggerColour);
