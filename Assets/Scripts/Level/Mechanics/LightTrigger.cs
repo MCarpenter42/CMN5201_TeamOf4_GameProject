@@ -11,7 +11,7 @@ public class LightTrigger : Core
 {
     #region [ PROPERTIES ]
 
-    [SerializeField] int validID = 0;
+    [SerializeField] BeamColours triggerColour = BeamColours.White;
     private bool triggerState;
 
     [SerializeField] UnityEvent falseEvent;
@@ -35,6 +35,11 @@ public class LightTrigger : Core
     public bool IDCheck(int beamID)
     {
         return (beamID == validID);
+    }
+    
+    public bool ColourCheck(BeamColours colour)
+    {
+        return (colour == triggerColour);
     }
 
     public void ChangeTriggerState(bool state)

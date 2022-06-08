@@ -11,7 +11,7 @@ public class BeamEmitter : Core
     #region [ PROPERTIES ]
 
     [SerializeField] GameObject beamPrefab;
-    [SerializeField] int beamID = 0;
+    [SerializeField] BeamColours beamColour = BeamColours.White;
 
     public bool isEmitting = true;
 
@@ -44,6 +44,31 @@ public class BeamEmitter : Core
             if (lnRndr != null)
             {
                 lightBeam = lnRndr;
+
+                Gradient gradient = new Gradient();
+                switch (beamColour)
+                {
+                    case BeamColours.White:
+                        gradient.SetKeys(new GradientColorKey[] { new GradientColorKey(new Color(1.0f, 1.0f, 1.0f), 0.0f) }, new GradientAlphaKey[] { new GradientAlphaKey(1.0f, 0.0f) });
+                        break;
+                        
+                    case BeamColours.Red:
+                        gradient.SetKeys(new GradientColorKey[] { new GradientColorKey(new Color(1.0f, 0.0f, 0.0f), 0.0f) }, new GradientAlphaKey[] { new GradientAlphaKey(1.0f, 0.0f) });
+                        break;
+                        
+                    case BeamColours.Green:
+                        gradient.SetKeys(new GradientColorKey[] { new GradientColorKey(new Color(0.0f, 1.0f, 0.0f), 0.0f) }, new GradientAlphaKey[] { new GradientAlphaKey(1.0f, 0.0f) });
+                        break;
+                        
+                    case BeamColours.Blue:
+                        gradient.SetKeys(new GradientColorKey[] { new GradientColorKey(new Color(0.0f, 0.0f, 1.0f), 0.0f) }, new GradientAlphaKey[] { new GradientAlphaKey(1.0f, 0.0f) });
+                        break;
+
+                    default:
+                        gradient.SetKeys(new GradientColorKey[] { new GradientColorKey(new Color(1.0f, 1.0f, 1.0f), 0.0f) }, new GradientAlphaKey[] { new GradientAlphaKey(1.0f, 0.0f) });
+                        break;
+                }
+                lightBeam.colorGradient = gradient;
             }
             else
             {
@@ -113,7 +138,7 @@ public class BeamEmitter : Core
                 if (triggerCurrent == null && hitObj.GetComponent<LightTrigger>() != null)
                 {
                     LightTrigger triggerHit = hitObj.GetComponent<LightTrigger>();
-                    if (triggerHit.IDCheck(beamID))
+                    if (triggerHit.ColourCheck(beamColour))
                     {
                         triggerCurrent = triggerHit;
                         triggerCurrent.ChangeTriggerState(true);

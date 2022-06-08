@@ -17,6 +17,7 @@ public class Core : MonoBehaviour
     #region [ PROPERTIES ]
 
     public enum ObjectTypes { Empty, Static, Player, StartDoor, Movable };
+    public enum BeamColours { White, Red, Green, Blue };
 
     #endregion
 
