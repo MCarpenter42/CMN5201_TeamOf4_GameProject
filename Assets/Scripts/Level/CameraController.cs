@@ -6,11 +6,13 @@ using UnityEngine.UI;
 using UnityEditor;
 using TMPro;
 
-public class RotatableObject : LevelObject
+public class CameraController : Core
 {
-	#region [ PROPERTIES ]
-	
-	
+    #region [ PROPERTIES ]
+
+    private GameObject cameraMount;
+    [SerializeField] bool useLevelGridScale = false;
+    [SerializeField] List<Vector3> cameraPoints = new List<Vector3>() { Vector3.zero };
 	
 	#endregion
 
@@ -20,24 +22,21 @@ public class RotatableObject : LevelObject
 
     void Awake()
     {
-        
+        cameraMount = transform.GetChild(0).gameObject;
     }
 
     void Start()
     {
-        
+        if (useLevelGridScale)
+        {
+            cameraMount.transform.position = cameraPoints[0] * GameManager.LevelController.gridCellScale;
+        }
+        else
+        {
+            cameraMount.transform.position = cameraPoints[0];
+        }
     }
 	
-    void Update()
-    {
-        
-    }
-
-    void FixedUpdate()
-    {
-        
-    }
-
 	#endregion
 
     /* - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */

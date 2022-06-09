@@ -81,6 +81,7 @@ public class Player : LevelObject
         }
         else
         {
+            GetObjectMovingDir();
             if (gridMovement.normalized == -objectDir.normalized)
             {
                 bool obstructed = Physics.Raycast(transform.position + checkOffset, dir, GameManager.LevelController.gridCellScale * 1.45f);
@@ -117,14 +118,7 @@ public class Player : LevelObject
 
     public void ChangeFacing(Vector3 dir)
     {
-        if (dir.x >= 0.0f)
-        {
-            facingDir = ToDeg(Mathf.Acos(dir.z / dir.magnitude));
-        }
-        else
-        {
-            facingDir = 360.0f - ToDeg(Mathf.Acos(dir.z / dir.magnitude));
-        }
+        facingDir = GetGridBearing(dir);
 
         if (dirInd == null)
         {
@@ -132,7 +126,7 @@ public class Player : LevelObject
         }
         else
         {
-            dirInd.transform.eulerAngles = new Vector3(0.0f, facingDir, 0.0f);
+            pivot.transform.eulerAngles = new Vector3(0.0f, facingDir, 0.0f);
         }
 
         CheckObjectPushable(dir);
@@ -145,7 +139,7 @@ public class Player : LevelObject
         if (hit.collider != null)
         {
             LevelObject obj = hit.collider.gameObject.GetComponent<LevelObject>();
-            if (obj != null && obj.type == ObjectTypes.Movable)
+            if (obj != null && obj.movable)
             {
                 canGrabFacing = true;
             }
@@ -199,5 +193,16 @@ public class Player : LevelObject
     {
         objectMoving = null;
         objectDir = Vector3.zero;
+    }
+
+    public Vector3 GetObjectMovingDir()
+    {
+        float x = objectMoving.transform.position.x - transform.position.x;
+        float z = objectMoving.transform.position.z - transform.position.z;
+        //Debug.Log(x + ", " + z);
+        Vector3 dirObjectMoving = new Vector3(x, 0.0f, z);
+        float angleObjectMoving = GetGridBearing(dirObjectMoving);
+        objectDir = new Vector3(Mathf.Sin(ToRad(angleObjectMoving)), 0.0f, Mathf.Cos(ToRad(angleObjectMoving)));
+        return objectDir;
     }
 }

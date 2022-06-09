@@ -16,6 +16,11 @@ public class LevelObject : Core
 
     public ObjectTypes type;
 
+    protected GameObject pivot;
+
+    public bool movable = false;
+    public bool rotatable = false;
+
     #endregion
 
     /* - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
@@ -48,29 +53,52 @@ public class LevelObject : Core
 
     protected void OnAwake()
     {
-        
+        GetComponents();
     }
     
     protected void OnStart()
     {
-
+        GetFacing();
     }
 
     /* - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
 
+    protected void GetComponents()
+    {
+        if (GetChildrenWithTag(gameObject, "Pivot").Count > 0)
+        {
+            pivot = GetChildrenWithTag(gameObject, "Pivot")[0];
+        }
+    }
+
     public Vector3 GetGridPos()
     {
-        Vector3 pos = transform.position;
-        Vector3 gridPos = Vector3.zero;
-        gridPos.x = pos.x - GameManager.LevelController.worldGrid.gridOffset.x;
-        gridPos.z = pos.z - GameManager.LevelController.worldGrid.gridOffset.z;
-        gridPos.x /= GameManager.LevelController.gridCellScale;
-        gridPos.z /= GameManager.LevelController.gridCellScale;
-        this.gridPos = gridPos;
-        //Debug.Log(transform.position + ", " + gridPos);
+        gridPos = transform.position / GameManager.LevelController.gridCellScale;
         return gridPos;
     }
 
+    public float GetFacing()
+    {
+        float facing = 0.0f;
+        if (pivot != null)
+        {
+            facingDir = WrapClamp(pivot.transform.eulerAngles.x, 0.0f, 360.0f);
+        }
+        return facing;
+    }
+
+    public float GetGridBearing(Vector3 dir)
+    {
+        if (dir.x >= 0.0f)
+        {
+            return ToDeg(Mathf.Acos(dir.z / dir.magnitude));
+        }
+        else
+        {
+            return 360.0f - ToDeg(Mathf.Acos(dir.z / dir.magnitude));
+        }
+    }
+    
     public void Move(Vector3 gridMovement)
     {
         if (!isMoving)
@@ -87,7 +115,7 @@ public class LevelObject : Core
         }
     }
 
-    private IEnumerator MoveAnim(Vector3 gridMovement, float animTime)
+    protected IEnumerator MoveAnim(Vector3 gridMovement, float animTime)
     {
         isMoving = true;
 
@@ -107,6 +135,79 @@ public class LevelObject : Core
 
         GetGridPos();
 
+        isMoving = false;
+    }
+
+    public void Rotate(float gridRot, float animTime)
+    {
+        StartCoroutine(RotateAnim(gridRot, animTime));
+    }
+
+    protected IEnumerator RotateAnim(float gridRot, float animTime)
+    {
+        isMoving = true;
+
+        int animFrames = (int)(animTime * 200.0f);
+        float animFrameTime = animTime / (float)animFrames;
+        float rotAngle = gridRot * 90.0f;
+        float rotStep = rotAngle / (float)animFrames;
+
+        for (int i = 1; i <= animFrames; i++)
+        {
+            yield return new WaitForSecondsRealtime(animFrameTime);
+            if (pivot != null)
+            {
+                pivot.transform.Rotate(Vector3.up, rotStep);
+            }
+            facingDir += rotStep;
+        }
+        facingDir = WrapClamp(facingDir, 0.0f, 360.0f);
+
+        isMoving = false;
+    }
+    
+    public void RotateAround(Vector3 gridPivot, float gridRot, float animTime)
+    {
+        StartCoroutine(RotateAroundAnim(gridPivot, gridRot, animTime));
+    }
+
+    protected IEnumerator RotateAroundAnim(Vector3 gridPivot, float gridRot, float animTime)
+    {
+        isMoving = true;
+        
+        int animFrames = (int)(animTime * 200.0f);
+        float animFrameTime = animTime / (float)animFrames;
+
+        float rotAngle = gridRot * 90.0f;
+        float rotStep = rotAngle / (float)animFrames;
+        float rotAngleRad = ToRad(rotAngle);
+        float rotStepRad = ToRad(rotStep);
+
+        Vector3 pivotPoint = gridPivot * GameManager.LevelController.gridCellScale;
+
+        float startAngleRad = ToRad(GetGridBearing(transform.position - gridPivot));
+        float rotRadius = Vector3.Distance(transform.position, gridPivot);
+
+        // pos x = pvt x + r * sin(angle)
+        // pos z = pvt z + r * cos(angle)
+
+        for (int i = 1; i <= animFrames; i++)
+        {
+            float delta = (float)i / (float)animFrames;
+            float angle = startAngleRad + rotAngleRad * delta;
+            float x = pivotPoint.x + rotRadius * Mathf.Sin(angle);
+            float z = pivotPoint.z + rotRadius * Mathf.Cos(angle);
+            yield return new WaitForSecondsRealtime(animFrameTime);
+            if (pivot != null)
+            {
+                pivot.transform.Rotate(Vector3.up, rotStep);
+            }
+            facingDir += rotStep;
+            transform.position = new Vector3(x, transform.position.y, z);
+        }
+        facingDir = WrapClamp(facingDir, 0.0f, 360.0f);
+
+        GetGridPos();
         isMoving = false;
     }
 

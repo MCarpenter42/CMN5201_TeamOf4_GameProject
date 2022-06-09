@@ -16,7 +16,7 @@ public class Core : MonoBehaviour
 
     #region [ PROPERTIES ]
 
-    public enum ObjectTypes { Empty, Static, Player, StartDoor, Movable };
+    public enum ObjectTypes { Empty, Static, Player, StartDoor, Dynamic };
     public enum BeamColours { White, Red, Green, Blue };
 
     #endregion
@@ -155,7 +155,28 @@ public class Core : MonoBehaviour
 
         return rotVect;
     }
-
+    
+    public static float WrapClamp(float value, float min, float max)
+    {
+        float range = max - min;
+        if (value < min)
+        {
+            float diff = min - value;
+            int mult = (int)((diff - (diff % range)) / range) + 1;
+            return value + (float)mult * range;
+        }
+        else if (value > max)
+        {
+            float diff = value - max;
+            int mult = (int)((diff - (diff % range)) / range) + 1;
+            return value - (float)mult * range;
+        }
+        else
+        {
+            return value;
+        }
+    }
+    
     // This is just to make it easier to generate random integers
     public static int RandomInt(int valMin, int valMax)
     {

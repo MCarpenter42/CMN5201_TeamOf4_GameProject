@@ -73,21 +73,8 @@ public class LevelController : Core
     {
         worldGrid.GetGridSize(floorTiles);
         worldGrid.OffsetFromScale(gridCellScale);
-        ObjectsToGrid();
         GetGridPositions();
         SetTileColours();
-    }
-
-    private void ObjectsToGrid()
-    {
-        foreach (LevelObject obj in levelObjects)
-        {
-            Vector3 pos = obj.transform.position;
-            pos.x += worldGrid.gridOffset.x;
-            pos.y += worldGrid.gridOffset.y;
-            pos.z += worldGrid.gridOffset.z;
-            obj.transform.position = pos;
-        }
     }
 
     private void GetGridPositions()
@@ -105,7 +92,6 @@ public class LevelController : Core
         {
             int a = (int)tile.gridPos.x;
             int b = (int)tile.gridPos.z;
-            //Debug.Log(a + ", " + b);
             sortedTiles[a, b] = tile;
         }
 
@@ -154,7 +140,7 @@ public class LevelController : Core
                 player.PlayerMove(-Vector3.right, playerMoveTime);
             }
 
-            if (GetInputDown(Controls.Interaction.GrabRelease))
+            if (GetInputDown(Controls.Interaction.Interact))
             {
                 if (player.objectMoving != null)
                 {
@@ -163,6 +149,23 @@ public class LevelController : Core
                 else if (player.canGrabFacing && player.objectMoving == null)
                 {
                     player.Grab();
+                }
+            }
+
+            if (player.objectMoving != null)
+            {
+                if (player.objectMoving.rotatable && !player.isMoving)
+                {
+                    if (GetInput(Controls.Interaction.RotateClockwise))
+                    {
+                        player.objectMoving.Rotate(1.0f, 1.0f);
+                        player.RotateAround(player.objectMoving.gridPos, 1.0f, 1.0f);
+                    }
+                    else if (GetInput(Controls.Interaction.RotateAnticlockwise))
+                    {
+                        player.objectMoving.Rotate(-1.0f, 1.0f);
+                        player.RotateAround(player.objectMoving.gridPos, -1.0f, 1.0f);
+                    }
                 }
             }
         }
