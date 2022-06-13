@@ -245,7 +245,7 @@ public class Player : LevelObject
             Vector3 step = points[i] - points[i - 1];
             Vector3 stepDir = step.normalized;
             float stepDist = step.magnitude;
-            if (Physics.Raycast(points[i - 1], stepDir, stepDist))
+            if (Physics.Raycast(points[i - 1], stepDir, stepDist) || !Physics.Raycast(points[i], Vector3.down, GameManager.LevelController.gridCellScale * 0.20f))
             {
                 rotObstructed = true;
                 break;
