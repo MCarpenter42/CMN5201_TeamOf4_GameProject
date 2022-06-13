@@ -16,6 +16,9 @@ public class Player : LevelObject
     [HideInInspector] public Vector3 objectDir = Vector3.zero;
     private Vector3 checkOffset = new Vector3(0.0f, -0.9f, 0.0f);
 
+    [SerializeField] float jumpHeight = 0.5f;
+    [SerializeField] float jumpTimescale = 1.2f;
+
     #endregion
 
     /* - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
@@ -72,10 +75,20 @@ public class Player : LevelObject
             {
                 Vector3 targetPos = transform.position + checkOffset + dir * GameManager.LevelController.gridCellScale;
                 bool walkable = Physics.Raycast(targetPos, Vector3.down, GameManager.LevelController.gridCellScale * 0.20f);
+                targetPos += dir * GameManager.LevelController.gridCellScale;
+                bool jumpable = Physics.Raycast(targetPos, Vector3.down, GameManager.LevelController.gridCellScale * 0.20f);
                 if (walkable)
                 {
                     Move(gridMovement, animTime);
                     StartCoroutine(DelayedCheckObjectPushable(gridMovement, animTime));
+                }
+                else
+                {
+                    if (jumpable)
+                    {
+                        Move(gridMovement * 2.0f, Vector3.up * jumpHeight, animTime * jumpTimescale);
+                        StartCoroutine(DelayedCheckObjectPushable(gridMovement, animTime * jumpTimescale));
+                    }
                 }
             }
         }
@@ -254,4 +267,6 @@ public class Player : LevelObject
 
         return !rotObstructed;
     }
+
+
 }

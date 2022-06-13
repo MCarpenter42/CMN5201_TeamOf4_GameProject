@@ -114,7 +114,7 @@ public class LevelObject : Core
             StartCoroutine(MoveAnim(gridMovement, animTime));
         }
     }
-
+    
     protected IEnumerator MoveAnim(Vector3 gridMovement, float animTime)
     {
         isMoving = true;
@@ -131,6 +131,47 @@ public class LevelObject : Core
             yield return new WaitForSecondsRealtime(animFrameTime);
 
             transform.position = Vector3.Lerp(posStart, posEnd, delta);
+        }
+
+        GetGridPos();
+
+        isMoving = false;
+    }
+    
+    public void Move(Vector3 gridMovement, Vector3 jumpOffset)
+    {
+        if (!isMoving)
+        {
+            StartCoroutine(MoveAnim(gridMovement, jumpOffset, 1.0f));
+        }
+    }
+
+    public void Move(Vector3 gridMovement, Vector3 jumpOffset, float animTime)
+    {
+        if (!isMoving)
+        {
+            StartCoroutine(MoveAnim(gridMovement, jumpOffset, animTime));
+        }
+    }
+
+    protected IEnumerator MoveAnim(Vector3 gridMovement, Vector3 jumpOffset, float animTime)
+    {
+        isMoving = true;
+
+        int animFrames = (int)(animTime * 200.0f);
+        float animFrameTime = animTime / (float)animFrames;
+        Vector3 posStart = transform.position;
+        Vector3 posEnd = posStart + gridMovement * GameManager.LevelController.gridCellScale;
+
+        for (int i = 1; i <= animFrames; i++)
+        {
+            float delta = (float)i / (float)animFrames;
+
+            yield return new WaitForSecondsRealtime(animFrameTime);
+
+            Vector3 pos = Vector3.Lerp(posStart, posEnd, delta);
+            pos += jumpOffset * Mathf.Sin(Mathf.PI * delta);
+            transform.position = pos;
         }
 
         GetGridPos();
