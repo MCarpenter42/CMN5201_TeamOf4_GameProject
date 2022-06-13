@@ -158,13 +158,19 @@ public class LevelController : Core
                 {
                     if (GetInput(Controls.Interaction.RotateClockwise))
                     {
-                        player.objectMoving.Rotate(1.0f, 1.0f);
-                        player.RotateAround(player.objectMoving.gridPos, 1.0f, 1.0f);
+                        if (player.CanRotateAround(player.objectMoving.gridPos, 1.0f))
+                        {
+                            player.objectMoving.Rotate(1.0f, 1.0f);
+                            player.RotateAround(player.objectMoving.gridPos, 1.0f, 1.0f);
+                        }
                     }
                     else if (GetInput(Controls.Interaction.RotateAnticlockwise))
                     {
-                        player.objectMoving.Rotate(-1.0f, 1.0f);
-                        player.RotateAround(player.objectMoving.gridPos, -1.0f, 1.0f);
+                        if (player.CanRotateAround(player.objectMoving.gridPos, -1.0f))
+                        {
+                            player.objectMoving.Rotate(-1.0f, 1.0f);
+                            player.RotateAround(player.objectMoving.gridPos, -1.0f, 1.0f);
+                        }
                     }
                 }
             }
