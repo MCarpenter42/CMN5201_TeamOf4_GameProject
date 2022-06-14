@@ -47,7 +47,11 @@ public class PauseMenu : Core
 
     public void LoadMenu()
     {
-        Debug.Log("Test");
+        SceneManager.LoadScene(0);
+    }
+    public void Restart()
+    {
+        SceneManager.LoadScene(SceneManager.GetActiveScene().name);
     }
 
     public void Quit()

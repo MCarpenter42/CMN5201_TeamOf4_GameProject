@@ -10,4 +10,8 @@ public class ChrisMenu : UI
         Debug.Log("QUIT");
         Application.Quit();
     }
+    public void Level1()
+    {
+        SceneManager.LoadScene(1);
+    }
 }
