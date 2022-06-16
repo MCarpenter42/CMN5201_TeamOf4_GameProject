@@ -278,10 +278,14 @@ public class Core : MonoBehaviour
             for (int i = 0; i < parentObj.transform.childCount; i++)
             {
                 GameObject child = parentObj.transform.GetChild(i).gameObject;
-                T childComponent = child.GetComponent<T>();
-                if (!childComponent.Equals(null))
+                T childComponent;
+                if (child.TryGetComponent<T>(out childComponent))
                 {
                     childrenWithComponent.Add(child);
+                }
+                else
+                {
+                    throw new System.Exception("Component type \"" + typeof(T) + "\" not found in any child objects!");
                 }
             }
         }
