@@ -18,6 +18,8 @@ public class GameManager : Core
 
     public static UIController UIController;
 
+    public static PauseMenu PauseMenu;
+
     #endregion
 
     #region [ PROPERTIES ]
@@ -107,7 +109,7 @@ public class GameManager : Core
         LevelController = FindObjectOfType<LevelController>();
         if (LevelController.isGameplayLevel)
         {
-            Player = GameObject.FindGameObjectWithTag("Player").GetComponent<Player>();
+            Player = FindObjectOfType<Player>();
         }
         UIController = FindObjectOfType<UIController>();
 
@@ -143,6 +145,18 @@ public class GameManager : Core
         if (LevelController.isGameplayLevel)
         {
             LevelController.LevelInputs();
+        }
+
+        if (Input.GetKeyDown(Controls.General.Pause.Key))
+        {
+            if (isPaused)
+            {
+                UIController.pauseMenu.PauseMenuResume();
+            }
+            else
+            {
+                UIController.pauseMenu.PauseMenuPause();
+            }
         }
     }
 

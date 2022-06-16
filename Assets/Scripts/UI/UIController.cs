@@ -11,6 +11,7 @@ public class UIController : UI
     #region [ OBJECTS ]
 
     [HideInInspector] public HUD hud;
+    [HideInInspector] public PauseMenu pauseMenu;
 	
 	#endregion
     
@@ -53,6 +54,8 @@ public class UIController : UI
         if (GameManager.LevelController.isGameplayLevel)
         {
             hud = GetChildrenWithComponent<HUD>(gameObject)[0].GetComponent<HUD>();
+            pauseMenu = GetChildrenWithComponent<PauseMenu>(gameObject)[0].GetComponent<PauseMenu>();
+            pauseMenu.menuFrame.SetActive(false);
         }
     }
 }

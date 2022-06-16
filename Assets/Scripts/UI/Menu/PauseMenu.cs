@@ -1,54 +1,37 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 using UnityEngine.SceneManagement;
+using UnityEditor;
+using TMPro;
 
-public class PauseMenu : Core
+public class PauseMenu : UI
 {
     // Having a cariable local to this script to log whether the game is paused isn't
     // necessary - use GameManager.isPaused instead!
     //public static bool gamePaused = false;
-    public GameObject pauseMenuUI;
+    public GameObject menuFrame;
 
-    // Update is called once per frame
-    void Update()
-    {
-        if (Input.GetKeyDown(Controls.General.Pause.Key))
-        {
-            if (GameManager.isPaused)
-            {
-                PauseMenuResume();
-            }
-            else
-            {
-                PauseMenuPause();
-            }
-        }
- 
-    }
+    /* - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
 
     public void PauseMenuResume()
     {
-        /*pauseMenuUI.SetActive(false);
-        Time.timeScale = 1f;
-        gamePaused = false;*/
-        pauseMenuUI.SetActive(false);
+        menuFrame.SetActive(false);
         Resume();
     }
 
     public void PauseMenuPause()
     {
-        /*pauseMenuUI.SetActive(true);
-        Time.timeScale = 0f;
-        gamePaused = true;*/
         Pause();
-        pauseMenuUI.SetActive(true);
+        menuFrame.SetActive(true);
     }
 
     public void LoadMenu()
     {
         SceneManager.LoadScene(0);
     }
+
     public void Restart()
     {
         SceneManager.LoadScene(SceneManager.GetActiveScene().name);
