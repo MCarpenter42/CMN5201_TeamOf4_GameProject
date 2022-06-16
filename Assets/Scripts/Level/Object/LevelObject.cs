@@ -16,10 +16,12 @@ public class LevelObject : Core
 
     public ObjectTypes type;
 
-    protected GameObject pivot;
+    [HideInInspector] public GameObject pivot;
 
     public bool movable = false;
     public bool rotatable = false;
+
+    protected Coroutine movement;
 
     #endregion
 
@@ -79,12 +81,11 @@ public class LevelObject : Core
 
     public float GetFacing()
     {
-        float facing = 0.0f;
         if (pivot != null)
         {
-            facingDir = WrapClamp(pivot.transform.eulerAngles.x, 0.0f, 360.0f);
+            facingDir = WrapClamp(pivot.transform.eulerAngles.y, 0.0f, 360.0f);
         }
-        return facing;
+        return facingDir;
     }
 
     public float GetGridBearing(Vector3 dir)
@@ -99,11 +100,35 @@ public class LevelObject : Core
         }
     }
     
+    public Vector3 GetGridDir(float bearing)
+    {
+        Vector3 dir = new Vector3();
+        dir.x = Mathf.Sin(ToRad(bearing));
+        dir.z = Mathf.Cos(ToRad(bearing));
+        return dir;
+    }
+    
     public void Move(Vector3 gridMovement)
     {
         if (!isMoving)
         {
-            StartCoroutine(MoveAnim(gridMovement, 1.0f));
+            movement = StartCoroutine(MoveAnim(gridMovement, 1.0f));
+        }
+    }
+    
+    public void Move(Vector3 gridMovement, bool interrupt)
+    {
+        if (!isMoving)
+        {
+            movement = StartCoroutine(MoveAnim(gridMovement, 1.0f));
+        }
+        else if (interrupt)
+        {
+            if (movement != null)
+            {
+                StopCoroutine(movement);
+                movement = StartCoroutine(MoveAnim(gridMovement, 1.0f));
+            }
         }
     }
 
@@ -111,7 +136,23 @@ public class LevelObject : Core
     {
         if (!isMoving)
         {
-            StartCoroutine(MoveAnim(gridMovement, animTime));
+            movement = StartCoroutine(MoveAnim(gridMovement, animTime));
+        }
+    }
+    
+    public void Move(Vector3 gridMovement, float animTime, bool interrupt)
+    {
+        if (!isMoving)
+        {
+            movement = StartCoroutine(MoveAnim(gridMovement, animTime));
+        }
+        else if (interrupt)
+        {
+            if (movement != null)
+            {
+                StopCoroutine(movement);
+                movement = StartCoroutine(MoveAnim(gridMovement, animTime));
+            }
         }
     }
     
@@ -142,7 +183,23 @@ public class LevelObject : Core
     {
         if (!isMoving)
         {
-            StartCoroutine(MoveAnim(gridMovement, jumpOffset, 1.0f));
+            movement = StartCoroutine(MoveAnim(gridMovement, jumpOffset, 1.0f));
+        }
+    }
+    
+    public void Move(Vector3 gridMovement, Vector3 jumpOffset, bool interrupt)
+    {
+        if (!isMoving)
+        {
+            movement = StartCoroutine(MoveAnim(gridMovement, jumpOffset, 1.0f));
+        }
+        else if (interrupt)
+        {
+            if (movement != null)
+            {
+                StopCoroutine(movement);
+                movement = StartCoroutine(MoveAnim(gridMovement, jumpOffset, 1.0f));
+            }
         }
     }
 
@@ -150,7 +207,23 @@ public class LevelObject : Core
     {
         if (!isMoving)
         {
-            StartCoroutine(MoveAnim(gridMovement, jumpOffset, animTime));
+            movement = StartCoroutine(MoveAnim(gridMovement, jumpOffset, animTime));
+        }
+    }
+    
+    public void Move(Vector3 gridMovement, Vector3 jumpOffset, float animTime, bool interrupt)
+    {
+        if (!isMoving)
+        {
+            movement = StartCoroutine(MoveAnim(gridMovement, jumpOffset, animTime));
+        }
+        else if (interrupt)
+        {
+            if (movement != null)
+            {
+                StopCoroutine(movement);
+                movement = StartCoroutine(MoveAnim(gridMovement, jumpOffset, animTime));
+            }
         }
     }
 
@@ -181,7 +254,26 @@ public class LevelObject : Core
 
     public void Rotate(float gridRot, float animTime)
     {
-        StartCoroutine(RotateAnim(gridRot, animTime));
+        if (!isMoving)
+        {
+            movement = StartCoroutine(RotateAnim(gridRot, animTime));
+        }
+    }
+    
+    public void Rotate(float gridRot, float animTime, bool interrupt)
+    {
+        if (!isMoving)
+        {
+            movement = StartCoroutine(RotateAnim(gridRot, animTime));
+        }
+        else if (interrupt)
+        {
+            if (movement != null)
+            {
+                StopCoroutine(movement);
+                movement = StartCoroutine(RotateAnim(gridRot, animTime));
+            }
+        }
     }
 
     protected IEnumerator RotateAnim(float gridRot, float animTime)
@@ -209,7 +301,26 @@ public class LevelObject : Core
     
     public void RotateAround(Vector3 gridPivot, float gridRot, float animTime)
     {
-        StartCoroutine(RotateAroundAnim(gridPivot, gridRot, animTime));
+        if (!isMoving)
+        {
+            movement = StartCoroutine(RotateAroundAnim(gridPivot, gridRot, animTime));
+        }
+    }
+    
+    public void RotateAround(Vector3 gridPivot, float gridRot, float animTime, bool interrupt)
+    {
+        if (!isMoving)
+        {
+            movement = StartCoroutine(RotateAroundAnim(gridPivot, gridRot, animTime));
+        }
+        else if (interrupt)
+        {
+            if (movement != null)
+            {
+                StopCoroutine(movement);
+                movement = StartCoroutine(RotateAroundAnim(gridPivot, gridRot, animTime));
+            }
+        }
     }
 
     protected IEnumerator RotateAroundAnim(Vector3 gridPivot, float gridRot, float animTime)

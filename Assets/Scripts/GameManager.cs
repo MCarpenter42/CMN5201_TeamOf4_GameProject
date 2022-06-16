@@ -104,8 +104,11 @@ public class GameManager : Core
         controlsInstance = gameObject.AddComponent<Controls>();
         Controls = controlsInstance;
 
-        Player = GameObject.FindGameObjectWithTag("Player").GetComponent<Player>();
         LevelController = FindObjectOfType<LevelController>();
+        if (LevelController.isGameplayLevel)
+        {
+            Player = GameObject.FindGameObjectWithTag("Player").GetComponent<Player>();
+        }
         UIController = FindObjectOfType<UIController>();
 
         if (firstLoad)
@@ -137,7 +140,10 @@ public class GameManager : Core
 
     private void HandleInputs()
     {
-        LevelController.LevelInputs();
+        if (LevelController.isGameplayLevel)
+        {
+            LevelController.LevelInputs();
+        }
     }
 
     #region [ SETTINGS ]
@@ -182,6 +188,12 @@ public class GameManager : Core
             PlayerPrefs.SetInt(name, keyIndex);
         }
     }
+
+    #endregion
+
+    #region [ SCENE HANDLING ]
+
+
 
     #endregion
 

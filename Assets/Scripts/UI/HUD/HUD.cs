@@ -10,9 +10,12 @@ public class HUD : UI
 {
     #region [ OBJECTS ]
 
-    [HideInInspector] public Dictionary<string, Prompt> prompts = new Dictionary<string, Prompt>();
+    [HideInInspector] public List<Prompt> prompts;
 
-    public Prompt interactPrompt;
+    [Header("Prompts")]
+    public Prompt promptInteract;
+    public Prompt promptRotCW;
+    public Prompt promptRotCCW;
 	
 	#endregion
     
@@ -29,15 +32,15 @@ public class HUD : UI
     void Awake()
     {
         GetComponents();
-        foreach (KeyValuePair<string, Prompt> prompt in prompts)
-        {
-            prompt.Value.gameObject.SetActive(false);
-        }
     }
 
     void Start()
     {
-        
+        SetKeyPromptLabels();
+        foreach (Prompt prompt in prompts)
+        {
+            prompt.Show(false);
+        }
     }
 	
     void Update()
@@ -56,6 +59,18 @@ public class HUD : UI
 	
     private void GetComponents()
     {
-        prompts.Add("Interact", interactPrompt);
+        prompts = new List<Prompt>()
+        {
+            promptInteract,
+            promptRotCW,
+            promptRotCCW,
+        };
+    }
+
+    private void SetKeyPromptLabels()
+    {
+        promptInteract.SetText(0, Controls.Interaction.Interact.Key.ToString(), AdjustCondition.GreaterThan);
+        promptRotCW.SetText(0, Controls.Interaction.RotateClockwise.Key.ToString(), AdjustCondition.GreaterThan);
+        promptRotCCW.SetText(0, Controls.Interaction.RotateCounterClockwise.Key.ToString(), AdjustCondition.GreaterThan);
     }
 }

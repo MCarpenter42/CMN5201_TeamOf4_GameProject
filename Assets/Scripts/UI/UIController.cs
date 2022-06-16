@@ -44,12 +44,15 @@ public class UIController : UI
         
     }
 
-	#endregion
+    #endregion
 
     /* - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
-	
+
     private void GetComponents()
     {
-        hud = GetChildrenWithComponent<HUD>(gameObject)[0].GetComponent<HUD>();
+        if (GameManager.LevelController.isGameplayLevel)
+        {
+            hud = GetChildrenWithComponent<HUD>(gameObject)[0].GetComponent<HUD>();
+        }
     }
 }

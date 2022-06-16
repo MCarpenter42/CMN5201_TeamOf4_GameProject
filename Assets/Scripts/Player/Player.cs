@@ -10,14 +10,21 @@ public class Player : LevelObject
 {
     #region [ PROPERTIES ]
 
+    [Header("Components")]
     [SerializeField] GameObject dirInd;
     [HideInInspector] public bool canGrabFacing = false;
     [HideInInspector] public LevelObject objectMoving = null;
     [HideInInspector] public Vector3 objectDir = Vector3.zero;
     private Vector3 checkOffset = new Vector3(0.0f, -0.9f, 0.0f);
 
+    [Header("Attributes")]
     [SerializeField] float jumpHeight = 0.5f;
     [SerializeField] float jumpTimescale = 1.2f;
+    public float moveTime = 0.25f;
+
+    [Header("Behaviour")]
+    [SerializeField] public bool useStartPath = false;
+    [SerializeField] public List<MovePathPoint> startPathPoints = new List<MovePathPoint>();
 
     #endregion
 
@@ -34,33 +41,40 @@ public class Player : LevelObject
     {
         OnStart();
     }
-	
-    void Update()
+
+    void OnCollisionEnter(Collision collision)
     {
-        
+        if (collision.gameObject.GetComponent<EndPoint>() != null)
+        {
+            GoToScene('+');
+        }
     }
 
-    void FixedUpdate()
-    {
-        
-    }
-
-	#endregion
+    #endregion
 
     /* - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
-	
-    public Vector3 GetStartingMove()
+
+    public void FollowStartPath()
     {
-        Vector3 startingMove = Vector3.zero;
-        if (gridPos.x < 0 || gridPos.x >= GameManager.LevelController.worldGrid.gridSize[0])
+        if (startPathPoints.Count > 0)
         {
-            startingMove.x -= gridPos.x;
+            transform.localPosition = startPathPoints[0].transform.localPosition;
+            GetGridPos();
+            if (startPathPoints.Count > 1)
+            {
+                StartCoroutine(MovePathAnim(startPathPoints));
+            }    
         }
-        if (gridPos.z < 0 || gridPos.z >= GameManager.LevelController.worldGrid.gridSize[1])
+    }
+
+    private IEnumerator MovePathAnim(List<MovePathPoint> path)
+    {
+        for (int i = 1; i < path.Count; i++)
         {
-            startingMove.z -= gridPos.z;
+            Vector3 gridMovement = path[i].transform.position - path[i - 1].transform.position;
+            //PlayerMove();
+            yield return new WaitForSecondsRealtime(0.0f);
         }
-        return startingMove;
     }
 
     /* - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
@@ -166,16 +180,19 @@ public class Player : LevelObject
             canGrabFacing = false;
         }
 
-        Prompt interactPrompt;
-        GameManager.UIController.hud.prompts.TryGetValue("Interact", out interactPrompt);
+        Prompt interactPrompt = GameManager.UIController.hud.promptInteract;
 
-        if (canGrabFacing && objectMoving == null)
+        if (interactPrompt != null)
         {
-            interactPrompt.gameObject.SetActive(true);
-        }
-        else
-        {
-            interactPrompt.gameObject.SetActive(false);
+            if (canGrabFacing && objectMoving == null)
+            {
+                interactPrompt.Show(true);
+                interactPrompt.SetText(1, "Grab Object", AdjustCondition.Always);
+            }
+            else if (!canGrabFacing && objectMoving == null)
+            {
+                interactPrompt.Show(false);
+            }
         }
     }
 
@@ -197,8 +214,25 @@ public class Player : LevelObject
             grabSuccess = true;
             objectMoving = hitObject.GetComponent<LevelObject>();
             objectDir = grabDir;
-            CheckObjectPushable(grabDir);
+            //CheckObjectPushable(grabDir);
         }
+
+        Prompt interactPrompt = GameManager.UIController.hud.promptInteract;
+        Prompt rotCWPrompt = GameManager.UIController.hud.promptRotCW;
+        Prompt rotCCWPrompt = GameManager.UIController.hud.promptRotCCW;
+
+        if (grabSuccess && interactPrompt.visible)
+        {
+            interactPrompt.SetText(1, "Release Object", AdjustCondition.Always);
+            if (objectMoving.rotatable)
+            {
+                rotCWPrompt.Show(true);
+                rotCWPrompt.SetText(1, "Rotate Clockwise", AdjustCondition.Always);
+                rotCCWPrompt.Show(true);
+                rotCCWPrompt.SetText(1, "Rotate Counter-Clockwise", AdjustCondition.Always);
+            }
+        }
+
         return grabSuccess;
     }
 
@@ -206,6 +240,12 @@ public class Player : LevelObject
     {
         objectMoving = null;
         objectDir = Vector3.zero;
+        CheckObjectPushable(GetGridDir(facingDir));
+
+        Prompt rotCWPrompt = GameManager.UIController.hud.promptRotCW;
+        Prompt rotCCWPrompt = GameManager.UIController.hud.promptRotCCW;
+        rotCWPrompt.Show(false);
+        rotCCWPrompt.Show(false);
     }
 
     public Vector3 GetObjectMovingDir()
@@ -267,6 +307,5 @@ public class Player : LevelObject
 
         return !rotObstructed;
     }
-
 
 }

@@ -250,6 +250,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 04363982f0fba0f46895b0bdaf4770c9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  gridPos: {x: 0, y: 0, z: 0}
+  isMoving: 0
+  facingDir: 0
+  type: 1
+  pivot: {fileID: 0}
+  movable: 0
+  rotatable: 0
   indicatorPart: {fileID: 3140442604933163318}
   falseColour: {r: 1, g: 0, b: 0, a: 1}
   trueColour: {r: 0, g: 1, b: 0, a: 1}

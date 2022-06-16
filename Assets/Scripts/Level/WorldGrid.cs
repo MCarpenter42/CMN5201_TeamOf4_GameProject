@@ -11,7 +11,6 @@ public class WorldGrid : Core
     #region [ PROPERTIES ]
 
     public int[] gridSize = new int[] { 0, 0 };
-    public Vector3 gridOffset = new Vector3();
 	
 	#endregion
 
@@ -38,13 +37,5 @@ public class WorldGrid : Core
 
         gridSize[0] = xVals.Count;
         gridSize[1] = zVals.Count;
-    }
-
-    public void OffsetFromScale(float scale)
-    {
-        float width = (float)(gridSize[0] - 1) * scale;
-        float depth = (float)(gridSize[1] - 1) * scale;
-        gridOffset.x = width * -0.5f;
-        gridOffset.z = depth * -0.5f;
     }
 }

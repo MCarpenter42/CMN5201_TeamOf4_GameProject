@@ -16,8 +16,9 @@ public class Core : MonoBehaviour
 
     #region [ PROPERTIES ]
 
-    public enum ObjectTypes { Empty, Static, Player, StartDoor, Dynamic };
+    public enum ObjectTypes { Empty, Static, Dynamic, Player, StartPoint, EndPoint };
     public enum BeamColours { White, Red, Green, Blue };
+    public enum AdjustCondition { Never, Always, LessThan, GreaterThan };
 
     #endregion
 
@@ -64,11 +65,7 @@ public class Core : MonoBehaviour
 
     public void Exit()
     {
-        /*
-         
-        Any code that needs to always run before quitting the game can be placed here
-        
-        */
+        Debug.Log("Exiting game...");
         Application.Quit();
     }
 

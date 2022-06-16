@@ -10,13 +10,15 @@ public class LevelController : Core
 {
     #region [ PROPERTIES ]
 
+    public bool isGameplayLevel = true;
     [SerializeField] public float gridCellScale = 1.0f;
     [HideInInspector] public WorldGrid worldGrid;
     [HideInInspector] public List<LevelObject> levelObjects = new List<LevelObject>();
+    [SerializeField] public bool useTileGrid = true;
     [HideInInspector] public List<FloorTile> floorTiles = new List<FloorTile>();
 
     private Player player;
-    private LevelObject startDoor;
+    private StartPoint startPoint;
 
     #endregion
 
@@ -32,10 +34,24 @@ public class LevelController : Core
 
     void Start()
     {
-        player.transform.localPosition = startDoor.transform.localPosition;
-        player.GetGridPos();
-        player.Move(player.GetStartingMove(), 0.8f);
-        player.ChangeFacing(player.GetStartingMove());
+        if (isGameplayLevel)
+        {
+            if (player.useStartPath)
+            {
+                if (player.startPathPoints.Count > 0)
+                {
+                    player.FollowStartPath();
+                }
+            }
+            else
+            {
+                player.transform.localPosition = startPoint.transform.localPosition;
+                player.GetGridPos();
+                Vector3 startingMove = player.GetGridDir(startPoint.GetFacing()).normalized * gridCellScale * (float)startPoint.moveMulti;
+                player.Move(startingMove, 0.8f * (float)startPoint.moveMulti);
+                player.ChangeFacing(startingMove);
+            }
+        }
     }
 
     void Update()
@@ -58,23 +74,26 @@ public class LevelController : Core
     {
         worldGrid = gameObject.AddComponent<WorldGrid>();
         levelObjects = ArrayToList(FindObjectsOfType<LevelObject>());
-        floorTiles = ArrayToList(FindObjectsOfType<FloorTile>());
-        player = GameManager.Player;
-        foreach (LevelObject obj in levelObjects)
+        if (useTileGrid)
         {
-            if (obj.type == ObjectTypes.StartDoor)
-            {
-                startDoor = obj;
-            }
+            floorTiles = ArrayToList(FindObjectsOfType<FloorTile>());
         }
+        player = GameManager.Player;
+        startPoint = FindObjectOfType<StartPoint>();
     }
 
     private void Setup()
     {
-        worldGrid.GetGridSize(floorTiles);
-        worldGrid.OffsetFromScale(gridCellScale);
+        if (useTileGrid)
+        {
+            floorTiles = ArrayToList(FindObjectsOfType<FloorTile>());
+            worldGrid.GetGridSize(floorTiles);
+        }
         GetGridPositions();
-        SetTileColours();
+        if (useTileGrid)
+        {
+            SetTileColours();
+        }
     }
 
     private void GetGridPositions()
@@ -120,27 +139,26 @@ public class LevelController : Core
 
     public void LevelInputs()
     {
-        float playerMoveTime = 0.25f;
         if (!player.isMoving)
         {
             if (GetInput(Controls.Movement.Up))
             {
-                player.PlayerMove(Vector3.forward, playerMoveTime);
+                player.PlayerMove(Vector3.forward, player.moveTime);
             }
             else if (GetInput(Controls.Movement.Down))
             {
-                player.PlayerMove(-Vector3.forward, playerMoveTime);
+                player.PlayerMove(-Vector3.forward, player.moveTime);
             }
             else if (GetInput(Controls.Movement.Right))
             {
-                player.PlayerMove(Vector3.right, playerMoveTime);
+                player.PlayerMove(Vector3.right, player.moveTime);
             }
             else if (GetInput(Controls.Movement.Left))
             {
-                player.PlayerMove(-Vector3.right, playerMoveTime);
+                player.PlayerMove(-Vector3.right, player.moveTime);
             }
 
-            if (GetInputDown(Controls.Interaction.Interact))
+            if (GetInputDown(Controls.Interaction.Interact) && !player.isMoving)
             {
                 if (player.objectMoving != null)
                 {
@@ -164,7 +182,7 @@ public class LevelController : Core
                             player.RotateAround(player.objectMoving.gridPos, 1.0f, 1.0f);
                         }
                     }
-                    else if (GetInput(Controls.Interaction.RotateAnticlockwise))
+                    else if (GetInput(Controls.Interaction.RotateCounterClockwise))
                     {
                         if (player.CanRotateAround(player.objectMoving.gridPos, -1.0f))
                         {

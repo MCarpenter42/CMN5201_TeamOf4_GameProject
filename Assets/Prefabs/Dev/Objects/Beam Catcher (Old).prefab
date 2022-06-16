@@ -207,7 +207,7 @@ GameObject:
   - component: {fileID: 1063541257367449505}
   - component: {fileID: 6053652857427884080}
   m_Layer: 0
-  m_Name: Beam Catcher
+  m_Name: Beam Catcher (Old)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

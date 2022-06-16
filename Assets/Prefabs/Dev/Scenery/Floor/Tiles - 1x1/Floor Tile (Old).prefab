@@ -93,7 +93,7 @@ GameObject:
   - component: {fileID: 8268502893297544082}
   - component: {fileID: 8268502893297544083}
   m_Layer: 0
-  m_Name: Floor Tile
+  m_Name: Floor Tile (Old)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

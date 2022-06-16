@@ -286,8 +286,8 @@ public class Controls_Movement
 
 public class Controls_Interaction
 {
-	public ControlInput Interact = new ControlInput("Grab / Release Object", KeyCode.Space);
-	public ControlInput RotateAnticlockwise = new ControlInput("Activate", KeyCode.Q);
+	public ControlInput Interact = new ControlInput("Interact With Object", KeyCode.Space);
+	public ControlInput RotateCounterClockwise = new ControlInput("Activate", KeyCode.Q);
 	public ControlInput RotateClockwise = new ControlInput("Activate", KeyCode.E);
 }
 
