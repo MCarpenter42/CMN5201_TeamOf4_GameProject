@@ -26,6 +26,8 @@ public class Player : LevelObject
     [SerializeField] public bool useStartPath = false;
     [SerializeField] public List<MovePathPoint> startPathPoints = new List<MovePathPoint>();
 
+    private float moveTimeElapsed = 0.0f;
+
     #endregion
 
     /* - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
@@ -40,6 +42,11 @@ public class Player : LevelObject
     void Start()
     {
         OnStart();
+    }
+
+    void Update()
+    {
+        Debugging();
     }
 
     void OnCollisionEnter(Collision collision)
@@ -198,7 +205,7 @@ public class Player : LevelObject
 
     public IEnumerator DelayedCheckObjectPushable(Vector3 dir, float time)
     {
-        yield return new WaitForSecondsRealtime(time);
+        yield return new WaitForSeconds(time);
         CheckObjectPushable(dir);
     }
 
@@ -308,4 +315,18 @@ public class Player : LevelObject
         return !rotObstructed;
     }
 
+    /* - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
+
+    private void Debugging()
+    {
+        GameManager.UIController.moveFrames = animFramesPassed;
+        if (isMoving)
+        {
+            moveTimeElapsed += Time.deltaTime;
+        }
+        else if (moveTimeElapsed > 0.0f)
+        {
+            moveTimeElapsed = 0.0f;
+        }
+    }
 }

@@ -91,7 +91,7 @@ public class GameManager : Core
 
     void Update()
     {
-        CalcFPS();
+        UIController.fps = CalcFPS();
         HandleInputs();
 
         DebugOnUpdate();
@@ -125,7 +125,7 @@ public class GameManager : Core
         
     }
 
-    private void CalcFPS()
+    private float CalcFPS()
     {
         if (frameTimes.Count >= 60)
         {
@@ -137,7 +137,7 @@ public class GameManager : Core
         {
             total += f;
         }
-        FPS = (int)((float)frameTimes.Count / total);
+        return FPS = (int)((float)frameTimes.Count / total);
     }
 
     private void HandleInputs()

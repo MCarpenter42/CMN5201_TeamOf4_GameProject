@@ -5,6 +5,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using UnityEditor;
 using TMPro;
+using System.Diagnostics;
 
 public class LevelObject : Core
 {
@@ -22,6 +23,9 @@ public class LevelObject : Core
     public bool rotatable = false;
 
     protected Coroutine movement;
+
+    protected int animFramesPassed;
+    Stopwatch sw = new Stopwatch();
 
     #endregion
 
@@ -41,7 +45,7 @@ public class LevelObject : Core
 
     void Update()
     {
-
+        
     }
 
     void FixedUpdate()
@@ -169,12 +173,24 @@ public class LevelObject : Core
         {
             float delta = (float)i / (float)animFrames;
 
-            yield return new WaitForSecondsRealtime(animFrameTime);
+            yield return new WaitForSeconds(animFrameTime);
 
             transform.position = Vector3.Lerp(posStart, posEnd, delta);
+
+            animFramesPassed = i;
+
+            sw.Stop();
+            GameManager.UIController.coroutineFrameTime = (float)sw.Elapsed.TotalSeconds;
+            sw.Restart();
         }
 
         GetGridPos();
+
+        if (gameObject.GetComponent<Player>() != null)
+        {
+            string info = animFrames + " | " + animFrameTime;
+            GameManager.UIController.moveAnimInfo = info;
+        }
 
         isMoving = false;
     }
@@ -240,7 +256,7 @@ public class LevelObject : Core
         {
             float delta = (float)i / (float)animFrames;
 
-            yield return new WaitForSecondsRealtime(animFrameTime);
+            yield return new WaitForSeconds(animFrameTime);
 
             Vector3 pos = Vector3.Lerp(posStart, posEnd, delta);
             pos += jumpOffset * Mathf.Sin(Mathf.PI * delta);
@@ -287,7 +303,7 @@ public class LevelObject : Core
 
         for (int i = 1; i <= animFrames; i++)
         {
-            yield return new WaitForSecondsRealtime(animFrameTime);
+            yield return new WaitForSeconds(animFrameTime);
             if (pivot != null)
             {
                 pivot.transform.Rotate(Vector3.up, rotStep);
@@ -349,7 +365,7 @@ public class LevelObject : Core
             float angle = startAngleRad + rotAngleRad * delta;
             float x = pivotPoint.x + rotRadius * Mathf.Sin(angle);
             float z = pivotPoint.z + rotRadius * Mathf.Cos(angle);
-            yield return new WaitForSecondsRealtime(animFrameTime);
+            yield return new WaitForSeconds(animFrameTime);
             if (pivot != null)
             {
                 pivot.transform.Rotate(Vector3.up, rotStep);

@@ -16,7 +16,7 @@ public class HUD : UI
     public Prompt promptInteract;
     public Prompt promptRotCW;
     public Prompt promptRotCCW;
-	
+
 	#endregion
     
 	#region [ PROPERTIES ]

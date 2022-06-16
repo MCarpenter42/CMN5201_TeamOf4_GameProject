@@ -283,13 +283,17 @@ public class Core : MonoBehaviour
                 {
                     childrenWithComponent.Add(child);
                 }
-                else
-                {
-                    throw new System.Exception("Component type \"" + typeof(T) + "\" not found in any child objects!");
-                }
             }
         }
-        return childrenWithComponent;
+
+        if (childrenWithComponent.Count > 0)
+        {
+            return childrenWithComponent;
+        }
+        else
+        {
+            throw new System.Exception("Component type \"" + typeof(T) + "\" not found in any child objects!");
+        }
     }
 
     // Pretty much the same deal here as with the "children with component" function.
