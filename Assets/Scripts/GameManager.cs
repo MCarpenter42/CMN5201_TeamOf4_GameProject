@@ -11,6 +11,7 @@ public class GameManager : Core
 
     private static GameManager instance = null;
     private Controls controlsInstance;
+    private VideoSettings vidSettingsInstance;
 
     public static Player Player;
 
@@ -105,6 +106,8 @@ public class GameManager : Core
     {
         controlsInstance = gameObject.AddComponent<Controls>();
         Controls = controlsInstance;
+        vidSettingsInstance = gameObject.AddComponent<VideoSettings>();
+        VideoSettings = vidSettingsInstance;
 
         LevelController = FindObjectOfType<LevelController>();
         if (LevelController.isGameplayLevel)
@@ -137,7 +140,9 @@ public class GameManager : Core
         {
             total += f;
         }
-        return FPS = (int)((float)frameTimes.Count / total);
+        float fps = (float)frameTimes.Count / total;
+        fps -= (fps % 0.01f);
+        return FPS = fps;
     }
 
     private void HandleInputs()

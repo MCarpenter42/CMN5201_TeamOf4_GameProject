@@ -10,7 +10,7 @@ public class UIController : UI
 {
     #region [ OBJECTS ]
 
-    private enum PerfDebugDisplay { None, FPS, MoveTime, MoveFrames, MoveAnimInfo, CoroutineFrameTime };
+    private enum PerfDebugDisplay { None, FPS };
 
     [Header("UI Components")]
     public HUD hud;
@@ -18,13 +18,8 @@ public class UIController : UI
 
     [Header("Performance & Debug")]
     [SerializeField] PerfDebugDisplay debugPanelInfo = PerfDebugDisplay.None;
-
     public GameObject debugDisplay;
     [HideInInspector] public float fps;
-    [HideInInspector] public float moveTime;
-    [HideInInspector] public int moveFrames;
-    [HideInInspector] public string moveAnimInfo;
-    [HideInInspector] public float coroutineFrameTime;
 
     #endregion
 
@@ -45,34 +40,21 @@ public class UIController : UI
 
     void Start()
     {
-        if (debugPanelInfo != PerfDebugDisplay.None)
+        if (debugDisplay != null)
         {
-            debugDisplay.SetActive(true);
-            TextMeshProUGUI label = GetChildrenWithComponent<TextMeshProUGUI>(debugDisplay)[1].GetComponent<TextMeshProUGUI>();
-            if (debugPanelInfo == PerfDebugDisplay.FPS)
+            if (debugPanelInfo != PerfDebugDisplay.None)
             {
-                label.text = "FPS:";
+                debugDisplay.SetActive(true);
+                TextMeshProUGUI label = GetChildrenWithComponent<TextMeshProUGUI>(debugDisplay)[1].GetComponent<TextMeshProUGUI>();
+                if (debugPanelInfo == PerfDebugDisplay.FPS)
+                {
+                    label.text = "FPS:";
+                }
             }
-            else if (debugPanelInfo == PerfDebugDisplay.MoveTime)
+            else
             {
-                label.text = "Movement Time:";
+                debugDisplay.SetActive(false);
             }
-            else if (debugPanelInfo == PerfDebugDisplay.MoveFrames)
-            {
-                label.text = "Movement Frames:";
-            }
-            else if (debugPanelInfo == PerfDebugDisplay.MoveAnimInfo)
-            {
-                label.text = "Move Anim Info:";
-            }
-            else if (debugPanelInfo == PerfDebugDisplay.CoroutineFrameTime)
-            {
-                label.text = "Coroutine Frame Time:";
-            }
-        }
-        else
-        {
-            debugDisplay.SetActive(false);
         }
     }
 	
@@ -97,15 +79,22 @@ public class UIController : UI
     {
         if (GameManager.LevelController.isGameplayLevel)
         {
-            if (hud == null)
+            if (hud == null && GetChildrenWithComponent<HUD>(gameObject).Count > 0)
             {
                 hud = GetChildrenWithComponent<HUD>(gameObject)[0].GetComponent<HUD>();
             }
             if (pauseMenu == null)
             {
-                pauseMenu = GetChildrenWithComponent<PauseMenu>(gameObject)[0].GetComponent<PauseMenu>();
+                if (GetChildrenWithComponent<PauseMenu>(gameObject).Count > 0)
+                {
+                    pauseMenu = GetChildrenWithComponent<PauseMenu>(gameObject)[0].GetComponent<PauseMenu>();
+                    pauseMenu.menuFrame.SetActive(false);
+                }
             }
-            pauseMenu.menuFrame.SetActive(false);
+            else
+            {
+                pauseMenu.menuFrame.SetActive(false);
+            }
         }
     }
 
@@ -115,22 +104,6 @@ public class UIController : UI
         if (debugPanelInfo == PerfDebugDisplay.FPS)
         {
             textObj.text = "FPS: " + fps.ToString();
-        }
-        else if (debugPanelInfo == PerfDebugDisplay.MoveTime)
-        {
-            textObj.text = moveTime.ToString();
-        }
-        else if (debugPanelInfo == PerfDebugDisplay.MoveFrames)
-        {
-            textObj.text = moveFrames.ToString();
-        }
-        else if (debugPanelInfo == PerfDebugDisplay.MoveAnimInfo)
-        {
-            textObj.text = moveAnimInfo;
-        }
-        else if (debugPanelInfo == PerfDebugDisplay.CoroutineFrameTime)
-        {
-            textObj.text = coroutineFrameTime.ToString();
         }
     }
 }

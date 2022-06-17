@@ -5,7 +5,6 @@ using UnityEngine;
 using UnityEngine.UI;
 using UnityEditor;
 using TMPro;
-using System.Diagnostics;
 
 public class LevelObject : Core
 {
@@ -23,9 +22,6 @@ public class LevelObject : Core
     public bool rotatable = false;
 
     protected Coroutine movement;
-
-    protected int animFramesPassed;
-    Stopwatch sw = new Stopwatch();
 
     #endregion
 
@@ -164,33 +160,21 @@ public class LevelObject : Core
     {
         isMoving = true;
 
-        int animFrames = (int)(animTime * 200.0f);
-        float animFrameTime = animTime / (float)animFrames;
         Vector3 posStart = transform.position;
         Vector3 posEnd = posStart + gridMovement * GameManager.LevelController.gridCellScale;
 
-        for (int i = 1; i <= animFrames; i++)
+        float timeElapsed = 0.0f;
+        while (timeElapsed <= animTime)
         {
-            float delta = (float)i / (float)animFrames;
+            timeElapsed += Time.deltaTime;
+            float delta = timeElapsed / animTime;
 
-            yield return new WaitForSeconds(animFrameTime);
+            yield return null;
 
             transform.position = Vector3.Lerp(posStart, posEnd, delta);
-
-            animFramesPassed = i;
-
-            sw.Stop();
-            GameManager.UIController.coroutineFrameTime = (float)sw.Elapsed.TotalSeconds;
-            sw.Restart();
         }
 
         GetGridPos();
-
-        if (gameObject.GetComponent<Player>() != null)
-        {
-            string info = animFrames + " | " + animFrameTime;
-            GameManager.UIController.moveAnimInfo = info;
-        }
 
         isMoving = false;
     }
@@ -247,22 +231,23 @@ public class LevelObject : Core
     {
         isMoving = true;
 
-        int animFrames = (int)(animTime * 200.0f);
-        float animFrameTime = animTime / (float)animFrames;
         Vector3 posStart = transform.position;
         Vector3 posEnd = posStart + gridMovement * GameManager.LevelController.gridCellScale;
 
-        for (int i = 1; i <= animFrames; i++)
+        float timeElapsed = 0.0f;
+        while (timeElapsed <= animTime)
         {
-            float delta = (float)i / (float)animFrames;
+            timeElapsed += Time.deltaTime;
+            float delta = timeElapsed / animTime;
 
-            yield return new WaitForSeconds(animFrameTime);
+            yield return null;
 
             Vector3 pos = Vector3.Lerp(posStart, posEnd, delta);
             pos += jumpOffset * Mathf.Sin(Mathf.PI * delta);
             transform.position = pos;
         }
 
+        transform.position = posEnd;
         GetGridPos();
 
         isMoving = false;
@@ -296,21 +281,31 @@ public class LevelObject : Core
     {
         isMoving = true;
 
-        int animFrames = (int)(animTime * 200.0f);
-        float animFrameTime = animTime / (float)animFrames;
         float rotAngle = gridRot * 90.0f;
-        float rotStep = rotAngle / (float)animFrames;
+        Vector3 rotStart = pivot.transform.eulerAngles;
+        Vector3 rotEnd = rotStart;
+        rotEnd.y += rotAngle;
 
-        for (int i = 1; i <= animFrames; i++)
+        float facingStart = facingDir;
+        float facingEnd = WrapClamp(facingStart + rotAngle, 0.0f, 360.0f);
+
+        float timeElapsed = 0.0f;
+        while (timeElapsed <= animTime)
         {
-            yield return new WaitForSeconds(animFrameTime);
+            timeElapsed += Time.deltaTime;
+            float delta = Time.deltaTime / animTime;
+            float rotDelta = rotAngle * delta;
+
+            yield return null;
+
             if (pivot != null)
             {
-                pivot.transform.Rotate(Vector3.up, rotStep);
+                pivot.transform.Rotate(Vector3.up, rotDelta);
             }
-            facingDir += rotStep;
+            facingDir += rotDelta;
         }
-        facingDir = WrapClamp(facingDir, 0.0f, 360.0f);
+        pivot.transform.eulerAngles = rotEnd;
+        facingDir = facingEnd;
 
         isMoving = false;
     }
@@ -343,37 +338,56 @@ public class LevelObject : Core
     {
         isMoving = true;
         
-        int animFrames = (int)(animTime * 200.0f);
-        float animFrameTime = animTime / (float)animFrames;
-
         float rotAngle = gridRot * 90.0f;
-        float rotStep = rotAngle / (float)animFrames;
-        float rotAngleRad = ToRad(rotAngle);
-        float rotStepRad = ToRad(rotStep);
 
         Vector3 pivotPoint = gridPivot * GameManager.LevelController.gridCellScale;
+        float rotRadius = Vector3.Distance(transform.position, pivotPoint);
 
-        float startAngleRad = ToRad(GetGridBearing(transform.position - gridPivot));
-        float rotRadius = Vector3.Distance(transform.position, gridPivot);
+        float startAngle = GetGridBearing(transform.position - gridPivot);
+        float endAngle = startAngle + rotAngle;
+
+        Vector3 posStart = transform.position;
+        Vector3 posEnd = new Vector3();
+        posEnd.x = pivotPoint.x + rotRadius * Mathf.Sin(ToRad(endAngle));
+        posEnd.y = posStart.y;
+        posEnd.z = pivotPoint.z + rotRadius * Mathf.Cos(ToRad(endAngle));
+
+        Vector3 rotStart = pivot.transform.eulerAngles;
+        Vector3 rotEnd = rotStart;
+        rotEnd.y += rotAngle;
+
+        float facingStart = facingDir;
+        float facingEnd = WrapClamp(facingStart + rotAngle, 0.0f, 360.0f);
 
         // pos x = pvt x + r * sin(angle)
         // pos z = pvt z + r * cos(angle)
 
-        for (int i = 1; i <= animFrames; i++)
+        float timeElapsed = 0.0f;
+        while (timeElapsed <= animTime)
         {
-            float delta = (float)i / (float)animFrames;
-            float angle = startAngleRad + rotAngleRad * delta;
-            float x = pivotPoint.x + rotRadius * Mathf.Sin(angle);
-            float z = pivotPoint.z + rotRadius * Mathf.Cos(angle);
-            yield return new WaitForSeconds(animFrameTime);
+            timeElapsed += Time.deltaTime;
+            float delta = timeElapsed / animTime;
+
+            float angle = Mathf.Lerp(startAngle, endAngle, delta);
+            float angleRad = ToRad(angle);
+            float x = pivotPoint.x + rotRadius * Mathf.Sin(angleRad);
+            float z = pivotPoint.z + rotRadius * Mathf.Cos(angleRad);
+
+            float rotDelta = rotAngle * Time.deltaTime / animTime;
+
+            yield return null;
+
+            transform.position = new Vector3(x, transform.position.y, z);
+
             if (pivot != null)
             {
-                pivot.transform.Rotate(Vector3.up, rotStep);
+                pivot.transform.Rotate(Vector3.up, rotDelta);
             }
-            facingDir += rotStep;
-            transform.position = new Vector3(x, transform.position.y, z);
+            facingDir += rotDelta;
         }
-        facingDir = WrapClamp(facingDir, 0.0f, 360.0f);
+        transform.position = posEnd;
+        pivot.transform.eulerAngles = rotEnd;
+        facingDir = facingEnd;
 
         GetGridPos();
         isMoving = false;

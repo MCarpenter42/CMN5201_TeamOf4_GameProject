@@ -319,7 +319,6 @@ public class Player : LevelObject
 
     private void Debugging()
     {
-        GameManager.UIController.moveFrames = animFramesPassed;
         if (isMoving)
         {
             moveTimeElapsed += Time.deltaTime;

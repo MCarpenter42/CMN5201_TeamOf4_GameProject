@@ -6101,7 +6101,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   hud: {fileID: 1307769512}
   pauseMenu: {fileID: 550737563}
-  debugPanelInfo: 5
+  debugPanelInfo: 0
   debugDisplay: {fileID: 1331623611}
   fps: 0
   moveTime: 0

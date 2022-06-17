@@ -11,6 +11,7 @@ public class Core : MonoBehaviour
 	#region [ OBJECTS ]
 
 	public static Controls Controls;
+    public static VideoSettings VideoSettings;
 
     #endregion
 
@@ -286,14 +287,7 @@ public class Core : MonoBehaviour
             }
         }
 
-        if (childrenWithComponent.Count > 0)
-        {
-            return childrenWithComponent;
-        }
-        else
-        {
-            throw new System.Exception("Component type \"" + typeof(T) + "\" not found in any child objects!");
-        }
+        return childrenWithComponent;
     }
 
     // Pretty much the same deal here as with the "children with component" function.
@@ -311,6 +305,7 @@ public class Core : MonoBehaviour
                 }
             }
         }
+
         return childrenWithTag;
     }
     
@@ -331,6 +326,7 @@ public class Core : MonoBehaviour
                 }
             }
         }
+
         return itemsWithComponent;
     }
 
@@ -349,6 +345,7 @@ public class Core : MonoBehaviour
                 }
             }
         }
+
         return itemsWithTag;
     }
 
