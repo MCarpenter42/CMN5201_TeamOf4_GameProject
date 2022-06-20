@@ -6,7 +6,7 @@ using UnityEngine.UI;
 using UnityEditor;
 using TMPro;
 
-public class UIController : UI
+public class UIController : Core
 {
     #region [ OBJECTS ]
 
@@ -106,4 +106,5 @@ public class UIController : UI
             textObj.text = "FPS: " + fps.ToString();
         }
     }
+
 }

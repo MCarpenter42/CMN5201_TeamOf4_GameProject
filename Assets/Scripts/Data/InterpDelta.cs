@@ -4,15 +4,67 @@ using UnityEngine;
 
 public static class InterpDelta
 {
-    public static float CosCurve(float deltaIn)
+    public enum InterpTypes { Linear, CosCurve, CosSpeedUp, CosSlowDown, CosSpeedUpSlowDown, CosSlowDownSpeedUp, SmoothedLinear };
+
+    public static float CosCurve(float rawDelta)
     {
-        deltaIn = Mathf.Clamp(deltaIn, 0.0f, 1.0f);
-        float rad = deltaIn * Mathf.PI;
+        rawDelta = Mathf.Clamp(rawDelta, 0.0f, 1.0f);
+        float rad = rawDelta * Mathf.PI;
         float cos = -Mathf.Cos(rad);
-        return (cos + 1.0f) * 0.5f;
+        float output = (cos + 1.0f) * 0.5f;
+        return output;
+    }
+    
+    public static float CosSpeedUp(float rawDelta)
+    {
+        rawDelta = Mathf.Clamp(rawDelta, 0.0f, 1.0f);
+        float rad = rawDelta - 2.0f;
+        rad *= Mathf.PI;
+        rad /= 2.0f;
+        float cos = Mathf.Cos(rad);
+        float output = 1.0f + cos;
+        return output;
     }
 
-    public static float SmoothedLinear(float x, float smoothing0to1)
+    public static float CosSlowDown(float rawDelta)
+    {
+        rawDelta = Mathf.Clamp(rawDelta, 0.0f, 1.0f);
+        float rad = rawDelta - 1.0f;
+        rad *= Mathf.PI;
+        rad /= 2.0f;
+        float output = Mathf.Cos(rad);
+        return output;
+    }
+    
+    public static float CosSpeedUpSlowDown(float rawDelta, bool forward)
+    {
+        float output;
+        if (forward)
+        {
+            output = CosSpeedUp(rawDelta);
+        }
+        else
+        {
+            output = CosSlowDown(rawDelta);
+        }
+        return output;
+    }
+    
+    public static float CosSlowDownSpeedUp(float rawDelta, bool forward)
+    {
+        float output;
+        if (forward)
+        {
+            output = CosSlowDown(rawDelta);
+        }
+        else
+        {
+            output = CosSpeedUp(rawDelta);
+        }
+        return output;
+    }
+
+    public static float SmoothedLinear(float rawDelta, float smoothing0to1)
     {
         // This is my personal experimental lerp smoothing type!
 
@@ -25,7 +77,7 @@ public static class InterpDelta
         // Conversely, at a value of 1, the curve just becomes a
         // cos-type curve, and breaks again above that value.
 
-        float y = 0.0f;
+        float output = 0.0f;
 
         float n = 0.25f + 0.75f * Mathf.Clamp(smoothing0to1, 0.0f, 1.0f);
         float p1 = Mathf.Sqrt(n) / 2 + 1;
@@ -33,23 +85,35 @@ public static class InterpDelta
 
         float piDivN = Mathf.PI / n;
 
-        if (x < n / 2.0f)
+        if (rawDelta < n / 2.0f)
         {
-            y = (Mathf.Pow(n, p1) * (1 - Mathf.Cos(piDivN * x))) / 2;
+            output = (Mathf.Pow(n, p1) * (1 - Mathf.Cos(piDivN * rawDelta))) / 2;
         }
-        else if (x > 1.0f - n / 2.0f)
+        else if (rawDelta > 1.0f - n / 2.0f)
         {
-            y = 1 - (Mathf.Pow(n, p1) * (1 + Mathf.Cos(piDivN * x + Mathf.PI - piDivN))) / 2;
+            output = 1 - (Mathf.Pow(n, p1) * (1 + Mathf.Cos(piDivN * rawDelta + Mathf.PI - piDivN))) / 2;
         }
-        else if (x >= n / 2.0f && x <= 1.0f - n / 2.0f)
+        else if (rawDelta >= n / 2.0f && rawDelta <= 1.0f - n / 2.0f)
         {
-            y = (Mathf.Pow(n, p2) * Mathf.PI) / 2 * Mathf.Sin(Mathf.PI / 2) * (x - 0.5f) + 0.5f;
+            output = (Mathf.Pow(n, p2) * Mathf.PI) / 2 * Mathf.Sin(Mathf.PI / 2) * (rawDelta - 0.5f) + 0.5f;
         }
-        else if (x == 0.5f)
+        else if (rawDelta == 0.5f)
         {
-            y = 0.5f;
+            output = 0.5f;
         }
 
-        return y;
+        return output;
+    }
+
+
+
+    private static float ToRad(float degrees)
+    {
+        return degrees * Mathf.PI / 180.0f;
+    }
+
+    private static float ToDeg(float radians)
+    {
+        return radians * 180.0f / Mathf.PI;
     }
 }

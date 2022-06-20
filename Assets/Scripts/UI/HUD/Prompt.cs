@@ -10,14 +10,14 @@ public class Prompt : UI
 {
     #region [ PROPERTIES ]
 
+    [Header("Prompt Properties")]
     [SerializeField] float minTextPadding = 30.0f;
     [SerializeField] bool twoParts = false;
     private GameObject[] parts = new GameObject[2] { null, null };
     private TextMeshProUGUI[] labels = new TextMeshProUGUI[2];
     private float[] defaultWidths = new float[3];
+    private float[] defaultHeights = new float[3];
 	
-    [HideInInspector] public bool visible;
-
 	#endregion
 
     /* - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
@@ -26,6 +26,7 @@ public class Prompt : UI
 
     void Awake()
     {
+        OnAwake();
         GetComponents();
     }
 
@@ -51,6 +52,7 @@ public class Prompt : UI
 
                 parts[0] = transform.GetChild(0).gameObject;
                 defaultWidths[0] = parts[0].GetComponent<RectTransform>().rect.width;
+                defaultHeights[0] = parts[0].GetComponent<RectTransform>().rect.height;
                 if (GetChildrenWithTag(parts[0], "Text").Count > 0)
                 {
                     labels[0] = GetChildrenWithTag(parts[0], "Text")[0].GetComponent<TextMeshProUGUI>();
@@ -58,6 +60,7 @@ public class Prompt : UI
 
                 parts[1] = transform.GetChild(1).gameObject;
                 defaultWidths[1] = parts[1].GetComponent<RectTransform>().rect.width;
+                defaultHeights[1] = parts[1].GetComponent<RectTransform>().rect.height;
                 if (GetChildrenWithTag(parts[1], "Text").Count > 0)
                 {
                     labels[1] = GetChildrenWithTag(parts[1], "Text")[0].GetComponent<TextMeshProUGUI>();
@@ -73,15 +76,28 @@ public class Prompt : UI
             }
         }
         defaultWidths[2] = gameObject.GetComponent<RectTransform>().rect.width;
+        defaultHeights[2] = gameObject.GetComponent<RectTransform>().rect.height;
     }
 
-    public void SetText(string text, AdjustCondition adjustWidth)
+    public void SetText(string text)
     {
-        SetText(0, text, adjustWidth);
+        SetText(0, text, AdjustCondition.GreaterThan, AdjustCondition.Never);
+    }
+    
+    public void SetText(int labelIndex, string text)
+    {
+        SetText(labelIndex, text, AdjustCondition.GreaterThan, AdjustCondition.Never);
+    }
+    
+    public void SetText(string text, AdjustCondition adjustWidth, AdjustCondition adjustHeight)
+    {
+        SetText(0, text, adjustWidth, adjustHeight);
     }
 
-    public void SetText(int labelIndex, string text, AdjustCondition adjustWidth)
+    public void SetText(int labelIndex, string text, AdjustCondition adjustWidth, AdjustCondition adjustHeight)
     {
+        labels[labelIndex].ForceMeshUpdate();
+
         Vector2 mainSize = gameObject.GetComponent<RectTransform>().sizeDelta;
         Vector2 partSize = new Vector2();
         if (twoParts)
@@ -93,6 +109,9 @@ public class Prompt : UI
 
         if (adjustWidth != AdjustCondition.Never)
         {
+            labels[labelIndex].enableWordWrapping = false;
+            labels[labelIndex].ForceMeshUpdate();
+
             float newTextWidth = labels[labelIndex].GetPreferredValues().x;
 
             if (adjustWidth == AdjustCondition.Always)
@@ -144,11 +163,62 @@ public class Prompt : UI
                 parts[labelIndex].GetComponent<RectTransform>().sizeDelta = partSize;
             }
         }
+        else if (adjustHeight != AdjustCondition.Never)
+        {
+            labels[labelIndex].enableWordWrapping = true;
+            labels[labelIndex].ForceMeshUpdate();
+
+            float newTextHeight = labels[labelIndex].GetRenderedValues().y;
+
+            if (adjustHeight == AdjustCondition.Always)
+            {
+                if (twoParts)
+                {
+                    float newPartHeight = newTextHeight + minTextPadding;
+                    float wDiff = newPartHeight - partSize.y;
+                    mainSize.y += wDiff;
+                    partSize.y = newPartHeight;
+                }
+                else
+                {
+                    mainSize.y = newTextHeight + minTextPadding;
+                }
+            }
+            else if (adjustHeight == AdjustCondition.GreaterThan)
+            {
+                if (newTextHeight + minTextPadding > defaultHeights[0])
+                {
+                    float wDiff = newTextHeight + minTextPadding - defaultHeights[0];
+                    if (twoParts)
+                    {
+                        partSize.y += wDiff;
+                        mainSize.y = (defaultHeights[2] - defaultHeights[1] - defaultHeights[0]) + partSize.y + parts[ToInt(!ToBool(labelIndex))].GetComponent<RectTransform>().sizeDelta.x;
+                    }
+                    else
+                    {
+                        mainSize.y += wDiff;
+                    }
+                }
+                else
+                {
+                    if (twoParts)
+                    {
+                        partSize.y = defaultHeights[labelIndex];
+                        mainSize.y = (defaultHeights[2] - defaultHeights[1] - defaultHeights[0]) + partSize.y + parts[ToInt(!ToBool(labelIndex))].GetComponent<RectTransform>().sizeDelta.x;
+                    }
+                    else
+                    {
+                        mainSize.y = defaultHeights[2];
+                    }
+                }
+            }
+
+            gameObject.GetComponent<RectTransform>().sizeDelta = mainSize;
+            if (twoParts)
+            {
+                parts[labelIndex].GetComponent<RectTransform>().sizeDelta = partSize;
+            }
+        }
     }
 
-    public void Show(bool show)
-    {
-        gameObject.SetActive(show);
-        visible = show;
-    }
 }

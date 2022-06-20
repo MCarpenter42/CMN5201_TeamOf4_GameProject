@@ -25,12 +25,13 @@ public class GameManager : Core
 
     #region [ PROPERTIES ]
 
-    public static bool isPaused = false;
-
     public static bool firstLoad = true;
 
     public static float FPS;
     private List<float> frameTimes = new List<float>();
+
+    public static bool isPaused = false;
+    public static bool showHints = true;
 
     #endregion
 

@@ -184,6 +184,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4510a9ae94798db4f9557113099c1dd5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  visible: 0
+  fixedShowHideDelay: 0
+  showHideType: 2
+  transitionTime: 0.4
+  hiddenOffset: {x: 0, y: 0}
+  slideMovementStyle: 5
+  opacity: 1
   minTextPadding: 30
   twoParts: 1
 --- !u!1 &3950075119065115114

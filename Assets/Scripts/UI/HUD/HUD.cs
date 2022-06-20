@@ -13,9 +13,10 @@ public class HUD : UI
     [HideInInspector] public List<Prompt> prompts;
 
     [Header("Prompts")]
-    public Prompt promptInteract;
-    public Prompt promptRotCW;
-    public Prompt promptRotCCW;
+    public Prompt levelHint;
+    public Prompt keyInteract;
+    public Prompt keyRotCW;
+    public Prompt keyRotCCW;
 
 	#endregion
     
@@ -39,7 +40,7 @@ public class HUD : UI
         SetKeyPromptLabels();
         foreach (Prompt prompt in prompts)
         {
-            prompt.Show(false);
+            prompt.SetShown(false);
         }
     }
 	
@@ -61,16 +62,17 @@ public class HUD : UI
     {
         prompts = new List<Prompt>()
         {
-            promptInteract,
-            promptRotCW,
-            promptRotCCW,
+            levelHint,
+            keyInteract,
+            keyRotCW,
+            keyRotCCW
         };
     }
 
     private void SetKeyPromptLabels()
     {
-        promptInteract.SetText(0, Controls.Interaction.Interact.Key.ToString(), AdjustCondition.GreaterThan);
-        promptRotCW.SetText(0, Controls.Interaction.RotateClockwise.Key.ToString(), AdjustCondition.GreaterThan);
-        promptRotCCW.SetText(0, Controls.Interaction.RotateCounterClockwise.Key.ToString(), AdjustCondition.GreaterThan);
+        keyInteract.SetText(0, Controls.Interaction.Interact.Key.ToString(), AdjustCondition.GreaterThan, AdjustCondition.Never);
+        keyRotCW.SetText(0, Controls.Interaction.RotateClockwise.Key.ToString(), AdjustCondition.GreaterThan, AdjustCondition.Never);
+        keyRotCCW.SetText(0, Controls.Interaction.RotateCounterClockwise.Key.ToString(), AdjustCondition.GreaterThan, AdjustCondition.Never);
     }
 }

@@ -187,14 +187,14 @@ public class Player : LevelObject
             canGrabFacing = false;
         }
 
-        Prompt interactPrompt = GameManager.UIController.hud.promptInteract;
+        Prompt interactPrompt = GameManager.UIController.hud.keyInteract;
 
         if (interactPrompt != null)
         {
             if (canGrabFacing && objectMoving == null)
             {
                 interactPrompt.Show(true);
-                interactPrompt.SetText(1, "Grab Object", AdjustCondition.Always);
+                interactPrompt.SetText(1, "Grab Object", AdjustCondition.Always, AdjustCondition.Never);
             }
             else if (!canGrabFacing && objectMoving == null)
             {
@@ -224,19 +224,19 @@ public class Player : LevelObject
             //CheckObjectPushable(grabDir);
         }
 
-        Prompt interactPrompt = GameManager.UIController.hud.promptInteract;
-        Prompt rotCWPrompt = GameManager.UIController.hud.promptRotCW;
-        Prompt rotCCWPrompt = GameManager.UIController.hud.promptRotCCW;
+        Prompt interactPrompt = GameManager.UIController.hud.keyInteract;
+        Prompt rotCWPrompt = GameManager.UIController.hud.keyRotCW;
+        Prompt rotCCWPrompt = GameManager.UIController.hud.keyRotCCW;
 
         if (grabSuccess && interactPrompt.visible)
         {
-            interactPrompt.SetText(1, "Release Object", AdjustCondition.Always);
+            interactPrompt.SetText(1, "Release Object", AdjustCondition.Always, AdjustCondition.Never);
             if (objectMoving.rotatable)
             {
                 rotCWPrompt.Show(true);
-                rotCWPrompt.SetText(1, "Rotate Clockwise", AdjustCondition.Always);
+                rotCWPrompt.SetText(1, "Rotate Clockwise", AdjustCondition.Always, AdjustCondition.Never);
                 rotCCWPrompt.Show(true);
-                rotCCWPrompt.SetText(1, "Rotate Counter-Clockwise", AdjustCondition.Always);
+                rotCCWPrompt.SetText(1, "Rotate Counter-Clockwise", AdjustCondition.Always, AdjustCondition.Never);
             }
         }
 
@@ -249,8 +249,8 @@ public class Player : LevelObject
         objectDir = Vector3.zero;
         CheckObjectPushable(GetGridDir(facingDir));
 
-        Prompt rotCWPrompt = GameManager.UIController.hud.promptRotCW;
-        Prompt rotCCWPrompt = GameManager.UIController.hud.promptRotCCW;
+        Prompt rotCWPrompt = GameManager.UIController.hud.keyRotCW;
+        Prompt rotCCWPrompt = GameManager.UIController.hud.keyRotCCW;
         rotCWPrompt.Show(false);
         rotCCWPrompt.Show(false);
     }

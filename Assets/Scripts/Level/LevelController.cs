@@ -10,6 +10,7 @@ public class LevelController : Core
 {
     #region [ PROPERTIES ]
 
+    [Header("Level Properties")]
     public bool isGameplayLevel = true;
     [SerializeField] public float gridCellScale = 1.0f;
     [HideInInspector] public WorldGrid worldGrid;
@@ -19,6 +20,9 @@ public class LevelController : Core
 
     private Player player;
     private StartPoint startPoint;
+
+    [Header("Puzzle Properties")]
+    [SerializeField][TextArea] string levelHintText = "";
 
     #endregion
 
@@ -51,6 +55,8 @@ public class LevelController : Core
                 player.Move(startingMove, 0.8f * (float)startPoint.moveMulti);
                 player.ChangeFacing(startingMove);
             }
+
+            LevelHint();
         }
     }
 
@@ -134,6 +140,28 @@ public class LevelController : Core
     }
 
     #endregion
+
+    /* - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
+    
+    private void LevelHint()
+    {
+        if (GameManager.UIController.hud.levelHint != null)
+        {
+            if (levelHintText != null && levelHintText.Length > 0)
+            {
+                Prompt levelHint = GameManager.UIController.hud.levelHint.GetComponent<Prompt>();
+                float initialShowDelay = 1.0f;
+                float initialHideDelay = initialShowDelay + levelHint.fixedShowHideDelay;
+                levelHint.DoDelayedShow(true, initialShowDelay);
+                levelHint.SetText(levelHintText, AdjustCondition.Never, AdjustCondition.Always);
+                levelHint.DoDelayedShow(false, initialHideDelay);
+            }
+            else
+            {
+                GameManager.UIController.hud.levelHint.GetComponent<Prompt>().SetShown(false);
+            }
+        }
+    }
 
     /* - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
 
