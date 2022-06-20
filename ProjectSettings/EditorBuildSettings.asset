@@ -6,11 +6,8 @@ EditorBuildSettings:
   serializedVersion: 2
   m_Scenes:
   - enabled: 1
-    path: Assets/Scenes/Game Scenes/Demo for Audio Team/Level 1.unity
-    guid: 373cdc71cac38bd479e6c5daaa5e392c
-  - enabled: 1
-    path: Assets/Scenes/Game Scenes/Demo for Audio Team/Level 2.unity
-    guid: a617ac9c818ae124ba10694c2c2905ab
+    path: Assets/Scenes/Stakeholder Demo Scenes/DemoScene_2.unity
+    guid: 02252f810e4586444a09cfe880f52e6e
   - enabled: 1
     path: Assets/Scenes/Game Scenes/Demo for Audio Team/End Screen.unity
     guid: 63d6df06cbf76ed4b9b37c024d7dc0ee
