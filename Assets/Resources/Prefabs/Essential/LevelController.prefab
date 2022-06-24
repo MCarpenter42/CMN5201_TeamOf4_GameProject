@@ -47,6 +47,6 @@ MonoBehaviour:
   gridCellScale: 1
   worldGrid: {fileID: 0}
   levelObjects: []
-  useTileGrid: 1
+  useTileGrid: 0
   floorTiles: []
   levelHintText: 
