@@ -101,19 +101,19 @@ public class Player : LevelObject
                 if (walkable)
                 {
                     Move(gridMovement, animTime);
-                    StartCoroutine(DelayedCheckObjectPushable(gridMovement, animTime));
+                    StartCoroutine(DelayedCheckObjectMovable(gridMovement, animTime));
                 }
                 else
                 {
                     if (jumpable)
                     {
                         Move(gridMovement * 2.0f, Vector3.up * jumpHeight, animTime * jumpTimescale);
-                        StartCoroutine(DelayedCheckObjectPushable(gridMovement, animTime * jumpTimescale));
+                        StartCoroutine(DelayedCheckObjectMovable(gridMovement, animTime * jumpTimescale));
                     }
                 }
             }
         }
-        else
+        else if (objectMoving.movable)
         {
             GetObjectMovingDir();
             if (gridMovement.normalized == -objectDir.normalized)
@@ -127,7 +127,7 @@ public class Player : LevelObject
                     {
                         Move(gridMovement, animTime);
                         objectMoving.Move(gridMovement, animTime);
-                        StartCoroutine(DelayedCheckObjectPushable(gridMovement, animTime));
+                        StartCoroutine(DelayedCheckObjectMovable(gridMovement, animTime));
                     }
                 }
             }
@@ -142,7 +142,7 @@ public class Player : LevelObject
                     {
                         Move(gridMovement, animTime);
                         objectMoving.Move(gridMovement, animTime);
-                        StartCoroutine(DelayedCheckObjectPushable(gridMovement, animTime));
+                        StartCoroutine(DelayedCheckObjectMovable(gridMovement, animTime));
                     }
                 }
             }
@@ -163,17 +163,17 @@ public class Player : LevelObject
             pivot.transform.eulerAngles = new Vector3(0.0f, facingDir, 0.0f);
         }
 
-        CheckObjectPushable(dir);
+        CheckObjectMovable(dir);
     }
 
-    public void CheckObjectPushable(Vector3 dir)
+    public void CheckObjectMovable(Vector3 dir)
     {
         RaycastHit hit;
         Physics.Raycast(transform.position + checkOffset, dir, out hit, GameManager.LevelController.gridCellScale * 1.10f);
         if (hit.collider != null)
         {
             LevelObject obj = hit.collider.gameObject.GetComponent<LevelObject>();
-            if (obj != null && obj.movable)
+            if (obj != null && (obj.movable || obj.rotatable))
             {
                 canGrabFacing = true;
             }
@@ -203,10 +203,10 @@ public class Player : LevelObject
         }
     }
 
-    public IEnumerator DelayedCheckObjectPushable(Vector3 dir, float time)
+    public IEnumerator DelayedCheckObjectMovable(Vector3 dir, float time)
     {
         yield return new WaitForSeconds(time);
-        CheckObjectPushable(dir);
+        CheckObjectMovable(dir);
     }
 
     public bool Grab()
@@ -221,7 +221,7 @@ public class Player : LevelObject
             grabSuccess = true;
             objectMoving = hitObject.GetComponent<LevelObject>();
             objectDir = grabDir;
-            //CheckObjectPushable(grabDir);
+            //CheckObjectMovable(grabDir);
         }
 
         Prompt interactPrompt = GameManager.UIController.hud.keyInteract;
@@ -247,7 +247,7 @@ public class Player : LevelObject
     {
         objectMoving = null;
         objectDir = Vector3.zero;
-        CheckObjectPushable(GetGridDir(facingDir));
+        CheckObjectMovable(GetGridDir(facingDir));
 
         Prompt rotCWPrompt = GameManager.UIController.hud.keyRotCW;
         Prompt rotCCWPrompt = GameManager.UIController.hud.keyRotCCW;

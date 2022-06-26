@@ -17,6 +17,7 @@ public class Core : MonoBehaviour
 
     #region [ ENUMERATION TYPES ]
 
+    public enum Axis { X, Y, Z };
     public enum ObjectTypes { Empty, Static, Dynamic, Player, StartPoint, EndPoint };
     public enum BeamColours { White, Red, Green, Blue };
     public enum AdjustCondition { Never, Always, LessThan, GreaterThan };

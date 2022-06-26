@@ -102,7 +102,6 @@ public class BeamEmitter : Core
     {
         beamPoints.Clear();
         beamPoints.Add(transform.position);
-        int n = 0;
         Vector3[] output = new Vector3[] { transform.position, transform.forward };
         while(true)
         {
@@ -112,14 +111,13 @@ public class BeamEmitter : Core
             }
             else
             {
-                output = BeamCast(output[0], output[1], n);
-                n++;
+                output = BeamCast(output[0], output[1]);
             }
         }
         DrawBeam();
     }
 
-    private Vector3[] BeamCast(Vector3 origin, Vector3 dir, int step)
+    private Vector3[] BeamCast(Vector3 origin, Vector3 dir)
     {
         RaycastHit hit;
         bool didHit = Physics.Raycast(origin, dir, out hit, 300.0f);
@@ -156,27 +154,6 @@ public class BeamEmitter : Core
         {
             return new Vector3[] { hit.point, Vector3.zero };
         }
-    }
-
-    private bool CheckNew()
-    {
-        bool pathChanged = false;
-        if (beamPoints.Count == beamPath.Count)
-        {
-            for (int i = 0; i < beamPoints.Count; i++)
-            {
-                if (beamPoints[i].x != beamPath[i].x || beamPoints[i].z != beamPath[i].z)
-                {
-                    pathChanged = true;
-                    break;
-                }
-            }
-        }
-        else
-        {
-            pathChanged = true;
-        }
-        return pathChanged;
     }
 
     private void DrawBeam()
