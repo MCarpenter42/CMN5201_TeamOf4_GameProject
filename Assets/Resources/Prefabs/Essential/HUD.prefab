@@ -212,7 +212,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 0}
+  m_Sprite: {fileID: 21300008, guid: 7188e9d0ec465034995ea794e337b4bd, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -461,8 +461,8 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 10911, guid: 0000000000000000f000000000000000, type: 0}
-  m_Type: 1
+  m_Sprite: {fileID: 21300020, guid: 7188e9d0ec465034995ea794e337b4bd, type: 3}
+  m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
   m_FillMethod: 4
@@ -541,6 +541,22 @@ PrefabInstance:
       propertyPath: m_Name
       value: Key Prompt (Interact)
       objectReference: {fileID: 0}
+    - target: {fileID: 4500715152626080734, guid: 6e90790b18812b646aeb3e736ebe5cec, type: 3}
+      propertyPath: m_Type
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4500715152626080734, guid: 6e90790b18812b646aeb3e736ebe5cec, type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: 21300006, guid: 7188e9d0ec465034995ea794e337b4bd, type: 3}
+    - target: {fileID: 6094407955074729444, guid: 6e90790b18812b646aeb3e736ebe5cec, type: 3}
+      propertyPath: m_Type
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6094407955074729444, guid: 6e90790b18812b646aeb3e736ebe5cec, type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: 21300008, guid: e919f8b19e6260d44b25ce176dd8ee66, type: 3}
     - target: {fileID: 6903476043371668629, guid: 6e90790b18812b646aeb3e736ebe5cec, type: 3}
       propertyPath: hiddenOffset.x
       value: -600
@@ -658,6 +674,22 @@ PrefabInstance:
       propertyPath: m_Name
       value: Key Prompt (Rotate CCW)
       objectReference: {fileID: 0}
+    - target: {fileID: 4500715152626080734, guid: 6e90790b18812b646aeb3e736ebe5cec, type: 3}
+      propertyPath: m_Type
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4500715152626080734, guid: 6e90790b18812b646aeb3e736ebe5cec, type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: 21300006, guid: 7188e9d0ec465034995ea794e337b4bd, type: 3}
+    - target: {fileID: 6094407955074729444, guid: 6e90790b18812b646aeb3e736ebe5cec, type: 3}
+      propertyPath: m_Type
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6094407955074729444, guid: 6e90790b18812b646aeb3e736ebe5cec, type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: 21300008, guid: e919f8b19e6260d44b25ce176dd8ee66, type: 3}
     - target: {fileID: 6903476043371668629, guid: 6e90790b18812b646aeb3e736ebe5cec, type: 3}
       propertyPath: hiddenOffset.x
       value: 600
@@ -775,6 +807,22 @@ PrefabInstance:
       propertyPath: m_Name
       value: Key Prompt (Rotate CW)
       objectReference: {fileID: 0}
+    - target: {fileID: 4500715152626080734, guid: 6e90790b18812b646aeb3e736ebe5cec, type: 3}
+      propertyPath: m_Type
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4500715152626080734, guid: 6e90790b18812b646aeb3e736ebe5cec, type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: 21300006, guid: 7188e9d0ec465034995ea794e337b4bd, type: 3}
+    - target: {fileID: 6094407955074729444, guid: 6e90790b18812b646aeb3e736ebe5cec, type: 3}
+      propertyPath: m_Type
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6094407955074729444, guid: 6e90790b18812b646aeb3e736ebe5cec, type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: 21300008, guid: e919f8b19e6260d44b25ce176dd8ee66, type: 3}
     - target: {fileID: 6903476043371668629, guid: 6e90790b18812b646aeb3e736ebe5cec, type: 3}
       propertyPath: hiddenOffset.x
       value: 600
