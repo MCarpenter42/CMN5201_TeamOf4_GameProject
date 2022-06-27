@@ -45,7 +45,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   materials:
-  - {fileID: 2100000, guid: 6a517ac100e560943b28f4a933e03dc2, type: 2}
+  - {fileID: 2100000, guid: 7958cad9af7de8245b6bc62037953577, type: 2}
   scaleAdjustment: {x: 0.125, y: 0.125}
   surfaceScaleDimensions: 1
   materialOffset: {x: 0, y: 0}
