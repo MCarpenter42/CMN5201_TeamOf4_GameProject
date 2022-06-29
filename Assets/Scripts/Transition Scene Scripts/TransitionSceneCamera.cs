@@ -25,7 +25,7 @@ public class TransitionSceneCamera : MonoBehaviour
     {
         Delta = 0.0f;//our delta will be going from 0f to 1f
         Alpha = 0.0f;
-        direction = StartingPoint.position - ScenePoint.position;
+        /*direction = StartingPoint.position - ScenePoint.position;*/
         rotAroundZAxis = -direction.z * 180;
     }
     
@@ -34,7 +34,7 @@ public class TransitionSceneCamera : MonoBehaviour
     {
         //code to make our platform move back and forth from point A to B
         /*transform.position = (1+Beta) * StartingPoint.position + Beta * ScenePoint.position;*/
-        Delta = Mathf.Cos(Time.time * speed) * 0.75f + 0.5f;
+        Delta = Mathf.Cos(Time.time * speed) * 0.75f + 0.75f;
         transform.position = Vector3.Lerp(transform.position, ScenePoint.transform.position, Time.deltaTime * Delta);
         
          /* transform.rotation = Quaternion.Lerp(StartingPoint.rotation, ScenePoint.rotation, Alpha * Time.deltaTime);

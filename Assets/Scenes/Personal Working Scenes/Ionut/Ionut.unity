@@ -2094,7 +2094,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 304406012}
   m_LocalRotation: {x: 0.21851647, y: -0, z: -0, w: 0.9758333}
-  m_LocalPosition: {x: 8.12, y: 32.51, z: -14.3}
+  m_LocalPosition: {x: -1.51, y: 30.66, z: -10.38}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 1823077749}
@@ -2115,7 +2115,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   StartingPoint: {fileID: 1913308861}
   ScenePoint: {fileID: 1750687713}
-  speed: 0.3
+  speed: 0.1
 --- !u!1001 &305218324
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -9759,7 +9759,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1490190532}
   m_Layer: 0
-  m_Name: EmptyObjects
+  m_Name: LerpingPoints
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -11755,13 +11755,13 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1823077746}
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalRotation: {x: -0.07170184, y: -0, z: -0, w: 0.9974261}
+  m_LocalPosition: {x: -3.11, y: -6.55, z: -5.48}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 304406013}
   m_RootOrder: 0
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: -8.223, y: 0, z: 0}
 --- !u!1001 &1876615915
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -12165,7 +12165,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1913308860}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -32.13077, y: 26.702312, z: -47.383656}
+  m_LocalPosition: {x: -45.2, y: 34, z: -41.8}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 1490190532}
