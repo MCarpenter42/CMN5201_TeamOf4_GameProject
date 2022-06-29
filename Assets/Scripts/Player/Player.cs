@@ -91,13 +91,17 @@ public class Player : LevelObject
         Vector3 dir = gridMovement.normalized;
         if (objectMoving == null)
         {
-            bool obstructed = Physics.Raycast(transform.position + checkOffset, dir, GameManager.LevelController.gridCellScale * 1.45f);
+            bool obstructed = Physics.Raycast(transform.position + checkOffset, dir, GameManager.LevelController.gridCellScale * 1.4f);
             if (!obstructed)
             {
                 Vector3 targetPos = transform.position + checkOffset + dir * GameManager.LevelController.gridCellScale;
                 bool walkable = Physics.Raycast(targetPos, Vector3.down, GameManager.LevelController.gridCellScale * 0.20f);
+
                 targetPos += dir * GameManager.LevelController.gridCellScale;
                 bool jumpable = Physics.Raycast(targetPos, Vector3.down, GameManager.LevelController.gridCellScale * 0.20f);
+
+                obstructed = Physics.Raycast(transform.position + checkOffset, dir, GameManager.LevelController.gridCellScale * 2.4f);
+
                 if (walkable)
                 {
                     Move(gridMovement, animTime);
@@ -105,7 +109,7 @@ public class Player : LevelObject
                 }
                 else
                 {
-                    if (jumpable)
+                    if (jumpable && !obstructed)
                     {
                         Move(gridMovement * 2.0f, Vector3.up * jumpHeight, animTime * jumpTimescale);
                         StartCoroutine(DelayedCheckObjectMovable(gridMovement, animTime * jumpTimescale));

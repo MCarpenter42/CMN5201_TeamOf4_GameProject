@@ -21,6 +21,8 @@ public class GameManager : Core
 
     public static PauseMenu PauseMenu;
 
+    public static AudioController AudioController;
+
     #endregion
 
     #region [ PROPERTIES ]
@@ -116,6 +118,8 @@ public class GameManager : Core
             Player = FindObjectOfType<Player>();
         }
         UIController = FindObjectOfType<UIController>();
+
+        AudioController = FindObjectOfType<AudioController>();
 
         if (firstLoad)
         {
