@@ -6,12 +6,11 @@ using UnityEngine.UI;
 using UnityEditor;
 using TMPro;
 
-public class StaticSurface : LevelObject
+public class AudioTest : SFXSource
 {
-    #region [ PROPERTIES ]
-
-    [Header("Surface Settings")]
-    public FloorTypes material = FloorTypes.Stone;
+	#region [ PROPERTIES ]
+	
+	
 	
 	#endregion
 
@@ -19,24 +18,12 @@ public class StaticSurface : LevelObject
 
 	#region [ BUILT-IN UNITY FUNCTIONS ]
 
-    void Awake()
-    {
-        
-    }
-
-    void Start()
-    {
-        
-    }
-	
     void Update()
     {
-        
-    }
-
-    void FixedUpdate()
-    {
-        
+        if (Input.GetKeyDown("t"))
+        {
+            PlayAudioClip();
+        }
     }
 
 	#endregion

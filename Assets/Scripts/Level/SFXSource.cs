@@ -15,7 +15,7 @@ public class SFXSource : Core
     [SerializeField] AudioClip clip;
 
     [Header("Settings")]
-    [SerializeField] float baseVolume;
+    [SerializeField] float baseVolume = 1.0f;
     [SerializeField] bool volumeFalloff;
     [Range(0.0f, 100.0f)]
     [SerializeField] float minDistance = 0.0f;
@@ -82,20 +82,22 @@ public class SFXSource : Core
     public bool PlayAudioClip()
     {
         bool alreadyPlaying = source.isPlaying;
-        if (!alreadyPlaying)
+        /*if (!alreadyPlaying)
         {
             source.PlayOneShot(clip);
-        }
+        }*/
+        source.PlayOneShot(clip);
         return alreadyPlaying;
     }
     
     public bool PlayAudioClip(AudioClip clip)
     {
         bool alreadyPlaying = source.isPlaying;
-        if (!alreadyPlaying)
+        /*if (!alreadyPlaying)
         {
             source.PlayOneShot(clip);
-        }
+        }*/
+        source.PlayOneShot(clip, 1.0f);
         return alreadyPlaying;
     }
 

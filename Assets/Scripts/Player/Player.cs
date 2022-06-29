@@ -19,8 +19,9 @@ public class Player : LevelObject
 
     [Header("Attributes")]
     [SerializeField] float jumpHeight = 0.5f;
-    [SerializeField] float jumpTimescale = 1.2f;
-    public float moveTime = 0.25f;
+    [SerializeField] float jumpTimescale = 1.5f;
+    public float moveTime = 0.6f;
+    [SerializeField] int stepsPerGridUnit = 2;
 
     [Header("Behaviour")]
     [SerializeField] public bool useStartPath = false;
@@ -106,6 +107,8 @@ public class Player : LevelObject
                 {
                     Move(gridMovement, animTime);
                     StartCoroutine(DelayedCheckObjectMovable(gridMovement, animTime));
+                    int steps = (int)((gridMovement.magnitude / GameManager.LevelController.gridCellScale) * (float)stepsPerGridUnit);
+                    GameManager.AudioController.PlayerWalk(animTime, steps);
                 }
                 else
                 {
@@ -132,6 +135,8 @@ public class Player : LevelObject
                         Move(gridMovement, animTime);
                         objectMoving.Move(gridMovement, animTime);
                         StartCoroutine(DelayedCheckObjectMovable(gridMovement, animTime));
+                        int steps = (int)((gridMovement.magnitude / GameManager.LevelController.gridCellScale) * (float)stepsPerGridUnit);
+                        GameManager.AudioController.PlayerWalk(animTime, steps);
                     }
                 }
             }
@@ -147,6 +152,8 @@ public class Player : LevelObject
                         Move(gridMovement, animTime);
                         objectMoving.Move(gridMovement, animTime);
                         StartCoroutine(DelayedCheckObjectMovable(gridMovement, animTime));
+                        int steps = (int)((gridMovement.magnitude / GameManager.LevelController.gridCellScale) * (float)stepsPerGridUnit);
+                        GameManager.AudioController.PlayerWalk(animTime, steps);
                     }
                 }
             }
@@ -317,6 +324,22 @@ public class Player : LevelObject
         }
 
         return !rotObstructed;
+    }
+
+    public FloorTypes GetFloorType()
+    {
+        FloorTypes type = FloorTypes.Empty;
+        Vector3 castPos = transform.position + checkOffset;
+        RaycastHit hit;
+        if (Physics.Raycast(castPos, Vector3.down, out hit, GameManager.LevelController.gridCellScale * 0.20f))
+        {
+            StaticSurface floor = hit.collider.gameObject.GetComponent<StaticSurface>();
+            if (floor != null)
+            {
+                type = floor.material;
+            }
+        }
+        return type;
     }
 
     /* - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */

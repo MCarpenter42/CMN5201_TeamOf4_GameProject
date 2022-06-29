@@ -18,9 +18,19 @@ public class AudioController : Core
     [SerializeField] AudioClip levelMusic;
     private AudioSource musicPlayer;
 
-    [Header("SFX")]
+    [Header("Sources")]
     [SerializeField] SFXSource sfxSourcePrefab;
-    private List<SFXSource> sfxSources = new List<SFXSource>();
+    [HideInInspector] public List<SFXSource> sfxSources = new List<SFXSource>();
+    [HideInInspector] public SFXSource playerSFX;
+    [HideInInspector] public List<SFXSource> beamSFX = new List<SFXSource>();
+
+    [Header("Player SFX")]
+    [SerializeField] public List<AudioClip> walkStone = new List<AudioClip>();
+    [SerializeField] public List<AudioClip> walkWood = new List<AudioClip>();
+    [SerializeField] public List<AudioClip> walkGrass = new List<AudioClip>();
+    [SerializeField] public List<AudioClip> walkFoliage = new List<AudioClip>();
+    [SerializeField] public List<AudioClip> walkWater = new List<AudioClip>();
+    private Coroutine playerWalkCycle = null;
 
 	#endregion
 
@@ -36,7 +46,7 @@ public class AudioController : Core
         {
             zone.transform.position = levelCentre;
         }
-        GetExistingSFX();
+        //GetExistingSFX();
     }
 
     void Start()
@@ -61,6 +71,8 @@ public class AudioController : Core
                 reverbZones.Add(child);
             }
         }
+
+        playerSFX = GetChildrenWithComponent<SFXSource>(GameManager.Player.gameObject)[0].GetComponent<SFXSource>();
     }
 
     private void GetExistingSFX()
@@ -91,7 +103,7 @@ public class AudioController : Core
 
         return n;
     }
-
+    
     public bool DestroySFXSource(int index)
     {
         bool indexInBounds = InBounds(index, sfxSources);
@@ -99,6 +111,81 @@ public class AudioController : Core
         {
             Destroy(sfxSources[index], 0.05f);
             sfxSources.RemoveAt(index);
+        }
+        return indexInBounds;
+    }
+
+    public int CreateSFXSource(Vector3 pos, string listName)
+    {
+        int n = sfxSources.Count;
+
+        SFXSource sfxSource;
+        switch (listName)
+        {
+            case "beamSFX":
+                n = beamSFX.Count;
+                sfxSource = Instantiate(sfxSourcePrefab, pos, Quaternion.identity);
+                beamSFX.Add(sfxSource);
+                break;
+
+            case "sfxSources":
+            default:
+                n = sfxSources.Count;
+                sfxSource = Instantiate(sfxSourcePrefab, pos, Quaternion.identity);
+                sfxSources.Add(sfxSource);
+                break;
+        }
+
+        return n;
+    }
+
+    public int CreateSFXSource(Vector3 pos, AudioClip clip, string listName)
+    {
+        int n = sfxSources.Count;
+
+        SFXSource sfxSource;
+        switch (listName)
+        {
+            case "beamSFX":
+                n = beamSFX.Count;
+                sfxSource = Instantiate(sfxSourcePrefab, pos, Quaternion.identity);
+                sfxSource.SetAudioClip(clip);
+                beamSFX.Add(sfxSource);
+                break;
+
+            case "sfxSources":
+            default:
+                n = sfxSources.Count;
+                sfxSource = Instantiate(sfxSourcePrefab, pos, Quaternion.identity);
+                sfxSource.SetAudioClip(clip);
+                sfxSources.Add(sfxSource);
+                break;
+        }
+
+        return n;
+    }
+
+    public bool DestroySFXSource(int index, string listName)
+    {
+        bool indexInBounds = false;
+        switch (listName)
+        {
+            case "beamSFX":
+                if (indexInBounds)
+                {
+                    Destroy(beamSFX[index], 0.05f);
+                    beamSFX.RemoveAt(index);
+                }
+                break;
+
+            case "sfxSources":
+            default:
+                if (indexInBounds)
+                {
+                    Destroy(sfxSources[index], 0.05f);
+                    sfxSources.RemoveAt(index);
+                }
+                break;
         }
         return indexInBounds;
     }
@@ -124,8 +211,39 @@ public class AudioController : Core
 
     /* - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
 
-    public void PlayerMoveAudio()
+    public void PlayerWalk(float time, int stepCount)
     {
+        if (playerWalkCycle != null)
+        {
+            StopCoroutine(playerWalkCycle);
+        }
+        playerWalkCycle = StartCoroutine(IPlayerWalk(time, stepCount));
+    }
 
+    private IEnumerator IPlayerWalk(float time, int stepCount)
+    {
+        float stepTime = time / (float)stepCount;
+
+        float targetTime = stepTime / 2.0f;
+        for (int i = 0; i < stepCount; i++)
+        {
+            float timePassed = 0.0f;
+            while (timePassed <= targetTime)
+            {
+                yield return null;
+                timePassed += Time.deltaTime;
+            }
+            
+            switch (GameManager.Player.GetFloorType())
+            {
+                case FloorTypes.Empty:
+                case FloorTypes.Stone:
+                default:
+                    playerSFX.PlayAudioClip(PickFromList(walkStone));
+                    break;
+            }
+
+            targetTime = stepTime;
+        }
     }
 }

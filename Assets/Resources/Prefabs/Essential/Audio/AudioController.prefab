@@ -48,6 +48,20 @@ MonoBehaviour:
   levelCentre: {x: 0, y: 0, z: 0}
   levelMusic: {fileID: 0}
   sfxSourcePrefab: {fileID: -1874640132433861565, guid: 98449a369f4206d4e9244a5736c0afbf, type: 3}
+  sfxSources: []
+  playerSFX: {fileID: 0}
+  beamSFX: []
+  walkStone:
+  - {fileID: 8300000, guid: f49f955608739f748a7a0330d0e80d65, type: 3}
+  - {fileID: 8300000, guid: 19c2e94ab406a7c4992d40566b466c05, type: 3}
+  - {fileID: 8300000, guid: bb860478c902f474eb0fe3f5e0a692a1, type: 3}
+  - {fileID: 8300000, guid: 94f52dbed03c2f047b6f45ba6dcc3f79, type: 3}
+  - {fileID: 8300000, guid: aabf01705ad9056488d3949a02508e62, type: 3}
+  - {fileID: 8300000, guid: 678bb90b6862deb4c983efe41ed50a79, type: 3}
+  walkWood: []
+  walkGrass: []
+  walkFoliage: []
+  walkWater: []
 --- !u!82 &1936744473378142413
 AudioSource:
   m_ObjectHideFlags: 0

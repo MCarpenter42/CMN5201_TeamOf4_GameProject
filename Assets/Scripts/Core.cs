@@ -19,7 +19,7 @@ public class Core : MonoBehaviour
 
     public enum Axis { X, Y, Z };
     public enum ObjectTypes { Empty, Static, Dynamic, Player, StartPoint, EndPoint };
-    public enum FloorTypes { Stone, Wood, Grass, Foliage, UnderWater };
+    public enum FloorTypes { Empty, Stone, Wood, Grass, Foliage, UnderWater };
     public enum BeamColours { White, Red, Green, Blue };
     public enum AdjustCondition { Never, Always, LessThan, GreaterThan };
 
@@ -265,6 +265,12 @@ public class Core : MonoBehaviour
         {
             destination.Add(source[i]);
         }
+    }
+
+    public static T PickFromList<T>(List<T> itemList)
+    {
+        int n = RandomInt(0, itemList.Count - 1);
+        return itemList[n];
     }
 
     #endregion
