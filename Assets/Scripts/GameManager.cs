@@ -14,14 +14,13 @@ public class GameManager : Core
     private VideoSettings vidSettingsInstance;
 
     public static Player Player;
-
     public static LevelController LevelController;
 
     public static UIController UIController;
-
     public static PauseMenu PauseMenu;
 
     public static AudioController AudioController;
+    public static GameObject Listener;
 
     #endregion
 
@@ -117,9 +116,11 @@ public class GameManager : Core
         {
             Player = FindObjectOfType<Player>();
         }
+
         UIController = FindObjectOfType<UIController>();
 
         AudioController = FindObjectOfType<AudioController>();
+        Listener = FindObjectOfType<AudioListener>().gameObject;
 
         if (firstLoad)
         {
