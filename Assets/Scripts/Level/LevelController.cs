@@ -171,19 +171,19 @@ public class LevelController : Core
         {
             if (GetInput(Controls.Movement.Up))
             {
-                player.PlayerMove(Vector3.forward, player.moveTime);
+                player.PlayerMove(Vector3.forward);
             }
             else if (GetInput(Controls.Movement.Down))
             {
-                player.PlayerMove(-Vector3.forward, player.moveTime);
+                player.PlayerMove(-Vector3.forward);
             }
             else if (GetInput(Controls.Movement.Right))
             {
-                player.PlayerMove(Vector3.right, player.moveTime);
+                player.PlayerMove(Vector3.right);
             }
             else if (GetInput(Controls.Movement.Left))
             {
-                player.PlayerMove(-Vector3.right, player.moveTime);
+                player.PlayerMove(-Vector3.right);
             }
 
             if (GetInputDown(Controls.Interaction.Interact) && !player.isMoving)

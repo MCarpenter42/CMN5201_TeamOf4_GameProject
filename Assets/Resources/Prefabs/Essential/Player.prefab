@@ -242,9 +242,9 @@ MonoBehaviour:
   canGrabFacing: 0
   objectMoving: {fileID: 0}
   objectDir: {x: 0, y: 0, z: 0}
-  jumpHeight: 0.5
-  jumpTimescale: 1.5
-  moveTime: 0.6
+  moveTime: 0.7
+  jumpHeight: 0.6
+  jumpTime: 0.3
   stepsPerGridUnit: 2
   useStartPath: 0
   startPathPoints: []
@@ -773,10 +773,6 @@ PrefabInstance:
     - target: {fileID: 6107320034225841355, guid: 98449a369f4206d4e9244a5736c0afbf, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 8748719975698855805, guid: 98449a369f4206d4e9244a5736c0afbf, type: 3}
-      propertyPath: Mute
-      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 9098060028122157199, guid: 98449a369f4206d4e9244a5736c0afbf, type: 3}
       propertyPath: m_Name

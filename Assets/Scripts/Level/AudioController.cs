@@ -224,7 +224,7 @@ public class AudioController : Core
     {
         float stepTime = time / (float)stepCount;
 
-        float targetTime = stepTime / 2.0f;
+        float targetTime = stepTime * 0.75f;
         for (int i = 0; i < stepCount; i++)
         {
             float timePassed = 0.0f;

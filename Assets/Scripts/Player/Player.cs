@@ -18,9 +18,9 @@ public class Player : LevelObject
     private Vector3 checkOffset = new Vector3(0.0f, -0.9f, 0.0f);
 
     [Header("Attributes")]
-    [SerializeField] float jumpHeight = 0.5f;
-    [SerializeField] float jumpTimescale = 1.5f;
     public float moveTime = 0.6f;
+    [SerializeField] float jumpHeight = 0.5f;
+    [SerializeField] float jumpTime = 0.4f;
     [SerializeField] int stepsPerGridUnit = 2;
 
     [Header("Behaviour")]
@@ -87,7 +87,7 @@ public class Player : LevelObject
 
     /* - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
 
-    public void PlayerMove(Vector3 gridMovement, float animTime)
+    public void PlayerMove(Vector3 gridMovement)
     {
         Vector3 dir = gridMovement.normalized;
         if (objectMoving == null)
@@ -105,17 +105,17 @@ public class Player : LevelObject
 
                 if (walkable)
                 {
-                    Move(gridMovement, animTime);
-                    StartCoroutine(DelayedCheckObjectMovable(gridMovement, animTime));
+                    Move(gridMovement, moveTime);
+                    StartCoroutine(DelayedCheckObjectMovable(gridMovement, moveTime));
                     int steps = (int)((gridMovement.magnitude / GameManager.LevelController.gridCellScale) * (float)stepsPerGridUnit);
-                    GameManager.AudioController.PlayerWalk(animTime, steps);
+                    GameManager.AudioController.PlayerWalk(moveTime, steps);
                 }
                 else
                 {
                     if (jumpable && !obstructed)
                     {
-                        Move(gridMovement * 2.0f, Vector3.up * jumpHeight, animTime * jumpTimescale);
-                        StartCoroutine(DelayedCheckObjectMovable(gridMovement, animTime * jumpTimescale));
+                        Move(gridMovement * 2.0f, Vector3.up * jumpHeight, jumpTime);
+                        StartCoroutine(DelayedCheckObjectMovable(gridMovement, jumpTime));
                     }
                 }
             }
@@ -132,11 +132,11 @@ public class Player : LevelObject
                     bool walkable = Physics.Raycast(targetPos, Vector3.down, GameManager.LevelController.gridCellScale * 0.20f);
                     if (walkable)
                     {
-                        Move(gridMovement, animTime);
-                        objectMoving.Move(gridMovement, animTime);
-                        StartCoroutine(DelayedCheckObjectMovable(gridMovement, animTime));
+                        Move(gridMovement, moveTime);
+                        objectMoving.Move(gridMovement, moveTime);
+                        StartCoroutine(DelayedCheckObjectMovable(gridMovement, moveTime));
                         int steps = (int)((gridMovement.magnitude / GameManager.LevelController.gridCellScale) * (float)stepsPerGridUnit);
-                        GameManager.AudioController.PlayerWalk(animTime, steps);
+                        GameManager.AudioController.PlayerWalk(moveTime, steps);
                     }
                 }
             }
@@ -149,11 +149,11 @@ public class Player : LevelObject
                     bool walkable = Physics.Raycast(targetPos, Vector3.down, GameManager.LevelController.gridCellScale * 0.20f);
                     if (walkable)
                     {
-                        Move(gridMovement, animTime);
-                        objectMoving.Move(gridMovement, animTime);
-                        StartCoroutine(DelayedCheckObjectMovable(gridMovement, animTime));
+                        Move(gridMovement, moveTime);
+                        objectMoving.Move(gridMovement, moveTime);
+                        StartCoroutine(DelayedCheckObjectMovable(gridMovement, moveTime));
                         int steps = (int)((gridMovement.magnitude / GameManager.LevelController.gridCellScale) * (float)stepsPerGridUnit);
-                        GameManager.AudioController.PlayerWalk(animTime, steps);
+                        GameManager.AudioController.PlayerWalk(moveTime, steps);
                     }
                 }
             }
