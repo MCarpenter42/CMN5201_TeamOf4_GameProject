@@ -17,11 +17,11 @@ public class Player : LevelObject
     [HideInInspector] public Vector3 objectDir = Vector3.zero;
     private Vector3 checkOffset = new Vector3(0.0f, -0.9f, 0.0f);
 
-    [Header("Attributes")]
-    public float moveTime = 0.6f;
+    [Header("Properties")]
     [SerializeField] float jumpHeight = 0.5f;
     [SerializeField] float jumpTime = 0.4f;
-    [SerializeField] int stepsPerGridUnit = 2;
+    [SerializeField] float jumpWindup = 0.1f;
+    [SerializeField] int stepsPerTile = 2;
 
     [Header("Behaviour")]
     [SerializeField] public bool useStartPath = false;
@@ -38,6 +38,7 @@ public class Player : LevelObject
     void Awake()
     {
         OnAwake();
+        jumpTime += jumpWindup;
     }
 
     void Start()
@@ -90,8 +91,10 @@ public class Player : LevelObject
     public void PlayerMove(Vector3 gridMovement)
     {
         Vector3 dir = gridMovement.normalized;
+        float moveDuration = 0.0f;
         if (objectMoving == null)
         {
+            moveDuration = moveTime;
             bool obstructed = Physics.Raycast(transform.position + checkOffset, dir, GameManager.LevelController.gridCellScale * 1.4f);
             if (!obstructed)
             {
@@ -105,23 +108,26 @@ public class Player : LevelObject
 
                 if (walkable)
                 {
-                    Move(gridMovement, moveTime);
-                    StartCoroutine(DelayedCheckObjectMovable(gridMovement, moveTime));
-                    int steps = (int)((gridMovement.magnitude / GameManager.LevelController.gridCellScale) * (float)stepsPerGridUnit);
-                    GameManager.AudioController.PlayerWalk(moveTime, steps);
+                    Move(gridMovement, moveDuration);
+                    StartCoroutine(DelayedCheckObjectMovable(gridMovement, moveDuration));
+                    int steps = (int)((gridMovement.magnitude / GameManager.LevelController.gridCellScale) * (float)stepsPerTile);
+                    GameManager.AudioController.PlayerWalk(moveDuration, steps);
                 }
                 else
                 {
                     if (jumpable && !obstructed)
                     {
-                        Move(gridMovement * 2.0f, Vector3.up * jumpHeight, jumpTime);
-                        StartCoroutine(DelayedCheckObjectMovable(gridMovement, jumpTime));
+                        moveDuration = jumpTime;
+                        Move(gridMovement * 2.0f, moveDuration, Vector3.up * jumpHeight, jumpWindup);
+                        StartCoroutine(DelayedCheckObjectMovable(gridMovement, moveDuration));
+                        GameManager.AudioController.PlayerJump(moveDuration);
                     }
                 }
             }
         }
         else if (objectMoving.movable)
         {
+            moveDuration = objectMoving.moveTime;
             GetObjectMovingDir();
             if (gridMovement.normalized == -objectDir.normalized)
             {
@@ -132,11 +138,11 @@ public class Player : LevelObject
                     bool walkable = Physics.Raycast(targetPos, Vector3.down, GameManager.LevelController.gridCellScale * 0.20f);
                     if (walkable)
                     {
-                        Move(gridMovement, moveTime);
-                        objectMoving.Move(gridMovement, moveTime);
-                        StartCoroutine(DelayedCheckObjectMovable(gridMovement, moveTime));
-                        int steps = (int)((gridMovement.magnitude / GameManager.LevelController.gridCellScale) * (float)stepsPerGridUnit);
-                        GameManager.AudioController.PlayerWalk(moveTime, steps);
+                        Move(gridMovement, moveDuration);
+                        objectMoving.Move(gridMovement, moveDuration);
+                        StartCoroutine(DelayedCheckObjectMovable(gridMovement, moveDuration));
+                        int steps = (int)((gridMovement.magnitude / GameManager.LevelController.gridCellScale) * (float)stepsPerTile);
+                        GameManager.AudioController.PlayerWalk(moveDuration, steps);
                     }
                 }
             }
@@ -149,11 +155,11 @@ public class Player : LevelObject
                     bool walkable = Physics.Raycast(targetPos, Vector3.down, GameManager.LevelController.gridCellScale * 0.20f);
                     if (walkable)
                     {
-                        Move(gridMovement, moveTime);
-                        objectMoving.Move(gridMovement, moveTime);
-                        StartCoroutine(DelayedCheckObjectMovable(gridMovement, moveTime));
-                        int steps = (int)((gridMovement.magnitude / GameManager.LevelController.gridCellScale) * (float)stepsPerGridUnit);
-                        GameManager.AudioController.PlayerWalk(moveTime, steps);
+                        Move(gridMovement, moveDuration);
+                        objectMoving.Move(gridMovement, moveDuration);
+                        StartCoroutine(DelayedCheckObjectMovable(gridMovement, moveDuration));
+                        int steps = (int)((gridMovement.magnitude / GameManager.LevelController.gridCellScale) * (float)stepsPerTile);
+                        GameManager.AudioController.PlayerWalk(moveDuration, steps);
                     }
                 }
             }

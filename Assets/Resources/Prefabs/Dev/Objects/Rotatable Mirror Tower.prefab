@@ -841,6 +841,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d35680c315a24da4595f62215f020480, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  reflectAxis: 2
 --- !u!1 &7454149348625126059
 GameObject:
   m_ObjectHideFlags: 0
@@ -921,11 +922,13 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   gridPos: {x: 0, y: 0, z: 0}
   isMoving: 0
+  isJumping: 0
   facingDir: 0
   type: 2
   pivot: {fileID: 0}
   movable: 1
   rotatable: 1
+  moveTime: 1.2
 --- !u!65 &6298874831341291988
 BoxCollider:
   m_ObjectHideFlags: 0

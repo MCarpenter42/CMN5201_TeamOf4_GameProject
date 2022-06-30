@@ -269,8 +269,15 @@ public class Core : MonoBehaviour
 
     public static T PickFromList<T>(List<T> itemList)
     {
-        int n = RandomInt(0, itemList.Count - 1);
-        return itemList[n];
+        if (itemList.Count > 0)
+        {
+            int n = RandomInt(0, itemList.Count - 1);
+            return itemList[n];
+        }
+        else
+        {
+            return default(T);
+        }
     }
 
     #endregion

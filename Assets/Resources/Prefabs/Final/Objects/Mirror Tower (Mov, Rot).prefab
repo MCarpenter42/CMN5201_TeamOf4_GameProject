@@ -447,11 +447,13 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   gridPos: {x: 0, y: 0, z: 0}
   isMoving: 0
+  isJumping: 0
   facingDir: 0
   type: 2
   pivot: {fileID: 0}
   movable: 1
   rotatable: 1
+  moveTime: 1.2
 --- !u!1 &3617911246796687878
 GameObject:
   m_ObjectHideFlags: 0
