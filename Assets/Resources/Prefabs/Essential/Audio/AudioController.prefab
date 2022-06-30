@@ -52,12 +52,12 @@ MonoBehaviour:
   playerSFX: {fileID: 0}
   beamSFX: []
   walkStone:
-  - {fileID: 8300000, guid: f49f955608739f748a7a0330d0e80d65, type: 3}
-  - {fileID: 8300000, guid: 19c2e94ab406a7c4992d40566b466c05, type: 3}
-  - {fileID: 8300000, guid: bb860478c902f474eb0fe3f5e0a692a1, type: 3}
-  - {fileID: 8300000, guid: 94f52dbed03c2f047b6f45ba6dcc3f79, type: 3}
-  - {fileID: 8300000, guid: aabf01705ad9056488d3949a02508e62, type: 3}
-  - {fileID: 8300000, guid: 678bb90b6862deb4c983efe41ed50a79, type: 3}
+  - {fileID: 8300000, guid: 4d84bd0af1d27c94d88f407fe36e0dd5, type: 3}
+  - {fileID: 8300000, guid: 66a6cc1db564ac94a8a104f9271a4b8c, type: 3}
+  - {fileID: 8300000, guid: 1d65f0d7110c465428f6f74afa38e7ee, type: 3}
+  - {fileID: 8300000, guid: 65443f5616948dc46be1223be42c5141, type: 3}
+  - {fileID: 8300000, guid: c82815a5e45871741a3e78e24e8dcad3, type: 3}
+  - {fileID: 8300000, guid: c08a417941fe43248a1eb13100afe694, type: 3}
   walkWood: []
   walkGrass: []
   walkFoliage: []
