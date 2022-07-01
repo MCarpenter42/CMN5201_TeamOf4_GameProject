@@ -271,13 +271,13 @@ MonoBehaviour:
   pivot: {fileID: 0}
   movable: 0
   rotatable: 0
-  moveTime: 0.5
+  moveTime: 0.2
   dirInd: {fileID: 2775515460777177824}
   canGrabFacing: 0
   objectMoving: {fileID: 0}
   objectDir: {x: 0, y: 0, z: 0}
   jumpHeight: 0.6
-  jumpTime: 0.4
+  jumpTime: 0.3
   jumpWindup: 0.08
   stepsPerTile: 1
   useStartPath: 0

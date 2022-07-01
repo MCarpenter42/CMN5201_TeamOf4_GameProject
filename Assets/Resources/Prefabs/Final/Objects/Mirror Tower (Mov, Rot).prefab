@@ -453,7 +453,7 @@ MonoBehaviour:
   pivot: {fileID: 0}
   movable: 1
   rotatable: 1
-  moveTime: 1.2
+  moveTime: 0.3
 --- !u!1 &3617911246796687878
 GameObject:
   m_ObjectHideFlags: 0
