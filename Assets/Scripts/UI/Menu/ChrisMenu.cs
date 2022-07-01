@@ -58,4 +58,20 @@ public class ChrisMenu : UI
     {
         SceneManager.LoadScene(12);
     }
+    public void Level13()
+    {
+        SceneManager.LoadScene(13);
+    }
+    public void Level14()
+    {
+        SceneManager.LoadScene(14);
+    }
+    public void Level15()
+    {
+        SceneManager.LoadScene(15);
+    }
+    public void Level16()
+    {
+        SceneManager.LoadScene(16);
+    }
 }
