@@ -10390,6 +10390,10 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1430937335786913403, guid: ca0a3789d31aa374fa6cf6775575373a, type: 3}
       propertyPath: gridOffsetWhenOpen.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1430937335786913403, guid: ca0a3789d31aa374fa6cf6775575373a, type: 3}
+      propertyPath: gridOffsetWhenOpen.z
       value: 1.1
       objectReference: {fileID: 0}
     m_RemovedComponents: []

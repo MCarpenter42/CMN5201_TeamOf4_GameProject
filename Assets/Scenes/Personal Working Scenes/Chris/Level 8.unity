@@ -10203,7 +10203,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 291198861330458768, guid: ff1fe3ac905ca534986a1171691b8742, type: 3}
       propertyPath: levelHintText
-      value: Only One Side
+      value: Make use of everything
       objectReference: {fileID: 0}
     - target: {fileID: 291198861330458769, guid: ff1fe3ac905ca534986a1171691b8742, type: 3}
       propertyPath: m_RootOrder
