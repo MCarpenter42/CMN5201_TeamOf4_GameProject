@@ -20,6 +20,7 @@ public class LevelController : Core
 
     private Player player;
     private StartPoint startPoint;
+    private CameraController levelCam;
 
     [Header("Puzzle Properties")]
     [SerializeField][TextArea] string levelHintText = "";
@@ -86,6 +87,7 @@ public class LevelController : Core
         }
         player = GameManager.Player;
         startPoint = FindObjectOfType<StartPoint>();
+        levelCam = FindObjectOfType<CameraController>();
     }
 
     private void Setup()
@@ -165,25 +167,97 @@ public class LevelController : Core
 
     /* - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
 
-    public void LevelInputs()
+    public void PlayerControl()
     {
-        if (!player.isMoving)
+        if (!player.isMoving && !levelCam.isRotating)
         {
             if (GetInput(Controls.Movement.Up))
             {
-                player.PlayerMove(Vector3.forward);
+                switch (levelCam.facing)
+                {
+                    case CompassBearing.North:
+                    default:
+                        player.PlayerMove(Vector3.forward);
+                        break;
+
+                    case CompassBearing.East:
+                        player.PlayerMove(Vector3.right);
+                        break;
+
+                    case CompassBearing.South:
+                        player.PlayerMove(-Vector3.forward);
+                        break;
+
+                    case CompassBearing.West:
+                        player.PlayerMove(-Vector3.right);
+                        break;
+                }
             }
             else if (GetInput(Controls.Movement.Down))
             {
-                player.PlayerMove(-Vector3.forward);
+                switch (levelCam.facing)
+                {
+                    case CompassBearing.North:
+                    default:
+                        player.PlayerMove(-Vector3.forward);
+                        break;
+
+                    case CompassBearing.East:
+                        player.PlayerMove(-Vector3.right);
+                        break;
+
+                    case CompassBearing.South:
+                        player.PlayerMove(Vector3.forward);
+                        break;
+
+                    case CompassBearing.West:
+                        player.PlayerMove(Vector3.right);
+                        break;
+                }
             }
             else if (GetInput(Controls.Movement.Right))
             {
-                player.PlayerMove(Vector3.right);
+                switch (levelCam.facing)
+                {
+                    case CompassBearing.North:
+                    default:
+                        player.PlayerMove(Vector3.right);
+                        break;
+
+                    case CompassBearing.East:
+                        player.PlayerMove(-Vector3.forward);
+                        break;
+
+                    case CompassBearing.South:
+                        player.PlayerMove(-Vector3.right);
+                        break;
+
+                    case CompassBearing.West:
+                        player.PlayerMove(Vector3.forward);
+                        break;
+                }
             }
             else if (GetInput(Controls.Movement.Left))
             {
-                player.PlayerMove(-Vector3.right);
+                switch (levelCam.facing)
+                {
+                    case CompassBearing.North:
+                    default:
+                        player.PlayerMove(-Vector3.right);
+                        break;
+
+                    case CompassBearing.East:
+                        player.PlayerMove(Vector3.forward);
+                        break;
+
+                    case CompassBearing.South:
+                        player.PlayerMove(Vector3.right);
+                        break;
+
+                    case CompassBearing.West:
+                        player.PlayerMove(-Vector3.forward);
+                        break;
+                }
             }
 
             if (GetInputDown(Controls.Interaction.Interact) && !player.isMoving)
@@ -219,6 +293,33 @@ public class LevelController : Core
                         }
                     }
                 }
+            }
+        }
+    }
+
+    public void CameraControl()
+    {
+        if (!levelCam.isRotating)
+        {
+            if (GetInputDown(Controls.Level.RotCamLeft))
+            {
+                levelCam.DoRotation(new Vector2Int(0, 1), 1.0f);
+            }
+            else if (GetInputDown(Controls.Level.RotCamRight))
+            {
+                levelCam.DoRotation(new Vector2Int(0, -1), 1.0f);
+            }
+        }
+
+        if (!levelCam.isZooming)
+        {
+            if (GetInput(Controls.Level.ZoomCamIn))
+            {
+                levelCam.DoZoom(2, 0.4f);
+            }
+            else if (GetInput(Controls.Level.ZoomCamOut))
+            {
+                levelCam.DoZoom(-2, 0.4f);
             }
         }
     }

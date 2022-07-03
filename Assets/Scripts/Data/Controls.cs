@@ -294,6 +294,10 @@ public class Controls_Interaction
 public class Controls_Level
 {
 	public ControlInput ResetLevel = new ControlInput("Reset Level", KeyCode.Backspace);
+    public ControlInput RotCamLeft = new ControlInput("Rotate Camera Left", KeyCode.LeftArrow);
+    public ControlInput RotCamRight = new ControlInput("Rotate Camera Right", KeyCode.RightArrow);
+    public ControlInput ZoomCamIn = new ControlInput("Zoom Camera In", KeyCode.R);
+    public ControlInput ZoomCamOut = new ControlInput("Zoom Camera Out", KeyCode.F);
 }
 
 

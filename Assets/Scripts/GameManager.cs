@@ -155,7 +155,8 @@ public class GameManager : Core
     {
         if (LevelController.isGameplayLevel)
         {
-            LevelController.LevelInputs();
+            LevelController.PlayerControl();
+            LevelController.CameraControl();
         }
 
         if (Input.GetKeyDown(Controls.General.Pause.Key))
