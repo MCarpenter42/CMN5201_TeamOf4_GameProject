@@ -81,11 +81,13 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   gridPos: {x: 0, y: 0, z: 0}
   isMoving: 0
+  isJumping: 0
   facingDir: 0
   type: 1
   pivot: {fileID: 0}
   movable: 0
   rotatable: 0
+  moveTime: 0
   material: 0
 --- !u!1 &8283292064998902813
 GameObject:
