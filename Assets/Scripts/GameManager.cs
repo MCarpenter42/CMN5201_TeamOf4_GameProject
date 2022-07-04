@@ -124,6 +124,7 @@ public class GameManager : Core
         }
 
         UIController = FindObjectOfType<UIController>();
+        UIController.pauseMenu.PauseMenuResume();
 
         AudioController = FindObjectOfType<AudioController>();
         Listener = FindObjectOfType<AudioListener>().gameObject;
