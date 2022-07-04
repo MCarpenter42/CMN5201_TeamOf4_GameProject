@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 4379710136362829874}
   - component: {fileID: 6708267181245157759}
   m_Layer: 0
-  m_Name: Light Trigger
+  m_Name: Light Trigger (Old Colour)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -397,7 +397,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 66786675415283b418a6ceb448386b41, type: 2}
+  - {fileID: 2100000, guid: f716952394f826f43bfd61722edffe7d, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -895,10 +895,6 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 23000013011644782, guid: ea9aa6d764a18cc4dbf5edc90a813992, type: 3}
-      propertyPath: m_Materials.Array.data[0]
-      value: 
-      objectReference: {fileID: 2100000, guid: 66786675415283b418a6ceb448386b41, type: 2}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: ea9aa6d764a18cc4dbf5edc90a813992, type: 3}
 --- !u!4 &679857094030084037 stripped

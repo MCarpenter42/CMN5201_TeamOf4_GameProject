@@ -55,7 +55,7 @@ public class Player : LevelObject
     {
         if (collision.gameObject.GetComponent<EndPoint>() != null)
         {
-            GoToScene('+');
+            GameManager.LevelController.NextLevel();
         }
     }
 
@@ -90,11 +90,16 @@ public class Player : LevelObject
 
     public void PlayerMove(Vector3 gridMovement)
     {
+        PlayerMove(gridMovement, 1.0f);
+    }
+    
+    public void PlayerMove(Vector3 gridMovement, float speedMod)
+    {
         Vector3 dir = gridMovement.normalized;
         float moveDuration = 0.0f;
         if (objectMoving == null)
         {
-            moveDuration = moveTime;
+            moveDuration = moveTime / speedMod;
             bool obstructed = Physics.Raycast(transform.position + checkOffset, dir, GameManager.LevelController.gridCellScale * 1.4f);
             if (!obstructed)
             {
@@ -127,7 +132,7 @@ public class Player : LevelObject
         }
         else if (objectMoving.movable)
         {
-            moveDuration = objectMoving.moveTime;
+            moveDuration = objectMoving.moveTime / speedMod;
             GetObjectMovingDir();
             if (gridMovement.normalized == -objectDir.normalized)
             {
@@ -165,6 +170,22 @@ public class Player : LevelObject
             }
         }
         ChangeFacing(gridMovement);
+    }
+
+    public void DelayedPlayerMove(float delay, Vector3 gridMovement)
+    {
+        StartCoroutine(IDelayedPlayerMove(delay, gridMovement, 1.0f));
+    }
+    
+    public void DelayedPlayerMove(float delay, Vector3 gridMovement, float speedMod)
+    {
+        StartCoroutine(IDelayedPlayerMove(delay, gridMovement, speedMod));
+    }
+
+    private IEnumerator IDelayedPlayerMove(float delay, Vector3 gridMovement, float speedMod)
+    {
+        yield return new WaitForSecondsRealtime(delay);
+        PlayerMove(gridMovement, speedMod);
     }
 
     public void ChangeFacing(Vector3 dir)

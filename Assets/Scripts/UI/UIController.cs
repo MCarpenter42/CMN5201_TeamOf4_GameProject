@@ -10,15 +10,16 @@ public class UIController : Core
 {
     #region [ OBJECTS ]
 
-    private enum PerfDebugDisplay { None, FPS };
-
     [Header("UI Components")]
     public HUD hud;
+    public Image blackScreen;
     public PauseMenu pauseMenu;
 
     [Header("Performance & Debug")]
-    [SerializeField] PerfDebugDisplay debugPanelInfo = PerfDebugDisplay.None;
-    public GameObject debugDisplay;
+    [SerializeField] DebugDisplay debugPanelInfo = DebugDisplay.None;
+    public GameObject debugPanel;
+    private TMP_Text debugHeader;
+    private TMP_Text debugInfo;
     [HideInInspector] public float fps;
 
     #endregion
@@ -40,27 +41,27 @@ public class UIController : Core
 
     void Start()
     {
-        if (debugDisplay != null)
+        if (debugPanel != null)
         {
-            if (debugPanelInfo != PerfDebugDisplay.None)
+            if (debugPanelInfo != DebugDisplay.None)
             {
-                debugDisplay.SetActive(true);
-                TextMeshProUGUI label = GetChildrenWithComponent<TextMeshProUGUI>(debugDisplay)[1].GetComponent<TextMeshProUGUI>();
-                if (debugPanelInfo == PerfDebugDisplay.FPS)
+                debugPanel.SetActive(true);
+                TextMeshProUGUI label = GetChildrenWithComponent<TextMeshProUGUI>(debugPanel)[1].GetComponent<TextMeshProUGUI>();
+                if (debugPanelInfo == DebugDisplay.FPS)
                 {
                     label.text = "FPS:";
                 }
             }
             else
             {
-                debugDisplay.SetActive(false);
+                debugPanel.SetActive(false);
             }
         }
     }
 	
     void Update()
     {
-        if (debugPanelInfo != PerfDebugDisplay.None)
+        if (debugPanelInfo != DebugDisplay.None)
         {
             UpdateDebugDisplay();
         }
@@ -96,15 +97,72 @@ public class UIController : Core
                 pauseMenu.menuFrame.SetActive(false);
             }
         }
+
+        if (debugPanel != null && GetChildrenWithComponent<TMP_Text>(debugPanel).Count > 1)
+        {
+            debugHeader = GetChildrenWithComponent<TMP_Text>(debugPanel)[0].GetComponent<TMP_Text>();
+            debugInfo = GetChildrenWithComponent<TMP_Text>(debugPanel)[1].GetComponent<TMP_Text>();
+        }
+    }
+
+    public void SetDebugType(DebugDisplay dbType)
+    {
+        debugPanelInfo = dbType;
+        if (debugPanel != null)
+        {
+            switch (dbType)
+            {
+                case DebugDisplay.None:
+                default:
+                    debugPanel.SetActive(false);
+                    break;
+
+                case DebugDisplay.FPS:
+                    debugPanel.SetActive(true);
+                    debugHeader.text = "FPS:";
+                    break;
+            }
+        }
     }
 
     public void UpdateDebugDisplay()
     {
-        TextMeshProUGUI textObj = GetChildrenWithComponent<TextMeshProUGUI>(debugDisplay)[0].GetComponent<TextMeshProUGUI>();
-        if (debugPanelInfo == PerfDebugDisplay.FPS)
+        switch (debugPanelInfo)
         {
-            textObj.text = "FPS: " + fps.ToString();
+            case DebugDisplay.None:
+            default:
+                break;
+
+            case DebugDisplay.FPS:
+                debugInfo.text = fps.ToString();
+                break;
         }
     }
 
+    public void BlackScreenFade(bool show, float duration)
+    {
+        StartCoroutine(IBlackScreenFade(show, duration));
+    }
+
+    private IEnumerator IBlackScreenFade(bool show, float duration)
+    {
+        Color clrStart = new Color(0.059f, 0.059f, 0.059f, 1.000f);
+        Color clrEnd = new Color(0.059f, 0.059f, 0.059f, 0.000f);
+
+        if (show)
+        {
+            clrStart = new Color(0.059f, 0.059f, 0.059f, 0.000f);
+            clrEnd = new Color(0.059f, 0.059f, 0.059f, 1.000f);
+        }
+
+        float timePassed = 0.0f;
+        while (timePassed < duration)
+        {
+            yield return null;
+            timePassed += Time.deltaTime;
+            float delta = timePassed / duration;
+            blackScreen.color = Color.Lerp(clrStart, clrEnd, delta);
+        }
+        blackScreen.color = clrEnd;
+    }
 }

@@ -46,11 +46,13 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   gridPos: {x: 0, y: 0, z: 0}
   isMoving: 0
+  isJumping: 0
   facingDir: 0
   type: 2
   pivot: {fileID: 0}
   movable: 0
   rotatable: 0
+  moveTime: 0
   gridOffsetWhenOpen: {x: 0, y: 0, z: 0}
   startOpen: 0
   transitionTime: 4
@@ -114,7 +116,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: af9c37b793d4f854d8e031d08698a119, type: 2}
+  - {fileID: 2100000, guid: 66786675415283b418a6ceb448386b41, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0

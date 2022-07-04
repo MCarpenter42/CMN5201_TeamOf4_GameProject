@@ -12,6 +12,7 @@ public class LevelController : Core
 
     [Header("Level Properties")]
     public bool isGameplayLevel = true;
+    private float levelFadeTime = 0.6f;
     [SerializeField] public float gridCellScale = 1.0f;
     [HideInInspector] public WorldGrid worldGrid;
     [HideInInspector] public List<LevelObject> levelObjects = new List<LevelObject>();
@@ -33,6 +34,7 @@ public class LevelController : Core
 
     void Awake()
     {
+        GameManager.Instance.OnLevelLoad();
         GetComponents();
         Setup();
     }
@@ -53,11 +55,16 @@ public class LevelController : Core
                 player.transform.localPosition = startPoint.transform.localPosition;
                 player.GetGridPos();
                 Vector3 startingMove = player.GetGridDir(startPoint.GetFacing()).normalized * gridCellScale * (float)startPoint.moveMulti;
-                player.Move(startingMove, 0.8f * (float)startPoint.moveMulti);
-                player.ChangeFacing(startingMove);
+                player.DelayedPlayerMove(0.3f, startingMove, 0.25f);
+                //player.ChangeFacing(startingMove);
             }
 
             LevelHint();
+
+            if (GameManager.UIController.blackScreen != null)
+            {
+                GameManager.UIController.BlackScreenFade(false, levelFadeTime);
+            }
         }
     }
 
@@ -166,6 +173,21 @@ public class LevelController : Core
     }
 
     /* - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
+
+    public void NextLevel()
+    {
+        StartCoroutine(DelayedSceneChange(levelFadeTime));
+        if (GameManager.UIController.blackScreen != null)
+        {
+            GameManager.UIController.BlackScreenFade(true, levelFadeTime);
+        }
+    }
+
+    private IEnumerator DelayedSceneChange(float time)
+    {
+        yield return new WaitForSecondsRealtime(time);
+        GoToScene('+');
+    }
 
     public void PlayerControl()
     {

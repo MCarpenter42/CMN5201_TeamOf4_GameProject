@@ -26,8 +26,6 @@ public class GameManager : Core
 
     #region [ PROPERTIES ]
 
-    public static bool firstLoad = true;
-
     public static float FPS;
     private List<float> frameTimes = new List<float>();
 
@@ -114,7 +112,11 @@ public class GameManager : Core
         Controls = controlsInstance;
         vidSettingsInstance = gameObject.AddComponent<VideoSettings>();
         VideoSettings = vidSettingsInstance;
+        OnLevelLoad();
+    }
 
+    public void OnLevelLoad()
+    {
         LevelController = FindObjectOfType<LevelController>();
         if (LevelController.isGameplayLevel)
         {
@@ -125,17 +127,6 @@ public class GameManager : Core
 
         AudioController = FindObjectOfType<AudioController>();
         Listener = FindObjectOfType<AudioListener>().gameObject;
-
-        if (firstLoad)
-        {
-            firstLoad = false;
-            OnFirstLoad();
-        }
-    }
-
-    private void OnFirstLoad()
-    {
-        
     }
 
     private float CalcFPS()

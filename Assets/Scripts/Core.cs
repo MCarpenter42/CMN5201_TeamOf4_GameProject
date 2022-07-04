@@ -19,10 +19,15 @@ public class Core : MonoBehaviour
 
     public enum Axis { X, Y, Z };
     public enum CompassBearing { North, East, South, West };
+    public enum AdjustCondition { Never, Always, LessThan, GreaterThan };
+
     public enum ObjectTypes { Empty, Static, Dynamic, Player, StartPoint, EndPoint };
     public enum FloorTypes { Empty, Stone, Wood, Grass, Foliage, UnderWater };
+
     public enum BeamColours { White, Red, Green, Blue };
-    public enum AdjustCondition { Never, Always, LessThan, GreaterThan };
+
+
+    public enum DebugDisplay { None, FPS };
 
     #endregion
 
