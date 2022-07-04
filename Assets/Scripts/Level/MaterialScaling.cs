@@ -11,7 +11,7 @@ public class MaterialScaling : Core
 {
     #region [ PROPERTIES ]
 
-    private enum Dims { XY, XZ, YZ };
+    private enum Dims { Default, XY, XZ, YZ };
     private enum ScaleType { Standard, FromParent, ToOther };
 
     [Header("Materials")]
@@ -24,6 +24,10 @@ public class MaterialScaling : Core
     [Header("Options")]
     [SerializeField] ScaleType scaleType = ScaleType.Standard;
     [SerializeField] MeshRenderer[] affectedMeshes;
+    [SerializeField] bool addPositionToOffset = false;
+    [SerializeField] Dims posDimensionsToAdd = Dims.Default;
+    [SerializeField] bool invertPosOffset = true;
+    [SerializeField] float posOffsetScale = 1.0f;
 
     #endregion
 
@@ -33,6 +37,10 @@ public class MaterialScaling : Core
 
     void Start()
     {
+        if (surfaceScaleDimensions == Dims.Default)
+        {
+            surfaceScaleDimensions = Dims.XZ;
+        }
         Rescale();
     }
 
@@ -91,10 +99,12 @@ public class MaterialScaling : Core
 
         Vector2 surfaceSize = Vector2.one;
         Vector2 matScale = Vector2.one;
+        Vector2 matOffset = materialOffset;
         if (scaleType == ScaleType.FromParent)
         {
             switch (surfaceScaleDimensions)
             {
+                default:
                 case Dims.XY:
                     surfaceSize.x = transform.parent.localScale.x;
                     surfaceSize.y = transform.parent.localScale.y;
@@ -109,15 +119,13 @@ public class MaterialScaling : Core
                     surfaceSize.x = transform.parent.localScale.y;
                     surfaceSize.y = transform.parent.localScale.z;
                     break;
-
-                default:
-                    break;
             }
         }
         else
         {
             switch (surfaceScaleDimensions)
             {
+                default:
                 case Dims.XY:
                     surfaceSize.x = transform.localScale.x;
                     surfaceSize.y = transform.localScale.y;
@@ -132,15 +140,16 @@ public class MaterialScaling : Core
                     surfaceSize.x = transform.localScale.y;
                     surfaceSize.y = transform.localScale.z;
                     break;
-
-                default:
-                    break;
             }
         }
 
         matScale = surfaceSize;
         matScale.x *= scaleAdjustment.x;
         matScale.y *= scaleAdjustment.y;
+        if (addPositionToOffset)
+        {
+            matOffset += PositionOffset();
+        }
 
         if (localMaterials.Length > 0)
         {
@@ -149,7 +158,7 @@ public class MaterialScaling : Core
                 if (mat != null)
                 {
                     mat.mainTextureScale = matScale;
-                    mat.mainTextureOffset = materialOffset;
+                    mat.mainTextureOffset = matOffset;
                 }
             }
 
@@ -171,6 +180,42 @@ public class MaterialScaling : Core
                     rndr.materials = localMaterials;
                 }
             }
+        }
+    }
+
+    private Vector2 PositionOffset()
+    {
+        Vector2 offset = materialOffset;
+        Dims dims = posDimensionsToAdd;
+        if (dims == Dims.Default)
+        {
+            dims = surfaceScaleDimensions;
+        }
+        switch (dims)
+        {
+            default:
+            case Dims.XY:
+                offset.x += transform.position.x;
+                offset.y += transform.position.y;
+                break;
+
+            case Dims.XZ:
+                offset.x += transform.position.x;
+                offset.y += transform.position.z;
+                break;
+
+            case Dims.YZ:
+                offset.x += transform.position.y;
+                offset.y += transform.position.z;
+                break;
+        }
+        if (invertPosOffset)
+        {
+            return -offset * posOffsetScale;
+        }
+        else
+        {
+            return offset * posOffsetScale;
         }
     }
 }

@@ -62,11 +62,15 @@ MonoBehaviour:
   materials:
   - {fileID: 2100000, guid: 7958cad9af7de8245b6bc62037953577, type: 2}
   scaleAdjustment: {x: 0.125, y: 0.125}
-  surfaceScaleDimensions: 1
+  surfaceScaleDimensions: 2
   materialOffset: {x: 0, y: 0}
   scaleType: 2
   affectedMeshes:
   - {fileID: 3434255093365333008}
+  addPositionToOffset: 0
+  posDimensionsToAdd: 0
+  invertPosOffset: 1
+  posOffsetScale: 0.125
 --- !u!114 &4804290188483871178
 MonoBehaviour:
   m_ObjectHideFlags: 0
