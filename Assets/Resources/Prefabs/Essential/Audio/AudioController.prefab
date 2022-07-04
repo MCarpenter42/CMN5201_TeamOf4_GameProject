@@ -46,7 +46,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   levelCentre: {x: 0, y: 0, z: 0}
-  levelMusic: {fileID: 0}
+  levelMusic: {fileID: 8300000, guid: c1fdd7bb4a143584e806d61d88ba42bc, type: 3}
   sfxSourcePrefab: {fileID: -1874640132433861565, guid: 98449a369f4206d4e9244a5736c0afbf, type: 3}
   sfxSources: []
   playerSFX: {fileID: 0}
@@ -76,7 +76,7 @@ AudioSource:
   OutputAudioMixerGroup: {fileID: 0}
   m_audioClip: {fileID: 0}
   m_PlayOnAwake: 0
-  m_Volume: 0.3
+  m_Volume: 0.2
   m_Pitch: 1
   Loop: 1
   Mute: 0

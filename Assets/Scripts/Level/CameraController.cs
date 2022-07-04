@@ -10,13 +10,13 @@ public class CameraController : Core
 {
     #region [ PROPERTIES ]
 
-    private GameObject cameraMount;
+    [HideInInspector] public GameObject cameraMount;
     [HideInInspector] public bool isMoving = false;
     private Coroutine movement = null;
-    private GameObject cameraPivot;
+    [HideInInspector] public GameObject cameraPivot;
     [HideInInspector] public bool isRotating = false;
     private Coroutine rotation = null;
-    private GameObject cameraZoom;
+    [HideInInspector] public GameObject cameraZoom;
     [HideInInspector] public bool isZooming = false;
     private Coroutine zoom = null;
 
