@@ -85,7 +85,7 @@ public class LevelController : Core
         {
             floorTiles = ArrayToList(FindObjectsOfType<FloorTile>());
         }
-        player = GameManager.Player;
+        player = FindObjectOfType<Player>();
         startPoint = FindObjectOfType<StartPoint>();
         levelCam = FindObjectOfType<CameraController>();
     }

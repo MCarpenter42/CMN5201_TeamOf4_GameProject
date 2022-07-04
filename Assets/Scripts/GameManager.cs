@@ -82,6 +82,10 @@ public class GameManager : Core
         {
             instance = this;
         }
+        else
+        {
+            Destroy(this.gameObject);
+        }
         DontDestroyOnLoad(gameObject);
 
         Setup();

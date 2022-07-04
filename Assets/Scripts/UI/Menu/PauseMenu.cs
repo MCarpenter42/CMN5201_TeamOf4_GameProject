@@ -35,6 +35,7 @@ public class PauseMenu : UI
     public void Restart()
     {
         SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+        PauseMenuResume();
     }
 
     public void Quit()
