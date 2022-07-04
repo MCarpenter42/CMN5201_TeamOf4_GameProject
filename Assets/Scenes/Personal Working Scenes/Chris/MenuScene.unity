@@ -271,7 +271,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &34147654
 RectTransform:
   m_ObjectHideFlags: 0
@@ -444,7 +444,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &189636820
 RectTransform:
   m_ObjectHideFlags: 0
@@ -2388,8 +2388,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -0.0058899, y: -3.1973}
-  m_SizeDelta: {x: 2301.4, y: 831.0646}
+  m_AnchoredPosition: {x: -0.0058899, y: -24}
+  m_SizeDelta: {x: 2301.4, y: 912.8795}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &841471894
 MonoBehaviour:
@@ -2415,7 +2415,11 @@ MonoBehaviour:
     right    \nJumping: Jumping Automatically happens while moving over a 1 grid
     empty space.\n\nCamera Controls: \nRight Arrow-moves the camera to the right,
     \nLeft Arrow-moves the camera to the left\nR Key- Zooms the camera in, F Key
-    Zooms the camera out\n\nPause Menu:\nEscape Key to bring up the Pause menu\n\n\n"
+    Zooms the camera out\n\nObject interaction Controls:\nThese will be taught to
+    you at the first levels, Some objects are movable and some are not, some are
+    rotatable but not movable! Some objects are rotatable and movable and others
+    do Absolutely nothing! Experiment with objects to see what you can and can't
+    do with them.\n\nPause Menu:\nEscape Key to bring up the Pause menu\n\n\n"
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 4bcd8e5b17655f5438ed62078d95a0ac, type: 2}
   m_sharedMaterial: {fileID: 3626159461713369385, guid: 4bcd8e5b17655f5438ed62078d95a0ac, type: 2}
@@ -2442,8 +2446,8 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 45
-  m_fontSizeBase: 45
+  m_fontSize: 40
+  m_fontSizeBase: 40
   m_fontWeight: 400
   m_enableAutoSizing: 0
   m_fontSizeMin: 18
@@ -6520,7 +6524,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -2.0148063, y: -512}
+  m_AnchoredPosition: {x: -2.0148063, y: -568}
   m_SizeDelta: {x: 134.7649, y: 65.7497}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1561052855
@@ -7662,7 +7666,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: -12, y: 516.9176}
+  m_AnchoredPosition: {x: -12, y: 542}
   m_SizeDelta: {x: -1946.1273, y: -1091.7998}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1765948907
