@@ -37,6 +37,10 @@ public class UIController : Core
     void Awake()
     {
         GetComponents();
+        if (blackScreen != null)
+        {
+            blackScreen.gameObject.SetActive(true);
+        }
     }
 
     void Start()
@@ -146,6 +150,8 @@ public class UIController : Core
 
     private IEnumerator IBlackScreenFade(bool show, float duration)
     {
+        blackScreen.gameObject.SetActive(true);
+
         Color clrStart = new Color(0.059f, 0.059f, 0.059f, 1.000f);
         Color clrEnd = new Color(0.059f, 0.059f, 0.059f, 0.000f);
 
@@ -164,5 +170,10 @@ public class UIController : Core
             blackScreen.color = Color.Lerp(clrStart, clrEnd, delta);
         }
         blackScreen.color = clrEnd;
+
+        if (!show)
+        {
+            blackScreen.gameObject.SetActive(true);
+        }
     }
 }
