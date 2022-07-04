@@ -444,7 +444,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &189636820
 RectTransform:
   m_ObjectHideFlags: 0
@@ -3395,7 +3395,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: '     AZTEC LIGHTS'
+  m_text: '    TEMPLE  LIGHTS'
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 4bcd8e5b17655f5438ed62078d95a0ac, type: 2}
   m_sharedMaterial: {fileID: 3626159461713369385, guid: 4bcd8e5b17655f5438ed62078d95a0ac, type: 2}
@@ -6047,7 +6047,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &1396853819
 RectTransform:
   m_ObjectHideFlags: 0
