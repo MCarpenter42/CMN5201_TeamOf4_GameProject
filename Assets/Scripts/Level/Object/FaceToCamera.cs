@@ -39,6 +39,7 @@ public class FaceToCamera : Core
             rot.y = rotPrev.y;
         }
         rot.z = rotPrev.z;
+        transform.eulerAngles = rot;
     }
 
 	#endregion

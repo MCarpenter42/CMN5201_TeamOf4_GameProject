@@ -10,7 +10,7 @@ public class ConstantRotation : MonoBehaviour
 {
     #region [ PROPERTIES ]
 
-    [SerializeField] Vector3 rotation;
+    public Vector3 rotation;
 	
 	#endregion
 

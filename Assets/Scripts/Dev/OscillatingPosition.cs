@@ -5,25 +5,25 @@ using UnityEngine.UI;
 using UnityEditor;
 using TMPro;
 
-public class OscillatingScale : Core
+public class OscillatingPosition : Core
 {
     #region [ PROPERTIES ]
 
-    private Vector3 baseScale;
-    [SerializeField] Vector3 scaleDeviation = Vector3.zero;
+    private Vector3 anchorPos;
+    [SerializeField] Vector3 posDeviation = Vector3.zero;
     [SerializeField] float oscillationRate = 1.0f;
     private float oscillationPeriod = 1.0f;
     [SerializeField] bool randomStartingOffset = false;
-
-    #endregion
+	
+	#endregion
 
     /* - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
 
-    #region [ BUILT-IN UNITY FUNCTIONS ]
+	#region [ BUILT-IN UNITY FUNCTIONS ]
 
     void Start()
     {
-        baseScale = transform.localScale;
+        anchorPos = transform.localPosition;
         oscillationPeriod = 1 / oscillationRate;
         StartCoroutine(Oscillate());
     }
@@ -48,7 +48,7 @@ public class OscillatingScale : Core
                 timePassed -= oscillationPeriod;
             }
             float delta = Mathf.Sin((timePassed / oscillationPeriod) * Mathf.PI);
-            transform.localScale = baseScale + scaleDeviation * delta;
+            transform.localPosition = anchorPos + posDeviation * delta;
         }
     }
 }
