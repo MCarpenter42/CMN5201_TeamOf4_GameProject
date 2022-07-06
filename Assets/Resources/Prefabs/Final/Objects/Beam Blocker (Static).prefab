@@ -188,6 +188,7 @@ GameObject:
   - component: {fileID: 5473367121496978550}
   - component: {fileID: 3132810396783415610}
   - component: {fileID: 4722856694535416807}
+  - component: {fileID: 2674830558161989462}
   m_Layer: 0
   m_Name: Beam Blocker (Static)
   m_TagString: Untagged
@@ -246,6 +247,23 @@ MonoBehaviour:
   movable: 0
   rotatable: 0
   moveTime: 0
+--- !u!114 &2674830558161989462
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3785456062872025425}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a83b1803041397b49af75c7a6180fd1b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  meshes:
+  - {fileID: 182315380163886911}
+  - {fileID: 8555800567575088900}
+  emissivePulseColour: {r: 0.3207547, g: 0.25117376, b: 0.122552514, a: 1}
+  emissivePulseRate: 0.8
 --- !u!1 &4626158111873394312
 GameObject:
   m_ObjectHideFlags: 0

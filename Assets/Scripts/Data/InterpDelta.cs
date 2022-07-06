@@ -64,6 +64,24 @@ public static class InterpDelta
         return output;
     }
 
+    public static float CosHill(float rawDelta)
+    {
+        rawDelta = Mathf.Clamp(rawDelta, 0.0f, 1.0f);
+        float rad = rawDelta * Mathf.PI * 2.0f;
+        float cos = -Mathf.Cos(rad);
+        float output = (cos + 1.0f) * 0.5f;
+        return output;
+    }
+    
+    public static float CosValley(float rawDelta)
+    {
+        rawDelta = Mathf.Clamp(rawDelta, 0.0f, 1.0f);
+        float rad = rawDelta * Mathf.PI * 2.0f;
+        float cos = Mathf.Cos(rad);
+        float output = (cos + 1.0f) * 0.5f;
+        return output;
+    }
+
     public static float SmoothedLinear(float rawDelta, float smoothing0to1)
     {
         // This is my personal experimental lerp smoothing type!

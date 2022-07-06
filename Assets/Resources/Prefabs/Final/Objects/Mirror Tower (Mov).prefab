@@ -338,6 +338,7 @@ GameObject:
   - component: {fileID: 6076525672564971339}
   - component: {fileID: 6076525672564971341}
   - component: {fileID: 6076525672564971338}
+  - component: {fileID: 314856021840329268}
   m_Layer: 0
   m_Name: Mirror Tower (Mov)
   m_TagString: Untagged
@@ -395,6 +396,24 @@ MonoBehaviour:
   movable: 1
   rotatable: 0
   moveTime: 0.5
+--- !u!114 &314856021840329268
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6076525672564971336}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a83b1803041397b49af75c7a6180fd1b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  meshes:
+  - {fileID: 3371903925501670701}
+  - {fileID: 1564464273884301581}
+  - {fileID: 6878965473535739620}
+  emissivePulseColour: {r: 0.3207547, g: 0.25117376, b: 0.122552514, a: 1}
+  emissivePulseRate: 0.8
 --- !u!1 &6076525673137908782
 GameObject:
   m_ObjectHideFlags: 0

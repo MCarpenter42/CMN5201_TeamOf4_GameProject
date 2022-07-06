@@ -47,10 +47,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   arrowAbove: {fileID: 8432561185641076021}
   arrowRing: {fileID: 7157576520664818240}
-  type: 0
+  type: 1
   displacement: 0.5
   materials: []
-  opacity: 0
+  opacity: 1
   rotationSpeed: 1
 --- !u!1 &7157576519525700141
 GameObject:

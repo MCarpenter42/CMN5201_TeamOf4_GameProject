@@ -459,4 +459,28 @@ public class LevelObject : Core
         isMoving = false;
     }
 
+    public void GlowPulse(int pulses)
+    {
+        if (gameObject.GetComponent<GlowPulse>() != null)
+        {
+            gameObject.GetComponent<GlowPulse>().PulseSequence(pulses);
+        }
+        else
+        {
+            Debug.LogWarning("No glow pulse component found.");
+        }
+    }
+    
+    public void GlowPulse(int pulses, float rate)
+    {
+        if (gameObject.GetComponent<GlowPulse>() != null)
+        {
+            gameObject.GetComponent<GlowPulse>().PulseSequence(pulses, rate);
+        }
+        else
+        {
+            Debug.LogWarning("No glow pulse component found.");
+        }
+    }
+
 }
