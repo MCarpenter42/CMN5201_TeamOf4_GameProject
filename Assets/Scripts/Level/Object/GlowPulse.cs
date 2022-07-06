@@ -17,6 +17,8 @@ public class GlowPulse : Core
     [SerializeField] Color emissivePulseColour = Color.white;
     [SerializeField] float emissivePulseRate = 1.2f;
 
+    private Coroutine pulseSequence = null;
+
     #endregion
 
     /* - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
@@ -53,12 +55,11 @@ public class GlowPulse : Core
         {
             for (int i = 0; i < meshes.Count; i++)
             {
-
                 baseMaterials.Add(meshes[i].materials);
             }
         }
 
-        StartCoroutine(IGlowPulse(pulses, emissivePulseRate));
+        pulseSequence = StartCoroutine(IGlowPulse(pulses, emissivePulseRate));
     }
 
     public void PulseSequence(int pulses, float rate)
@@ -71,7 +72,7 @@ public class GlowPulse : Core
             }
         }
 
-        StartCoroutine(IGlowPulse(pulses, rate));
+        pulseSequence = StartCoroutine(IGlowPulse(pulses, rate));
     }
 
     public IEnumerator IGlowPulse(int pulses, float rate)

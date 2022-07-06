@@ -214,7 +214,7 @@ public class Player : LevelObject
             if (obj != null && (obj.movable || obj.rotatable))
             {
                 canGrabFacing = true;
-                obj.GlowPulse(2, 0.9f);
+                obj.GlowPulse(2, 1.0f);
             }
             else
             {
