@@ -6,6 +6,9 @@ EditorBuildSettings:
   serializedVersion: 2
   m_Scenes:
   - enabled: 1
+    path: Assets/Scenes/Personal Working Scenes/Chris/Intro Cutscene.unity
+    guid: af15a7c2901e0794cb1c38a01dc5121a
+  - enabled: 1
     path: Assets/Scenes/Personal Working Scenes/Chris/MenuScene.unity
     guid: 103a30cbe9b50d84ab477fd1db8bffbe
   - enabled: 1
