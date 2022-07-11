@@ -12,6 +12,7 @@ public class LevelController : Core
 
     [Header("Level Properties")]
     public bool isGameplayLevel = true;
+    private float levelFadeTime = 0.8f;
     [SerializeField] public float gridCellScale = 1.0f;
     [HideInInspector] public WorldGrid worldGrid;
     [HideInInspector] public List<LevelObject> levelObjects = new List<LevelObject>();
@@ -20,6 +21,7 @@ public class LevelController : Core
 
     private Player player;
     private StartPoint startPoint;
+    private CameraController levelCam;
 
     [Header("Puzzle Properties")]
     [SerializeField][TextArea] string levelHintText = "";
@@ -32,6 +34,7 @@ public class LevelController : Core
 
     void Awake()
     {
+        GameManager.Instance.OnLevelLoad();
         GetComponents();
         Setup();
     }
@@ -52,11 +55,16 @@ public class LevelController : Core
                 player.transform.localPosition = startPoint.transform.localPosition;
                 player.GetGridPos();
                 Vector3 startingMove = player.GetGridDir(startPoint.GetFacing()).normalized * gridCellScale * (float)startPoint.moveMulti;
-                player.Move(startingMove, 0.8f * (float)startPoint.moveMulti);
-                player.ChangeFacing(startingMove);
+                player.DelayedPlayerMove(0.3f, startingMove, 0.25f);
+                //player.ChangeFacing(startingMove);
             }
 
             LevelHint();
+
+            if (GameManager.UIController.blackScreen != null)
+            {
+                GameManager.UIController.BlackScreenFade(false, levelFadeTime);
+            }
         }
     }
 
@@ -84,8 +92,9 @@ public class LevelController : Core
         {
             floorTiles = ArrayToList(FindObjectsOfType<FloorTile>());
         }
-        player = GameManager.Player;
+        player = FindObjectOfType<Player>();
         startPoint = FindObjectOfType<StartPoint>();
+        levelCam = FindObjectOfType<CameraController>();
     }
 
     private void Setup()
@@ -165,25 +174,112 @@ public class LevelController : Core
 
     /* - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
 
-    public void LevelInputs()
+    public void NextLevel()
     {
-        if (!player.isMoving)
+        StartCoroutine(DelayedSceneChange(levelFadeTime));
+        if (GameManager.UIController.blackScreen != null)
+        {
+            GameManager.UIController.BlackScreenFade(true, levelFadeTime);
+        }
+    }
+
+    private IEnumerator DelayedSceneChange(float time)
+    {
+        yield return new WaitForSecondsRealtime(time);
+        GoToScene('+');
+    }
+
+    public void PlayerControl()
+    {
+        if (!player.isMoving && !levelCam.isRotating)
         {
             if (GetInput(Controls.Movement.Up))
             {
-                player.PlayerMove(Vector3.forward, player.moveTime);
+                switch (levelCam.facing)
+                {
+                    case CompassBearing.North:
+                    default:
+                        player.PlayerMove(Vector3.forward);
+                        break;
+
+                    case CompassBearing.East:
+                        player.PlayerMove(Vector3.right);
+                        break;
+
+                    case CompassBearing.South:
+                        player.PlayerMove(-Vector3.forward);
+                        break;
+
+                    case CompassBearing.West:
+                        player.PlayerMove(-Vector3.right);
+                        break;
+                }
             }
             else if (GetInput(Controls.Movement.Down))
             {
-                player.PlayerMove(-Vector3.forward, player.moveTime);
+                switch (levelCam.facing)
+                {
+                    case CompassBearing.North:
+                    default:
+                        player.PlayerMove(-Vector3.forward);
+                        break;
+
+                    case CompassBearing.East:
+                        player.PlayerMove(-Vector3.right);
+                        break;
+
+                    case CompassBearing.South:
+                        player.PlayerMove(Vector3.forward);
+                        break;
+
+                    case CompassBearing.West:
+                        player.PlayerMove(Vector3.right);
+                        break;
+                }
             }
             else if (GetInput(Controls.Movement.Right))
             {
-                player.PlayerMove(Vector3.right, player.moveTime);
+                switch (levelCam.facing)
+                {
+                    case CompassBearing.North:
+                    default:
+                        player.PlayerMove(Vector3.right);
+                        break;
+
+                    case CompassBearing.East:
+                        player.PlayerMove(-Vector3.forward);
+                        break;
+
+                    case CompassBearing.South:
+                        player.PlayerMove(-Vector3.right);
+                        break;
+
+                    case CompassBearing.West:
+                        player.PlayerMove(Vector3.forward);
+                        break;
+                }
             }
             else if (GetInput(Controls.Movement.Left))
             {
-                player.PlayerMove(-Vector3.right, player.moveTime);
+                switch (levelCam.facing)
+                {
+                    case CompassBearing.North:
+                    default:
+                        player.PlayerMove(-Vector3.right);
+                        break;
+
+                    case CompassBearing.East:
+                        player.PlayerMove(Vector3.forward);
+                        break;
+
+                    case CompassBearing.South:
+                        player.PlayerMove(Vector3.right);
+                        break;
+
+                    case CompassBearing.West:
+                        player.PlayerMove(-Vector3.forward);
+                        break;
+                }
             }
 
             if (GetInputDown(Controls.Interaction.Interact) && !player.isMoving)
@@ -219,6 +315,33 @@ public class LevelController : Core
                         }
                     }
                 }
+            }
+        }
+    }
+
+    public void CameraControl()
+    {
+        if (!levelCam.isRotating)
+        {
+            if (GetInputDown(Controls.Level.RotCamLeft))
+            {
+                levelCam.DoRotation(new Vector2Int(0, 1), 1.0f);
+            }
+            else if (GetInputDown(Controls.Level.RotCamRight))
+            {
+                levelCam.DoRotation(new Vector2Int(0, -1), 1.0f);
+            }
+        }
+
+        if (!levelCam.isZooming)
+        {
+            if (GetInput(Controls.Level.ZoomCamIn))
+            {
+                levelCam.DoZoom(2, 0.4f);
+            }
+            else if (GetInput(Controls.Level.ZoomCamOut))
+            {
+                levelCam.DoZoom(-2, 0.4f);
             }
         }
     }

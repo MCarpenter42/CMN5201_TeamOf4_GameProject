@@ -12,8 +12,10 @@ public class LevelObject : Core
 
     [HideInInspector] public Vector3 gridPos = new Vector3();
     [HideInInspector] public bool isMoving = false;
+    [HideInInspector] public bool isJumping = false;
     [HideInInspector] public float facingDir = 0.0f;
 
+    [Header("General Properties")]
     public ObjectTypes type;
 
     [HideInInspector] public GameObject pivot;
@@ -22,6 +24,8 @@ public class LevelObject : Core
     public bool rotatable = false;
 
     protected Coroutine movement;
+
+    public float moveTime;
 
     #endregion
 
@@ -158,32 +162,35 @@ public class LevelObject : Core
     
     protected IEnumerator MoveAnim(Vector3 gridMovement, float animTime)
     {
-        isMoving = true;
-
-        Vector3 posStart = transform.position;
-        Vector3 posEnd = posStart + gridMovement * GameManager.LevelController.gridCellScale;
-
-        float timeElapsed = 0.0f;
-        while (timeElapsed <= animTime)
+        if (animTime > 0.0f)
         {
-            timeElapsed += Time.deltaTime;
-            float delta = timeElapsed / animTime;
+            isMoving = true;
 
-            yield return null;
+            Vector3 posStart = transform.position;
+            Vector3 posEnd = posStart + gridMovement * GameManager.LevelController.gridCellScale;
 
-            transform.position = Vector3.Lerp(posStart, posEnd, delta);
+            float timeElapsed = 0.0f;
+            while (timeElapsed <= animTime)
+            {
+                timeElapsed += Time.deltaTime;
+                float delta = timeElapsed / animTime;
+
+                yield return null;
+
+                transform.position = Vector3.Lerp(posStart, posEnd, delta);
+            }
+
+            GetGridPos();
+
+            isMoving = false;
         }
-
-        GetGridPos();
-
-        isMoving = false;
     }
     
     public void Move(Vector3 gridMovement, Vector3 jumpOffset)
     {
         if (!isMoving)
         {
-            movement = StartCoroutine(MoveAnim(gridMovement, jumpOffset, 1.0f));
+            movement = StartCoroutine(MoveAnim(gridMovement, jumpOffset, 1.0f, 0.0f));
         }
     }
     
@@ -191,66 +198,125 @@ public class LevelObject : Core
     {
         if (!isMoving)
         {
-            movement = StartCoroutine(MoveAnim(gridMovement, jumpOffset, 1.0f));
+            movement = StartCoroutine(MoveAnim(gridMovement, jumpOffset, 1.0f, 0.0f));
         }
         else if (interrupt)
         {
             if (movement != null)
             {
                 StopCoroutine(movement);
-                movement = StartCoroutine(MoveAnim(gridMovement, jumpOffset, 1.0f));
+                movement = StartCoroutine(MoveAnim(gridMovement, jumpOffset, 1.0f, 0.0f));
             }
         }
     }
 
-    public void Move(Vector3 gridMovement, Vector3 jumpOffset, float animTime)
+    public void Move(Vector3 gridMovement, float animTime, Vector3 jumpOffset)
     {
         if (!isMoving)
         {
-            movement = StartCoroutine(MoveAnim(gridMovement, jumpOffset, animTime));
+            movement = StartCoroutine(MoveAnim(gridMovement, jumpOffset, animTime, 0.0f));
         }
     }
     
-    public void Move(Vector3 gridMovement, Vector3 jumpOffset, float animTime, bool interrupt)
+    public void Move(Vector3 gridMovement, float animTime, Vector3 jumpOffset, bool interrupt)
     {
         if (!isMoving)
         {
-            movement = StartCoroutine(MoveAnim(gridMovement, jumpOffset, animTime));
+            movement = StartCoroutine(MoveAnim(gridMovement, jumpOffset, animTime, 0.0f));
         }
         else if (interrupt)
         {
             if (movement != null)
             {
                 StopCoroutine(movement);
-                movement = StartCoroutine(MoveAnim(gridMovement, jumpOffset, animTime));
+                movement = StartCoroutine(MoveAnim(gridMovement, jumpOffset, animTime, 0.0f));
+            }
+        }
+    }
+    
+    public void Move(Vector3 gridMovement, Vector3 jumpOffset, float windupTime)
+    {
+        if (!isMoving)
+        {
+            movement = StartCoroutine(MoveAnim(gridMovement, jumpOffset, 1.0f, windupTime));
+        }
+    }
+    
+    public void Move(Vector3 gridMovement, Vector3 jumpOffset, float windupTime, bool interrupt)
+    {
+        if (!isMoving)
+        {
+            movement = StartCoroutine(MoveAnim(gridMovement, jumpOffset, 1.0f, windupTime));
+        }
+        else if (interrupt)
+        {
+            if (movement != null)
+            {
+                StopCoroutine(movement);
+                movement = StartCoroutine(MoveAnim(gridMovement, jumpOffset, 1.0f, windupTime));
             }
         }
     }
 
-    protected IEnumerator MoveAnim(Vector3 gridMovement, Vector3 jumpOffset, float animTime)
+    public void Move(Vector3 gridMovement, float animTime, Vector3 jumpOffset, float windupTime)
     {
-        isMoving = true;
-
-        Vector3 posStart = transform.position;
-        Vector3 posEnd = posStart + gridMovement * GameManager.LevelController.gridCellScale;
-
-        float timeElapsed = 0.0f;
-        while (timeElapsed <= animTime)
+        if (!isMoving)
         {
-            timeElapsed += Time.deltaTime;
-            float delta = timeElapsed / animTime;
-
-            yield return null;
-
-            Vector3 pos = Vector3.Lerp(posStart, posEnd, delta);
-            pos += jumpOffset * Mathf.Sin(Mathf.PI * delta);
-            transform.position = pos;
+            movement = StartCoroutine(MoveAnim(gridMovement, jumpOffset, animTime, windupTime));
         }
+    }
+    
+    public void Move(Vector3 gridMovement, Vector3 jumpOffset, float animTime, float windupTime, bool interrupt)
+    {
+        if (!isMoving)
+        {
+            movement = StartCoroutine(MoveAnim(gridMovement, jumpOffset, animTime, windupTime));
+        }
+        else if (interrupt)
+        {
+            if (movement != null)
+            {
+                StopCoroutine(movement);
+                movement = StartCoroutine(MoveAnim(gridMovement, jumpOffset, animTime, windupTime));
+            }
+        }
+    }
 
-        transform.position = posEnd;
-        GetGridPos();
+    protected IEnumerator MoveAnim(Vector3 gridMovement, Vector3 jumpOffset, float animTime, float windupTime)
+    {
+        if (animTime > 0.0f)
+        {
+            isMoving = true;
+            isJumping = true;
 
-        isMoving = false;
+            Vector3 posStart = transform.position;
+            Vector3 posEnd = posStart + gridMovement * GameManager.LevelController.gridCellScale;
+
+            if (windupTime > 0.0f && windupTime < animTime)
+            {
+                animTime -= windupTime;
+                yield return new WaitForSecondsRealtime(windupTime);
+            }
+
+            float timeElapsed = 0.0f;
+            while (timeElapsed <= animTime)
+            {
+                timeElapsed += Time.deltaTime;
+                float delta = timeElapsed / animTime;
+
+                yield return null;
+
+                Vector3 pos = Vector3.Lerp(posStart, posEnd, delta);
+                pos += jumpOffset * Mathf.Sin(Mathf.PI * delta);
+                transform.position = pos;
+            }
+
+            transform.position = posEnd;
+            GetGridPos();
+
+            isMoving = false;
+            isJumping = false;
+        }
     }
 
     public void Rotate(float gridRot, float animTime)
@@ -391,6 +457,30 @@ public class LevelObject : Core
 
         GetGridPos();
         isMoving = false;
+    }
+
+    public void GlowPulse(int pulses)
+    {
+        if (gameObject.GetComponent<GlowPulse>() != null)
+        {
+            gameObject.GetComponent<GlowPulse>().PulseSequence(pulses);
+        }
+        else
+        {
+            Debug.LogWarning("No glow pulse component found.");
+        }
+    }
+    
+    public void GlowPulse(int pulses, float rate)
+    {
+        if (gameObject.GetComponent<GlowPulse>() != null)
+        {
+            gameObject.GetComponent<GlowPulse>().PulseSequence(pulses, rate);
+        }
+        else
+        {
+            Debug.LogWarning("No glow pulse component found.");
+        }
     }
 
 }

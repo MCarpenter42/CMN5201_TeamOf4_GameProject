@@ -9,7 +9,9 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 6836295272628057345}
+  - component: {fileID: 5439556236950268248}
   - component: {fileID: 2238846801521941322}
+  - component: {fileID: 4804290188483871178}
   m_Layer: 0
   m_Name: Tiled Surface
   m_TagString: Untagged
@@ -32,6 +34,19 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!65 &5439556236950268248
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8200171933477773027}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 1, y: 0.02, z: 1}
+  m_Center: {x: 0, y: -0.01, z: 0}
 --- !u!114 &2238846801521941322
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -45,13 +60,39 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   materials:
-  - {fileID: 2100000, guid: 6a517ac100e560943b28f4a933e03dc2, type: 2}
+  - {fileID: 2100000, guid: 7958cad9af7de8245b6bc62037953577, type: 2}
   scaleAdjustment: {x: 0.125, y: 0.125}
-  surfaceScaleDimensions: 1
+  surfaceScaleDimensions: 2
   materialOffset: {x: 0, y: 0}
   scaleType: 2
   affectedMeshes:
   - {fileID: 3434255093365333008}
+  addPositionToOffset: 0
+  posDimensionsToAdd: 0
+  invertPosOffset: 1
+  posOffsetScale: 0.125
+--- !u!114 &4804290188483871178
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8200171933477773027}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c12e2e893409c434686d88f105ba7e33, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  gridPos: {x: 0, y: 0, z: 0}
+  isMoving: 0
+  isJumping: 0
+  facingDir: 0
+  type: 1
+  pivot: {fileID: 0}
+  movable: 0
+  rotatable: 0
+  moveTime: 0
+  material: 0
 --- !u!1 &8283292064998902813
 GameObject:
   m_ObjectHideFlags: 0
@@ -63,7 +104,6 @@ GameObject:
   - component: {fileID: 92630426024717257}
   - component: {fileID: 7309002409196323043}
   - component: {fileID: 3434255093365333008}
-  - component: {fileID: 5744213879369565467}
   m_Layer: 0
   m_Name: Plane
   m_TagString: Untagged
@@ -134,17 +174,3 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!64 &5744213879369565467
-MeshCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8283292064998902813}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_Enabled: 1
-  serializedVersion: 4
-  m_Convex: 0
-  m_CookingOptions: 30
-  m_Mesh: {fileID: 10209, guid: 0000000000000000e000000000000000, type: 0}

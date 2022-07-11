@@ -5,16 +5,58 @@ EditorBuildSettings:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Scenes:
-  - enabled: 0
-    path: Assets/Scenes/Stakeholder Demo Scenes/DemoScene_2.unity
-    guid: 02252f810e4586444a09cfe880f52e6e
-  - enabled: 0
-    path: Assets/Scenes/Game Scenes/Demo for Audio Team/End Screen.unity
-    guid: 63d6df06cbf76ed4b9b37c024d7dc0ee
   - enabled: 1
-    path: Assets/Scenes/Personal Working Scenes/Ionut/Transition Scene 1.unity
-    guid: 0308116a7f1a7004aaecc245010370e2
+    path: Assets/Scenes/Personal Working Scenes/Chris/Intro Cutscene.unity
+    guid: af15a7c2901e0794cb1c38a01dc5121a
   - enabled: 1
-    path: Assets/Scenes/Personal Working Scenes/Ionut/Transition Scene 2.unity
-    guid: 7cf38339ec45ab04b8204cc457355461
+    path: Assets/Scenes/Personal Working Scenes/Chris/MenuScene.unity
+    guid: 103a30cbe9b50d84ab477fd1db8bffbe
+  - enabled: 1
+    path: Assets/Scenes/Game Scenes/Levels/Level 0.1.unity
+    guid: 07805f0e9082b71469d853ef1a0b1215
+  - enabled: 1
+    path: Assets/Scenes/Game Scenes/Levels/Level 0.2.unity
+    guid: ba70d7e3e4cb68944aa8efc4b31cf8c1
+  - enabled: 1
+    path: Assets/Scenes/Game Scenes/Levels/Level 0.3.unity
+    guid: 1da34601f9eab3e4ba3410e427bda522
+  - enabled: 1
+    path: Assets/Scenes/Game Scenes/Levels/Level 0.4.unity
+    guid: c5802a53d9782d64b89254ab3e82ed5a
+  - enabled: 1
+    path: Assets/Scenes/Game Scenes/Levels/Level 0.5.unity
+    guid: be6cbf842cc1d754b9449e5d29fdefb3
+  - enabled: 1
+    path: Assets/Scenes/Personal Working Scenes/Chris/Level 6.unity
+    guid: 62f8216fb9f5ca04f84ea8d147180b66
+  - enabled: 1
+    path: Assets/Scenes/Personal Working Scenes/Chris/Level 7.unity
+    guid: eb471fde0b3c98b45be105c3eca22ba3
+  - enabled: 1
+    path: Assets/Scenes/Personal Working Scenes/Chris/Level 8.unity
+    guid: 51d86be651a02694fa463c7a866f24fa
+  - enabled: 1
+    path: Assets/Scenes/Personal Working Scenes/Chris/Level 9.unity
+    guid: c80c83b6009f5c74a87b5632116fdd32
+  - enabled: 1
+    path: Assets/Scenes/Personal Working Scenes/Chris/Level 10.unity
+    guid: ceb620796fb92004f8bd211f0f91843d
+  - enabled: 1
+    path: Assets/Scenes/Personal Working Scenes/Chris/Level 11.unity
+    guid: 75e86427da7c55247b2633c9fcddb5a3
+  - enabled: 1
+    path: Assets/Scenes/Personal Working Scenes/Chris/Level 12.unity
+    guid: 4df581ed3b1187f4cbd2a5fa42015333
+  - enabled: 1
+    path: Assets/Scenes/Personal Working Scenes/Chris/Level 13.unity
+    guid: a60b58a28306601498aeba4ac3bdcf16
+  - enabled: 1
+    path: Assets/Scenes/Personal Working Scenes/Chris/Level 14.unity
+    guid: a28e03ddf07569e47ad780bb9b316d9e
+  - enabled: 1
+    path: Assets/Scenes/Personal Working Scenes/Chris/Level 15.unity
+    guid: 6d4dc08bdfa08e548a9162409ddef292
+  - enabled: 1
+    path: Assets/Scenes/Personal Working Scenes/Chris/Level 16.unity
+    guid: e7c5ab9cee0cd4e489add692cf08e408
   m_configObjects: {}

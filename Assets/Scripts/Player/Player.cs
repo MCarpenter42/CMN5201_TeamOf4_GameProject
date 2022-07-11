@@ -17,10 +17,11 @@ public class Player : LevelObject
     [HideInInspector] public Vector3 objectDir = Vector3.zero;
     private Vector3 checkOffset = new Vector3(0.0f, -0.9f, 0.0f);
 
-    [Header("Attributes")]
+    [Header("Properties")]
     [SerializeField] float jumpHeight = 0.5f;
-    [SerializeField] float jumpTimescale = 1.2f;
-    public float moveTime = 0.25f;
+    [SerializeField] float jumpTime = 0.4f;
+    [SerializeField] float jumpWindup = 0.1f;
+    [SerializeField] int stepsPerTile = 2;
 
     [Header("Behaviour")]
     [SerializeField] public bool useStartPath = false;
@@ -37,6 +38,7 @@ public class Player : LevelObject
     void Awake()
     {
         OnAwake();
+        jumpTime += jumpWindup;
     }
 
     void Start()
@@ -53,7 +55,7 @@ public class Player : LevelObject
     {
         if (collision.gameObject.GetComponent<EndPoint>() != null)
         {
-            GoToScene('+');
+            GameManager.LevelController.NextLevel();
         }
     }
 
@@ -86,35 +88,51 @@ public class Player : LevelObject
 
     /* - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
 
-    public void PlayerMove(Vector3 gridMovement, float animTime)
+    public void PlayerMove(Vector3 gridMovement)
+    {
+        PlayerMove(gridMovement, 1.0f);
+    }
+    
+    public void PlayerMove(Vector3 gridMovement, float speedMod)
     {
         Vector3 dir = gridMovement.normalized;
+        float moveDuration = 0.0f;
         if (objectMoving == null)
         {
-            bool obstructed = Physics.Raycast(transform.position + checkOffset, dir, GameManager.LevelController.gridCellScale * 1.45f);
+            moveDuration = moveTime / speedMod;
+            bool obstructed = Physics.Raycast(transform.position + checkOffset, dir, GameManager.LevelController.gridCellScale * 1.4f);
             if (!obstructed)
             {
                 Vector3 targetPos = transform.position + checkOffset + dir * GameManager.LevelController.gridCellScale;
                 bool walkable = Physics.Raycast(targetPos, Vector3.down, GameManager.LevelController.gridCellScale * 0.20f);
+
                 targetPos += dir * GameManager.LevelController.gridCellScale;
                 bool jumpable = Physics.Raycast(targetPos, Vector3.down, GameManager.LevelController.gridCellScale * 0.20f);
+
+                obstructed = Physics.Raycast(transform.position + checkOffset, dir, GameManager.LevelController.gridCellScale * 2.4f);
+
                 if (walkable)
                 {
-                    Move(gridMovement, animTime);
-                    StartCoroutine(DelayedCheckObjectMovable(gridMovement, animTime));
+                    Move(gridMovement, moveDuration);
+                    StartCoroutine(DelayedCheckObjectMovable(gridMovement, moveDuration));
+                    int steps = (int)((gridMovement.magnitude / GameManager.LevelController.gridCellScale) * (float)stepsPerTile);
+                    GameManager.AudioController.PlayerWalk(moveDuration, steps);
                 }
                 else
                 {
-                    if (jumpable)
+                    if (jumpable && !obstructed)
                     {
-                        Move(gridMovement * 2.0f, Vector3.up * jumpHeight, animTime * jumpTimescale);
-                        StartCoroutine(DelayedCheckObjectMovable(gridMovement, animTime * jumpTimescale));
+                        moveDuration = jumpTime;
+                        Move(gridMovement * 2.0f, moveDuration, Vector3.up * jumpHeight, jumpWindup);
+                        StartCoroutine(DelayedCheckObjectMovable(gridMovement, moveDuration));
+                        GameManager.AudioController.PlayerJump(moveDuration);
                     }
                 }
             }
         }
         else if (objectMoving.movable)
         {
+            moveDuration = objectMoving.moveTime / speedMod;
             GetObjectMovingDir();
             if (gridMovement.normalized == -objectDir.normalized)
             {
@@ -125,9 +143,11 @@ public class Player : LevelObject
                     bool walkable = Physics.Raycast(targetPos, Vector3.down, GameManager.LevelController.gridCellScale * 0.20f);
                     if (walkable)
                     {
-                        Move(gridMovement, animTime);
-                        objectMoving.Move(gridMovement, animTime);
-                        StartCoroutine(DelayedCheckObjectMovable(gridMovement, animTime));
+                        Move(gridMovement, moveDuration);
+                        objectMoving.Move(gridMovement, moveDuration);
+                        StartCoroutine(DelayedCheckObjectMovable(gridMovement, moveDuration));
+                        int steps = (int)((gridMovement.magnitude / GameManager.LevelController.gridCellScale) * (float)stepsPerTile);
+                        GameManager.AudioController.PlayerWalk(moveDuration, steps);
                     }
                 }
             }
@@ -140,14 +160,32 @@ public class Player : LevelObject
                     bool walkable = Physics.Raycast(targetPos, Vector3.down, GameManager.LevelController.gridCellScale * 0.20f);
                     if (walkable)
                     {
-                        Move(gridMovement, animTime);
-                        objectMoving.Move(gridMovement, animTime);
-                        StartCoroutine(DelayedCheckObjectMovable(gridMovement, animTime));
+                        Move(gridMovement, moveDuration);
+                        objectMoving.Move(gridMovement, moveDuration);
+                        StartCoroutine(DelayedCheckObjectMovable(gridMovement, moveDuration));
+                        int steps = (int)((gridMovement.magnitude / GameManager.LevelController.gridCellScale) * (float)stepsPerTile);
+                        GameManager.AudioController.PlayerWalk(moveDuration, steps);
                     }
                 }
             }
         }
         ChangeFacing(gridMovement);
+    }
+
+    public void DelayedPlayerMove(float delay, Vector3 gridMovement)
+    {
+        StartCoroutine(IDelayedPlayerMove(delay, gridMovement, 1.0f));
+    }
+    
+    public void DelayedPlayerMove(float delay, Vector3 gridMovement, float speedMod)
+    {
+        StartCoroutine(IDelayedPlayerMove(delay, gridMovement, speedMod));
+    }
+
+    private IEnumerator IDelayedPlayerMove(float delay, Vector3 gridMovement, float speedMod)
+    {
+        yield return new WaitForSecondsRealtime(delay);
+        PlayerMove(gridMovement, speedMod);
     }
 
     public void ChangeFacing(Vector3 dir)
@@ -176,6 +214,7 @@ public class Player : LevelObject
             if (obj != null && (obj.movable || obj.rotatable))
             {
                 canGrabFacing = true;
+                obj.GlowPulse(2, 1.0f);
             }
             else
             {
@@ -313,6 +352,22 @@ public class Player : LevelObject
         }
 
         return !rotObstructed;
+    }
+
+    public FloorTypes GetFloorType()
+    {
+        FloorTypes type = FloorTypes.Empty;
+        Vector3 castPos = transform.position + checkOffset;
+        RaycastHit hit;
+        if (Physics.Raycast(castPos, Vector3.down, out hit, GameManager.LevelController.gridCellScale * 0.20f))
+        {
+            StaticSurface floor = hit.collider.gameObject.GetComponent<StaticSurface>();
+            if (floor != null)
+            {
+                type = floor.material;
+            }
+        }
+        return type;
     }
 
     /* - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */

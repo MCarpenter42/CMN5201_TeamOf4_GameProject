@@ -10,6 +10,7 @@ public class BeamEmitter : Core
 {
     #region [ PROPERTIES ]
 
+    [Header("Beam")]
     [SerializeField] GameObject beamPrefab;
     [SerializeField] BeamColours beamColour = BeamColours.White;
 
@@ -19,6 +20,8 @@ public class BeamEmitter : Core
     private List<Vector3> beamPath = new List<Vector3>();
     private GameObject beamObj;
     private LineRenderer lightBeam;
+
+    private List<SFXSource> beamAudio = new List<SFXSource>();
 
     private bool validTriggerHit = false;
     private LightTrigger triggerCurrent = null;

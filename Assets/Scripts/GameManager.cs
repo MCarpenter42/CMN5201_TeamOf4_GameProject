@@ -14,18 +14,17 @@ public class GameManager : Core
     private VideoSettings vidSettingsInstance;
 
     public static Player Player;
-
     public static LevelController LevelController;
 
     public static UIController UIController;
-
     public static PauseMenu PauseMenu;
+
+    public static AudioController AudioController;
+    public static GameObject Listener;
 
     #endregion
 
     #region [ PROPERTIES ]
-
-    public static bool firstLoad = true;
 
     public static float FPS;
     private List<float> frameTimes = new List<float>();
@@ -81,6 +80,10 @@ public class GameManager : Core
         {
             instance = this;
         }
+        else
+        {
+            Destroy(this.gameObject);
+        }
         DontDestroyOnLoad(gameObject);
 
         Setup();
@@ -109,24 +112,22 @@ public class GameManager : Core
         Controls = controlsInstance;
         vidSettingsInstance = gameObject.AddComponent<VideoSettings>();
         VideoSettings = vidSettingsInstance;
+        OnLevelLoad();
+    }
 
+    public void OnLevelLoad()
+    {
         LevelController = FindObjectOfType<LevelController>();
         if (LevelController.isGameplayLevel)
         {
             Player = FindObjectOfType<Player>();
         }
+
         UIController = FindObjectOfType<UIController>();
+        UIController.pauseMenu.PauseMenuResume();
 
-        if (firstLoad)
-        {
-            firstLoad = false;
-            OnFirstLoad();
-        }
-    }
-
-    private void OnFirstLoad()
-    {
-        
+        AudioController = FindObjectOfType<AudioController>();
+        Listener = FindObjectOfType<AudioListener>().gameObject;
     }
 
     private float CalcFPS()
@@ -150,7 +151,8 @@ public class GameManager : Core
     {
         if (LevelController.isGameplayLevel)
         {
-            LevelController.LevelInputs();
+            LevelController.PlayerControl();
+            LevelController.CameraControl();
         }
 
         if (Input.GetKeyDown(Controls.General.Pause.Key))
