@@ -29,7 +29,7 @@ public class PauseMenu : UI
 
     public void LoadMenu()
     {
-        SceneManager.LoadScene(0);
+        SceneManager.LoadScene(1);
     }
 
     public void Restart()
