@@ -9,6 +9,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1153734802116830}
+  - component: {fileID: 4762548141603786397}
   m_Layer: 0
   m_Name: '2 Brick Var1 '
   m_TagString: Untagged
@@ -32,6 +33,27 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &4762548141603786397
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6408465955909454187}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5857def30329c3d4eb0b9dcb3fcd9786, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  gridPos: {x: 0, y: 0, z: 0}
+  isMoving: 0
+  isJumping: 0
+  facingDir: 0
+  type: 1
+  pivot: {fileID: 0}
+  movable: 0
+  rotatable: 0
+  moveTime: 0
 --- !u!1001 &2265950660798896084
 PrefabInstance:
   m_ObjectHideFlags: 0
