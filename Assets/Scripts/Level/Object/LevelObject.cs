@@ -461,9 +461,9 @@ public class LevelObject : Core
 
     public void GlowPulse(int pulses)
     {
-        if (gameObject.GetComponent<GlowPulse>() != null)
+        if (gameObject.GetComponent<HighlightGlow>() != null)
         {
-            gameObject.GetComponent<GlowPulse>().PulseSequence(pulses);
+            gameObject.GetComponent<HighlightGlow>().PulseSequence(pulses);
         }
         else
         {
@@ -473,9 +473,9 @@ public class LevelObject : Core
     
     public void GlowPulse(int pulses, float rate)
     {
-        if (gameObject.GetComponent<GlowPulse>() != null)
+        if (gameObject.GetComponent<HighlightGlow>() != null)
         {
-            gameObject.GetComponent<GlowPulse>().PulseSequence(pulses, rate);
+            gameObject.GetComponent<HighlightGlow>().PulseSequence(pulses, rate);
         }
         else
         {

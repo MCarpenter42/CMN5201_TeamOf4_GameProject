@@ -412,7 +412,7 @@ MonoBehaviour:
   - {fileID: 3371903925501670701}
   - {fileID: 1564464273884301581}
   - {fileID: 6878965473535739620}
-  emissivePulseColour: {r: 0.3207547, g: 0.25117376, b: 0.122552514, a: 1}
+  emissiveColour: {r: 0.32156864, g: 0.2509804, b: 0.12156863, a: 1}
   emissivePulseRate: 0.8
 --- !u!1 &6076525673137908782
 GameObject:

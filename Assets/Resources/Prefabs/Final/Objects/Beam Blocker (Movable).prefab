@@ -85,7 +85,7 @@ MonoBehaviour:
   meshes:
   - {fileID: 23476648243960435}
   - {fileID: 156409613057181236}
-  emissivePulseColour: {r: 0.3207547, g: 0.25117376, b: 0.122552514, a: 1}
+  emissiveColour: {r: 0.32156864, g: 0.2509804, b: 0.12156863, a: 1}
   emissivePulseRate: 0.8
 --- !u!1 &766683106466190474
 GameObject:
