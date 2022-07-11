@@ -170,13 +170,14 @@ public class HighlightArrow : Core
             newMat_1.color = matClr_1;
             localMaterials_1[0] = newMat_1;
 
-            Material newMat_2 = new Material(material_2);
+            Material newMat_2;
             if (material_2 == null)
             {
                 localMaterials_2[0] = newMat_1;
             }
             else
             {
+                newMat_2 = new Material(material_2);
                 newMat_2.name = "localMat_2";
                 Color matClr_2 = newMat_2.color;
                 matClr_2.a = opacity;

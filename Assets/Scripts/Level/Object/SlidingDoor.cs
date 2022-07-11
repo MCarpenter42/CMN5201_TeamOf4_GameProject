@@ -10,6 +10,8 @@ public class SlidingDoor : LevelObject
 {
     #region [ PROPERTIES ]
 
+    [Header("Door Properties")]
+    [SerializeField] LevelObject doorObject;
     [SerializeField] Vector3 gridOffsetWhenOpen;
     [SerializeField] bool startOpen;
     private Vector3 posClosed;
@@ -26,16 +28,21 @@ public class SlidingDoor : LevelObject
     void Awake()
     {
         OnAwake();
+        if (doorObject == null)
+        {
+            Debug.Log("No door object designated");
+            doorObject = this;
+        }
     }
 
     void Start()
     {
         OnStart();
-        posClosed = transform.position;
-        posOpen = transform.position + gridOffsetWhenOpen * GameManager.LevelController.gridCellScale;
+        posClosed = doorObject.transform.position;
+        posOpen = doorObject.transform.position + gridOffsetWhenOpen * GameManager.LevelController.gridCellScale;
         if (startOpen)
         {
-            transform.position = posOpen;
+            doorObject.transform.position = posOpen;
             isOpen = true;
         }
     }
@@ -57,8 +64,8 @@ public class SlidingDoor : LevelObject
             {
                 targetPos = posClosed;
             }
-            Vector3 gridMovement = (targetPos - transform.position) / GameManager.LevelController.gridCellScale;
-            Move(gridMovement, transitionTime, true);
+            Vector3 gridMovement = (targetPos - doorObject.transform.position) / GameManager.LevelController.gridCellScale;
+            doorObject.Move(gridMovement, transitionTime, true);
         }
 
         isOpen = open;
