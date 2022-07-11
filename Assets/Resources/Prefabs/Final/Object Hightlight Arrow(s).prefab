@@ -25,7 +25,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7157576519494587170}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: 0, y: 0.25, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 9101116325791682447}
@@ -51,7 +51,13 @@ MonoBehaviour:
   displacement: 0.5
   materials: []
   opacity: 1
-  rotationSpeed: 1
+  rotationRate: 0.08
+  oscillationPeriod: 1.2
+  posDeviation: 0.2
+  targetObject: {fileID: 0}
+  triggerOnEvent: 0
+  startHidden: 0
+  canReTrigger: 0
 --- !u!1 &7157576519525700141
 GameObject:
   m_ObjectHideFlags: 0
@@ -63,7 +69,6 @@ GameObject:
   - component: {fileID: 7157576519525700140}
   - component: {fileID: 7157576519525700136}
   - component: {fileID: 7157576519525700137}
-  - component: {fileID: 7157576519525700139}
   m_Layer: 0
   m_Name: Arrow (2)
   m_TagString: Untagged
@@ -134,21 +139,6 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!114 &7157576519525700139
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7157576519525700141}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 59963ddc58cf0dc40bd5b81130748862, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  posDeviation: {x: 0.1, y: 0, z: 0}
-  oscillationRate: 1
-  randomStartingOffset: 0
 --- !u!1 &7157576519535821192
 GameObject:
   m_ObjectHideFlags: 0
@@ -160,7 +150,6 @@ GameObject:
   - component: {fileID: 7157576519535821191}
   - component: {fileID: 7157576519535821187}
   - component: {fileID: 7157576519535821188}
-  - component: {fileID: 7157576519535821190}
   m_Layer: 0
   m_Name: Arrow (3)
   m_TagString: Untagged
@@ -231,21 +220,6 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!114 &7157576519535821190
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7157576519535821192}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 59963ddc58cf0dc40bd5b81130748862, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  posDeviation: {x: 0, y: 0, z: -0.1}
-  oscillationRate: 1
-  randomStartingOffset: 0
 --- !u!1 &7157576519591894356
 GameObject:
   m_ObjectHideFlags: 0
@@ -257,7 +231,6 @@ GameObject:
   - component: {fileID: 7157576519591894355}
   - component: {fileID: 7157576519591894319}
   - component: {fileID: 7157576519591894352}
-  - component: {fileID: 7157576519591894354}
   m_Layer: 0
   m_Name: Arrow (1)
   m_TagString: Untagged
@@ -328,21 +301,6 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!114 &7157576519591894354
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7157576519591894356}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 59963ddc58cf0dc40bd5b81130748862, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  posDeviation: {x: 0, y: 0, z: 0.1}
-  oscillationRate: 1
-  randomStartingOffset: 0
 --- !u!1 &7157576520664818240
 GameObject:
   m_ObjectHideFlags: 0
@@ -352,7 +310,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 7157576520664818271}
-  - component: {fileID: 7157576520664818270}
   m_Layer: 0
   m_Name: Arrows (Ring)
   m_TagString: Untagged
@@ -378,19 +335,6 @@ Transform:
   m_Father: {fileID: 7157576519494587169}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &7157576520664818270
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7157576520664818240}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5571645c179f0a543a281accebf60650, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  rotation: {x: 0, y: 50, z: 0}
 --- !u!1 &7157576521191466459
 GameObject:
   m_ObjectHideFlags: 0
@@ -402,7 +346,6 @@ GameObject:
   - component: {fileID: 7157576521191466458}
   - component: {fileID: 7157576521191466454}
   - component: {fileID: 7157576521191466455}
-  - component: {fileID: 7157576521191466457}
   m_Layer: 0
   m_Name: Arrow (4)
   m_TagString: Untagged
@@ -473,21 +416,6 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!114 &7157576521191466457
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7157576521191466459}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 59963ddc58cf0dc40bd5b81130748862, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  posDeviation: {x: -0.1, y: 0, z: 0}
-  oscillationRate: 1
-  randomStartingOffset: 0
 --- !u!1 &8432561185641076021
 GameObject:
   m_ObjectHideFlags: 0
@@ -499,7 +427,6 @@ GameObject:
   - component: {fileID: 9101116325791682447}
   - component: {fileID: 5323943609431310378}
   - component: {fileID: 7928171291130836192}
-  - component: {fileID: 8432561185641076020}
   m_Layer: 0
   m_Name: Arrow (Above)
   m_TagString: Untagged
@@ -570,16 +497,3 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!114 &8432561185641076020
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8432561185641076021}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5571645c179f0a543a281accebf60650, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  rotation: {x: 0, y: 50, z: 0}

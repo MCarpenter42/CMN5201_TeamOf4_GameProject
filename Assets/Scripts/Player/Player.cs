@@ -145,7 +145,7 @@ public class Player : LevelObject
                     {
                         Move(gridMovement, moveDuration);
                         objectMoving.Move(gridMovement, moveDuration);
-                        StartCoroutine(DelayedCheckObjectMovable(gridMovement, moveDuration));
+                        //StartCoroutine(DelayedCheckObjectMovable(gridMovement, moveDuration));
                         int steps = (int)((gridMovement.magnitude / GameManager.LevelController.gridCellScale) * (float)stepsPerTile);
                         GameManager.AudioController.PlayerWalk(moveDuration, steps);
                     }
@@ -162,7 +162,7 @@ public class Player : LevelObject
                     {
                         Move(gridMovement, moveDuration);
                         objectMoving.Move(gridMovement, moveDuration);
-                        StartCoroutine(DelayedCheckObjectMovable(gridMovement, moveDuration));
+                        //StartCoroutine(DelayedCheckObjectMovable(gridMovement, moveDuration));
                         int steps = (int)((gridMovement.magnitude / GameManager.LevelController.gridCellScale) * (float)stepsPerTile);
                         GameManager.AudioController.PlayerWalk(moveDuration, steps);
                     }
@@ -201,7 +201,10 @@ public class Player : LevelObject
             pivot.transform.eulerAngles = new Vector3(0.0f, facingDir, 0.0f);
         }
 
-        CheckObjectMovable(dir);
+        if (objectMoving == null)
+        {
+            CheckObjectMovable(dir);
+        }
     }
 
     public void CheckObjectMovable(Vector3 dir)
@@ -285,8 +288,21 @@ public class Player : LevelObject
     public void Release()
     {
         objectMoving = null;
+        if (GetGridBearing(objectDir) != facingDir)
+        {
+            CheckObjectMovable(GetGridDir(facingDir));
+        }
+        else
+        {
+            Prompt interactPrompt = GameManager.UIController.hud.keyInteract;
+
+            if (interactPrompt != null)
+            {
+                interactPrompt.Show(true);
+                interactPrompt.SetText(1, "Grab Object", AdjustCondition.Always, AdjustCondition.Never);
+            }
+        }
         objectDir = Vector3.zero;
-        CheckObjectMovable(GetGridDir(facingDir));
 
         Prompt rotCWPrompt = GameManager.UIController.hud.keyRotCW;
         Prompt rotCCWPrompt = GameManager.UIController.hud.keyRotCCW;
