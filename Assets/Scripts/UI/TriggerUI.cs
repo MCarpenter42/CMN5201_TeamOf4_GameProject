@@ -15,6 +15,8 @@ public class TriggerUI : MonoBehaviour
     void Start()
     {
         text.SetActive(false);
+        
+        
     }
 
     private void OnTriggerEnter(Collider other)
@@ -44,6 +46,7 @@ public class TriggerUI : MonoBehaviour
             Destroy(Coins);
             Destroy(Jewel);
             Destroy(Scrolls);
+            Destroy(GameObject.FindWithTag("gamemanager"));
             SceneManager.LoadScene(19);
             
             
