@@ -253,7 +253,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 1
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: SHRINE OF LIGHT
+  m_Text: PANTHEON OF LIGHT
 --- !u!222 &122517049
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -279,8 +279,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 7.1261425, y: 10.352308}
-  m_SizeDelta: {x: 462.6259, y: 125.7175}
+  m_AnchoredPosition: {x: 10, y: 21}
+  m_SizeDelta: {x: 594.4408, y: 119.885}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1 &182985313
 GameObject:
@@ -439,8 +439,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -0.0000166893, y: -1}
-  m_SizeDelta: {x: 462.6259, y: 125.7175}
+  m_AnchoredPosition: {x: 0.00070953, y: -1}
+  m_SizeDelta: {x: 594.44, y: 121.8}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &618592798
 MonoBehaviour:
@@ -475,7 +475,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 1
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: SHRINE OF LIGHT
+  m_Text: PANTHEON OF LIGHT
 --- !u!222 &618592799
 CanvasRenderer:
   m_ObjectHideFlags: 0
