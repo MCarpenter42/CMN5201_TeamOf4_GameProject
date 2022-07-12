@@ -59,4 +59,10 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/Personal Working Scenes/Chris/Level 16.unity
     guid: e7c5ab9cee0cd4e489add692cf08e408
+  - enabled: 1
+    path: Assets/Scenes/Personal Working Scenes/Chris/Treasure Room.unity
+    guid: c143a438523bc0a48a5949e13146c632
+  - enabled: 1
+    path: Assets/Scenes/Personal Working Scenes/Chris/Non-Level Scenes/Ending Cutscene.unity
+    guid: b18f2a96780cc5a48b640d2faca2f642
   m_configObjects: {}
