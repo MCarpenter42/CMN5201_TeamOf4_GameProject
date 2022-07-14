@@ -276,8 +276,8 @@ MonoBehaviour:
   canGrabFacing: 0
   objectMoving: {fileID: 0}
   objectDir: {x: 0, y: 0, z: 0}
-  jumpHeight: 0.6
-  jumpTime: 0.25
+  jumpHeight: 0.8
+  jumpTime: 0.4
   jumpWindup: 0.08
   stepsPerTile: 1
   useStartPath: 0

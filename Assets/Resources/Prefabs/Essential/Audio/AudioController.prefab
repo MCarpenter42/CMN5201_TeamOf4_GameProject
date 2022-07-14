@@ -46,24 +46,73 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   levelCentre: {x: 0, y: 0, z: 0}
-  levelMusic: {fileID: 8300000, guid: c1fdd7bb4a143584e806d61d88ba42bc, type: 3}
+  levelMusic: {fileID: 8300000, guid: 188506d41caad634fbd615a738b67daf, type: 3}
   sfxSourcePrefab: {fileID: -1874640132433861565, guid: 98449a369f4206d4e9244a5736c0afbf, type: 3}
   sfxSources: []
   playerSFX: {fileID: 0}
   beamSFX: []
   walkStone:
-  - {fileID: 8300000, guid: 4d84bd0af1d27c94d88f407fe36e0dd5, type: 3}
-  - {fileID: 8300000, guid: 66a6cc1db564ac94a8a104f9271a4b8c, type: 3}
-  - {fileID: 8300000, guid: 1d65f0d7110c465428f6f74afa38e7ee, type: 3}
-  - {fileID: 8300000, guid: 65443f5616948dc46be1223be42c5141, type: 3}
-  - {fileID: 8300000, guid: c82815a5e45871741a3e78e24e8dcad3, type: 3}
-  - {fileID: 8300000, guid: c08a417941fe43248a1eb13100afe694, type: 3}
-  walkWood: []
+  - {fileID: 8300000, guid: f4eae66817237524f85f219d855f1de1, type: 3}
+  - {fileID: 8300000, guid: 6a7c7525cabbc2841a9b224244f554df, type: 3}
+  - {fileID: 8300000, guid: 174cc705afec119439cd4c937e49799f, type: 3}
+  - {fileID: 8300000, guid: 919c0e0ff7d60e949934db8438dda471, type: 3}
+  - {fileID: 8300000, guid: 998b9b8f35ad8a1419b33aaa1f66b934, type: 3}
+  - {fileID: 8300000, guid: 4c4910215027b41488baa88d0457ba4c, type: 3}
+  - {fileID: 8300000, guid: d80cb5e6f2eee1947a044b0599e6b85e, type: 3}
+  walkWood:
+  - {fileID: 8300000, guid: ca6f61c49117d0e4f80db25f48be7a61, type: 3}
+  - {fileID: 8300000, guid: d0e4cbe45f44e3c469c26621ee8fbf7f, type: 3}
+  - {fileID: 8300000, guid: d92c0f4a9d266c0438fc3af2fb8b7160, type: 3}
+  - {fileID: 8300000, guid: c87a6f7ceeb076c44b90664f87abf6d4, type: 3}
+  - {fileID: 8300000, guid: c6984b289f3264f42a93c6f18f55665e, type: 3}
+  - {fileID: 8300000, guid: 4d5e6344cc3d1a04283b452d78142c1b, type: 3}
+  - {fileID: 8300000, guid: 2bb14002916c5d448907fe25a681e443, type: 3}
+  - {fileID: 8300000, guid: 419e9874e392efe4d872b12e871fb8ba, type: 3}
+  - {fileID: 8300000, guid: b758ac115c7ea8f41afe9f965e9ebcda, type: 3}
   walkGrass: []
-  walkFoliage: []
-  walkWater: []
-  jump: []
-  landStone: []
+  walkFoliage:
+  - {fileID: 8300000, guid: 32f241334d9e6464aa5808e54de39732, type: 3}
+  - {fileID: 8300000, guid: 57a5bf13821d1bd488dea7b8a519d2ab, type: 3}
+  - {fileID: 8300000, guid: f9efa2c928c48e448a84e00f5da3b8c4, type: 3}
+  - {fileID: 8300000, guid: fed5522f2a398fe4bb393203cb856647, type: 3}
+  - {fileID: 8300000, guid: f4f5347303afd3a4c8aa6ade8d45c07f, type: 3}
+  - {fileID: 8300000, guid: 3bb4db7b9725ee544b5d6d7f0250a8a8, type: 3}
+  - {fileID: 8300000, guid: 81b92d458cf63ea42be913181822d262, type: 3}
+  - {fileID: 8300000, guid: b137bdc6982b0464bbb8e4bf91765fbe, type: 3}
+  - {fileID: 8300000, guid: 5b65ad72d468ff245a8ba4fb710a66c8, type: 3}
+  - {fileID: 8300000, guid: 824b159b313e1074cb07b160b9510c00, type: 3}
+  - {fileID: 8300000, guid: e08792d41516c52448a0287bd9dbeda5, type: 3}
+  - {fileID: 8300000, guid: d65b3e083d9d9a74587fe9d80aa27acf, type: 3}
+  - {fileID: 8300000, guid: dc6f07ec3c8fd7d4fa71ab1358029b6f, type: 3}
+  walkWater:
+  - {fileID: 8300000, guid: 19e11fb615ad9b442bc373a12dc14c6c, type: 3}
+  - {fileID: 8300000, guid: 4e445d31e791b7d4eb68bdf86816d356, type: 3}
+  - {fileID: 8300000, guid: e8288cc48bfeb054cad32356ae55c119, type: 3}
+  - {fileID: 8300000, guid: 00deffed367f5ae4d996df55872c21c0, type: 3}
+  - {fileID: 8300000, guid: ca714380edd9c4a4896e1b20bff86094, type: 3}
+  - {fileID: 8300000, guid: 8870e3329dc3fb54a8082e1850109b20, type: 3}
+  - {fileID: 8300000, guid: ce0c9359069005847b7894f220cb49ff, type: 3}
+  - {fileID: 8300000, guid: 172e0d1b49fc1d249866fe3bf3997663, type: 3}
+  - {fileID: 8300000, guid: d6c2967d8ad04b5498e96a8ac213aa6a, type: 3}
+  - {fileID: 8300000, guid: 8e5f2867c274f6b4d9d698bd7f547146, type: 3}
+  - {fileID: 8300000, guid: 47f751a51039ddd47b151b8ccabc585c, type: 3}
+  - {fileID: 8300000, guid: 8cdd375a13858ee4887910e52e3e022c, type: 3}
+  - {fileID: 8300000, guid: 6ded1746cfeb96641b17e5f7da675f8f, type: 3}
+  - {fileID: 8300000, guid: 7761d6abf81548f4b985c16d06bb001e, type: 3}
+  jump:
+  - {fileID: 8300000, guid: 75b6a5cba6c993145a10558761398718, type: 3}
+  - {fileID: 8300000, guid: cdf533dd855c3af458766b11d283546c, type: 3}
+  - {fileID: 8300000, guid: 13e197bce3cf72f4a93f37e934b43243, type: 3}
+  - {fileID: 8300000, guid: ce5f010f7efcb9c4cbcce65532243153, type: 3}
+  land:
+  - {fileID: 8300000, guid: 64b71aa09f09d2d45813c0ead2a895a2, type: 3}
+  - {fileID: 8300000, guid: 31f149f28bf71a14e9d2a5fb9d99fe26, type: 3}
+  - {fileID: 8300000, guid: 30a8f5a8655b16540994a0da0fe4010e, type: 3}
+  - {fileID: 8300000, guid: 39fc224f5ee3e4c469c9c0261c671aa6, type: 3}
+  - {fileID: 8300000, guid: 07d658d7370e39e4aaa99da3c2cd396f, type: 3}
+  - {fileID: 8300000, guid: c9604d6c45f63c34db7fad9a31ec60e6, type: 3}
+  - {fileID: 8300000, guid: 39548c7e3767b1c4e9c908f4041b9f44, type: 3}
+  - {fileID: 8300000, guid: 2c850628d3b319c49bb6369509e6f856, type: 3}
 --- !u!82 &1936744473378142413
 AudioSource:
   m_ObjectHideFlags: 0

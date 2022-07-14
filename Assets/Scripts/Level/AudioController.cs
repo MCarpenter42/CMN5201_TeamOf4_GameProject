@@ -32,7 +32,7 @@ public class AudioController : Core
     public List<AudioClip> walkWater = new List<AudioClip>();
     private Coroutine playerWalkCycle = null;
     public List<AudioClip> jump = new List<AudioClip>();
-    public List<AudioClip> landStone = new List<AudioClip>();
+    public List<AudioClip> land = new List<AudioClip>();
     private Coroutine playerJumpCycle = null;
 
     #endregion
@@ -263,7 +263,7 @@ public class AudioController : Core
             case FloorTypes.Empty:
             case FloorTypes.Stone:
             default:
-                playerSFX.PlayAudioClip(PickFromList(landStone));
+                playerSFX.PlayAudioClip(PickFromList(land));
                 break;
         }
 
