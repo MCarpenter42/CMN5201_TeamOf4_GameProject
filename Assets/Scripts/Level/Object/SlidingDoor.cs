@@ -18,6 +18,8 @@ public class SlidingDoor : LevelObject
     private Vector3 posOpen;
     private bool isOpen = false;
     [SerializeField] float transitionTime = 4.0f;
+
+    private Coroutine audioPlay = null;
 	
 	#endregion
 
@@ -66,8 +68,34 @@ public class SlidingDoor : LevelObject
             }
             Vector3 gridMovement = (targetPos - doorObject.transform.position) / GameManager.LevelController.gridCellScale;
             doorObject.Move(gridMovement, transitionTime, true);
+
+            if (audioPlay != null)
+            {
+                GameManager.AudioController.doorSFX.Stop();
+                StopCoroutine(audioPlay);
+            }
+            audioPlay = StartCoroutine(DoorAudio(open, transitionTime));
         }
 
         isOpen = open;
+    }
+
+    public IEnumerator DoorAudio(bool open, float moveDuration)
+    {
+        List<AudioClip> clips = new List<AudioClip>();
+        if (open)
+        {
+            clips = GameManager.AudioController.doorOpen;
+        }
+        else
+        {
+            clips = GameManager.AudioController.doorClose;
+        }
+        GameManager.AudioController.doorSFX.PlayAudioClip(PickFromList(clips));
+
+        yield return new WaitForSeconds(moveDuration);
+
+        clips = GameManager.AudioController.doorStop;
+        GameManager.AudioController.doorSFX.PlayAudioClip(PickFromList(clips));
     }
 }

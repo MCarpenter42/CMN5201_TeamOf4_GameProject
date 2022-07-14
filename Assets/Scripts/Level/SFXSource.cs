@@ -11,8 +11,8 @@ public class SFXSource : Core
     #region [ PROPERTIES ]
 
     [Header("Audio")]
-    [SerializeField] AudioSource source;
-    [SerializeField] AudioClip clip;
+    public AudioSource source;
+    public AudioClip clip;
 
     [Header("Settings")]
     [SerializeField] float baseVolume = 1.0f;
@@ -118,10 +118,21 @@ public class SFXSource : Core
         return alreadyPlaying;
     }
 
+    public void PlayAudioLoop(AudioClip clip)
+    {
+        source.clip = clip;
+        source.Play();
+    }
+
     private IEnumerator DelayedSetPV(float pitch, float volume, float delay)
     {
         yield return new WaitForSeconds(delay);
         source.pitch = pitch;
         source.volume = volume;
+    }
+
+    public void Stop()
+    {
+        source.Stop();
     }
 }

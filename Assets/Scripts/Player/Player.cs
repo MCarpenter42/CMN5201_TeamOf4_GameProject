@@ -147,7 +147,13 @@ public class Player : LevelObject
                         objectMoving.Move(gridMovement, moveDuration);
                         //StartCoroutine(DelayedCheckObjectMovable(gridMovement, moveDuration));
                         int steps = (int)((gridMovement.magnitude / GameManager.LevelController.gridCellScale) * (float)stepsPerTile);
+
                         GameManager.AudioController.PlayerWalk(moveDuration, steps);
+                        SFXSource objSFX = objectMoving.gameObject.GetComponent<SFXSource>();
+                        if (!objSFX.source.isPlaying)
+                        {
+                            GameManager.AudioController.StartObjectMove(objSFX);
+                        }
                     }
                 }
             }
@@ -164,7 +170,13 @@ public class Player : LevelObject
                         objectMoving.Move(gridMovement, moveDuration);
                         //StartCoroutine(DelayedCheckObjectMovable(gridMovement, moveDuration));
                         int steps = (int)((gridMovement.magnitude / GameManager.LevelController.gridCellScale) * (float)stepsPerTile);
+
                         GameManager.AudioController.PlayerWalk(moveDuration, steps);
+                        SFXSource objSFX = objectMoving.gameObject.GetComponent<SFXSource>();
+                        if (!objSFX.source.isPlaying)
+                        {
+                            GameManager.AudioController.StartObjectMove(objSFX);
+                        }
                     }
                 }
             }

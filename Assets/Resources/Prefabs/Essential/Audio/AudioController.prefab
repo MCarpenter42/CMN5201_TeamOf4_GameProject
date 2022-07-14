@@ -51,6 +51,7 @@ MonoBehaviour:
   sfxSources: []
   playerSFX: {fileID: 0}
   beamSFX: []
+  uiSFX: {fileID: 0}
   walkStone:
   - {fileID: 8300000, guid: f4eae66817237524f85f219d855f1de1, type: 3}
   - {fileID: 8300000, guid: 6a7c7525cabbc2841a9b224244f554df, type: 3}
@@ -113,6 +114,27 @@ MonoBehaviour:
   - {fileID: 8300000, guid: c9604d6c45f63c34db7fad9a31ec60e6, type: 3}
   - {fileID: 8300000, guid: 39548c7e3767b1c4e9c908f4041b9f44, type: 3}
   - {fileID: 8300000, guid: 2c850628d3b319c49bb6369509e6f856, type: 3}
+  moveObject:
+  - {fileID: 8300000, guid: 7bba86ee66ff6d64da24ca93d0838f4b, type: 3}
+  - {fileID: 8300000, guid: d1c69a63d063ac940ab5399eac1736b7, type: 3}
+  - {fileID: 8300000, guid: d4c7d043d2e6b224dab272cd24cd1892, type: 3}
+  - {fileID: 8300000, guid: 2d5a7e73e2255f34ba9c85cb7537b0a0, type: 3}
+  - {fileID: 8300000, guid: e864eaa4b2d5ac9409876aa75c1b403d, type: 3}
+  doorOpen:
+  - {fileID: 8300000, guid: 099d4592723786b49a113ea9302725a0, type: 3}
+  doorClose:
+  - {fileID: 8300000, guid: 92efd8c249b26b94b88936cb900c0aa7, type: 3}
+  doorStop:
+  - {fileID: 8300000, guid: 51a337e6a5a4868458ce920bd5d2466e, type: 3}
+  buttonStandard:
+  - {fileID: 8300000, guid: 034538e3ff9fd364b9092c38165713d0, type: 3}
+  - {fileID: 8300000, guid: 8e14591a78ad18246ab48e3a3353ccfa, type: 3}
+  buttonHeavy:
+  - {fileID: 8300000, guid: 241b52867e8295042b50ca577a583d65, type: 3}
+  - {fileID: 8300000, guid: e5ec52fdf1331ee4182cdb39063231a4, type: 3}
+  slider:
+  - {fileID: 8300000, guid: 330ea3d94b6911348910712ee7bc25e9, type: 3}
+  - {fileID: 8300000, guid: 1bd36ef442d018142b688b9919058a22, type: 3}
 --- !u!82 &1936744473378142413
 AudioSource:
   m_ObjectHideFlags: 0

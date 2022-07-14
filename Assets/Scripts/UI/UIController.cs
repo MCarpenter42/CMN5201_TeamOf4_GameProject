@@ -14,6 +14,7 @@ public class UIController : Core
     public HUD hud;
     public Image blackScreen;
     public PauseMenu pauseMenu;
+    public SFXSource sfx;
 
     [Header("Performance & Debug")]
     [SerializeField] DebugDisplay debugPanelInfo = DebugDisplay.None;

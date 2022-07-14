@@ -281,6 +281,14 @@ public class LevelController : Core
                         break;
                 }
             }
+            else if (player.objectMoving != null)
+            {
+                SFXSource objSFX = player.objectMoving.gameObject.GetComponent<SFXSource>();
+                if (objSFX.source.isPlaying)
+                {
+                    objSFX.Stop();
+                }
+            }
 
             if (GetInputDown(Controls.Interaction.Interact) && !player.isMoving)
             {

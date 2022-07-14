@@ -23,6 +23,8 @@ public class AudioController : Core
     [HideInInspector] public List<SFXSource> sfxSources = new List<SFXSource>();
     [HideInInspector] public SFXSource playerSFX;
     [HideInInspector] public List<SFXSource> beamSFX = new List<SFXSource>();
+    [HideInInspector] public SFXSource doorSFX;
+    [HideInInspector] public SFXSource uiSFX;
 
     [Header("Player SFX")]
     public List<AudioClip> walkStone = new List<AudioClip>();
@@ -34,6 +36,17 @@ public class AudioController : Core
     public List<AudioClip> jump = new List<AudioClip>();
     public List<AudioClip> land = new List<AudioClip>();
     private Coroutine playerJumpCycle = null;
+
+    [Header("World SFX")]
+    public List<AudioClip> moveObject = new List<AudioClip>();
+    public List<AudioClip> doorOpen = new List<AudioClip>();
+    public List<AudioClip> doorClose = new List<AudioClip>();
+    public List<AudioClip> doorStop = new List<AudioClip>();
+
+    [Header("UI SFX")]
+    public List<AudioClip> buttonStandard = new List<AudioClip>();
+    public List<AudioClip> buttonHeavy = new List<AudioClip>();
+    public List<AudioClip> slider = new List<AudioClip>();
 
     #endregion
 
@@ -76,6 +89,14 @@ public class AudioController : Core
         }
 
         playerSFX = GetChildrenWithComponent<SFXSource>(GameManager.Player.gameObject)[0].GetComponent<SFXSource>();
+        if (GameObject.FindGameObjectWithTag("ExitDoor") != null)
+        {
+            doorSFX = GameObject.FindGameObjectWithTag("ExitDoor").GetComponent<SFXSource>();
+        }
+        if (GameManager.UIController.sfx != null)
+        {
+            uiSFX = GameManager.UIController.sfx;
+        }
     }
 
     private void GetExistingSFX()
@@ -279,6 +300,22 @@ public class AudioController : Core
                 playerSFX.PlayAudioClip(PickFromList(walkStone));
                 break;
         }
+    }
+
+    public void ButtonClick(bool isHeavy)
+    {
+
+    }
+
+    public void StartObjectMove(SFXSource source)
+    {
+        AudioClip clip = PickFromList(moveObject);
+        source.PlayAudioLoop(clip);
+    }
+    
+    public void StopObjectMove(SFXSource source)
+    {
+        source.Stop();
     }
 
 }
