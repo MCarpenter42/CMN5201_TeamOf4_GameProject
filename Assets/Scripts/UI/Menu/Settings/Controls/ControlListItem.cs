@@ -7,7 +7,7 @@ using UnityEngine.EventSystems;
 using UnityEditor;
 using TMPro;
 
-public class ControlListItem : UI, IPointerEnterHandler, IPointerExitHandler
+public class ControlListItem : UI
 {
     #region [ PROPERTIES ]
 
@@ -61,12 +61,12 @@ public class ControlListItem : UI, IPointerEnterHandler, IPointerExitHandler
 
     #region [ INTERACTION ]
 
-    public void OnPointerEnter(PointerEventData pointerEventData)
+    public override void EventOnPointerEnter()
     {
 
     }
 
-    public void OnPointerExit(PointerEventData pointerEventData)
+    public override void EventOnPointerExit()
     {
 
     }

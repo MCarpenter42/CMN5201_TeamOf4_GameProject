@@ -43,3 +43,22 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 08f9bf63f5c22b146906fc0d2fde3773, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  MainMenuScene: {fileID: 102900000, guid: 103a30cbe9b50d84ab477fd1db8bffbe, type: 3}
+  LevelTransitionScene: {fileID: 102900000, guid: 14da18f761c3c9745bbf942647bf8b5f, type: 3}
+  LevelScenes:
+  - {fileID: 102900000, guid: 07805f0e9082b71469d853ef1a0b1215, type: 3}
+  - {fileID: 102900000, guid: ba70d7e3e4cb68944aa8efc4b31cf8c1, type: 3}
+  - {fileID: 102900000, guid: 1da34601f9eab3e4ba3410e427bda522, type: 3}
+  - {fileID: 102900000, guid: c5802a53d9782d64b89254ab3e82ed5a, type: 3}
+  - {fileID: 102900000, guid: be6cbf842cc1d754b9449e5d29fdefb3, type: 3}
+  - {fileID: 102900000, guid: 62f8216fb9f5ca04f84ea8d147180b66, type: 3}
+  - {fileID: 102900000, guid: eb471fde0b3c98b45be105c3eca22ba3, type: 3}
+  - {fileID: 102900000, guid: 51d86be651a02694fa463c7a866f24fa, type: 3}
+  - {fileID: 102900000, guid: c80c83b6009f5c74a87b5632116fdd32, type: 3}
+  - {fileID: 102900000, guid: ceb620796fb92004f8bd211f0f91843d, type: 3}
+  - {fileID: 102900000, guid: 75e86427da7c55247b2633c9fcddb5a3, type: 3}
+  - {fileID: 102900000, guid: 4df581ed3b1187f4cbd2a5fa42015333, type: 3}
+  - {fileID: 102900000, guid: a60b58a28306601498aeba4ac3bdcf16, type: 3}
+  - {fileID: 102900000, guid: a28e03ddf07569e47ad780bb9b316d9e, type: 3}
+  - {fileID: 102900000, guid: 6d4dc08bdfa08e548a9162409ddef292, type: 3}
+  - {fileID: 102900000, guid: e7c5ab9cee0cd4e489add692cf08e408, type: 3}

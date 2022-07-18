@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.SceneManagement;
 using UnityEditor;
 using TMPro;
 
@@ -22,6 +23,15 @@ public class GameManager : Core
     public static AudioController AudioController;
     public static GameObject Listener;
 
+    public SceneAsset MainMenuScene;
+    private int mainMenuBuildIndex = -1;
+    
+    public SceneAsset LevelTransitionScene;
+    private int levelTransitionBuildIndex = -1;
+
+    public SceneAsset[] LevelScenes;
+    private int[] levelSceneIndices;
+
     #endregion
 
     #region [ PROPERTIES ]
@@ -31,6 +41,14 @@ public class GameManager : Core
 
     public static bool isPaused = false;
     public static bool showHints = true;
+
+    public static bool sceneChangeComplete = true;
+
+    #endregion
+
+    #region [ COROUTINES ]
+
+    Coroutine sceneChange = null;
 
     #endregion
 
@@ -112,6 +130,8 @@ public class GameManager : Core
         Controls = controlsInstance;
         vidSettingsInstance = gameObject.AddComponent<VideoSettings>();
         VideoSettings = vidSettingsInstance;
+
+        GetSceneIndices();
         OnLevelLoad();
     }
 
@@ -124,11 +144,29 @@ public class GameManager : Core
         }
 
         UIController = FindObjectOfType<UIController>();
-        UIController.pauseMenu.PauseMenuResume();
+        if (UIController.pauseMenu != null)
+        {
+            UIController.pauseMenu.Show(false);
+        }
 
         AudioController = FindObjectOfType<AudioController>();
         Listener = FindObjectOfType<AudioListener>().gameObject;
     }
+
+    private void GetSceneIndices()
+    {
+        mainMenuBuildIndex = SceneIndexFromName(MainMenuScene.name);
+        
+        levelTransitionBuildIndex = SceneIndexFromName(LevelTransitionScene.name);
+
+        levelSceneIndices = new int[LevelScenes.Length];
+        for (int i = 0; i < LevelScenes.Length; i++)
+        {
+            levelSceneIndices[i] = SceneIndexFromName(LevelScenes[i].name);
+        }
+    }
+
+    /* - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
 
     private float CalcFPS()
     {
@@ -151,21 +189,11 @@ public class GameManager : Core
     {
         if (LevelController.isGameplayLevel)
         {
-            LevelController.PlayerControl();
-            LevelController.CameraControl();
+            LevelController.PlayerInputs();
+            LevelController.CameraInputs();
         }
 
-        if (Input.GetKeyDown(Controls.General.Pause.Key))
-        {
-            if (isPaused)
-            {
-                UIController.pauseMenu.PauseMenuResume();
-            }
-            else
-            {
-                UIController.pauseMenu.PauseMenuPause();
-            }
-        }
+        UIController.UIInputs();
     }
 
     #region [ SETTINGS ]
@@ -215,7 +243,185 @@ public class GameManager : Core
 
     #region [ SCENE HANDLING ]
 
+    public bool GoToMainMenu()
+    {
+        bool successful = false;
 
+        if (MainMenuScene != null)
+        {
+            try
+            {
+                ChangeScene(mainMenuBuildIndex);
+                successful = true;
+            }
+            catch
+            {
+                throw new System.Exception("ERROR: Could not load scene, as it was not found in the build index!");
+            }
+        }
+
+        return successful;
+    }
+
+    public bool LoadLevel(int index)
+    {
+        bool successful = false;
+
+        if (InBounds(index, LevelScenes))
+        {
+            try
+            {
+                ChangeScene(levelSceneIndices[index]);
+                successful = true;
+            }
+            catch
+            {
+                throw new System.Exception("ERROR: Could not load scene, as it was not found in the build index!");
+            }
+        }
+
+        return successful;
+    }
+    
+    public bool LoadLevelAdjusted(int index)
+    {
+        bool successful = false;
+
+        if (InBounds(index - 1, LevelScenes))
+        {
+            try
+            {
+                ChangeScene(levelSceneIndices[index - 1]);
+                successful = true;
+            }
+            catch
+            {
+                throw new System.Exception("ERROR: Could not load scene, as it was not found in the build index!");
+            }
+        }
+
+        return successful;
+    }
+
+    public void ChangeScene(int targetSceneIndex)
+    {
+        ChangeScene(targetSceneIndex, true, true);
+    }
+    
+    public void ChangeScene(string targetSceneName)
+    {
+        ChangeScene(targetSceneName, true, true);
+    }
+    
+    public void ChangeScene(int targetSceneIndex, float loadScreenDelay)
+    {
+        ChangeScene(targetSceneIndex, true, true, loadScreenDelay);
+    }
+    
+    public void ChangeScene(string targetSceneName, float loadScreenDelay)
+    {
+        ChangeScene(targetSceneName, true, true, loadScreenDelay);
+    }
+    
+    public void ChangeScene(int targetSceneIndex, bool fadeOut, bool fadeIn)
+    {
+        if (sceneChangeComplete)
+        {
+            sceneChangeComplete = false;
+            StartCoroutine(IChangeScene(targetSceneIndex, fadeOut, fadeIn, 0.5f));
+        }
+    }
+    
+    public void ChangeScene(string targetSceneName, bool fadeOut, bool fadeIn)
+    {
+        if (sceneChangeComplete)
+        {
+            sceneChangeComplete = false;
+            StartCoroutine(IChangeScene(SceneIndexFromName(targetSceneName), fadeOut, fadeIn, 0.5f));
+        }
+    }
+    
+    public void ChangeScene(int targetSceneIndex, bool fadeOut, bool fadeIn, float loadScreenDelay)
+    {
+        if (sceneChangeComplete)
+        {
+            sceneChangeComplete = false;
+            StartCoroutine(IChangeScene(targetSceneIndex, fadeOut, fadeIn, loadScreenDelay));
+        }
+    }
+    
+    public void ChangeScene(string targetSceneName, bool fadeOut, bool fadeIn, float loadScreenDelay)
+    {
+        if (sceneChangeComplete)
+        {
+            sceneChangeComplete = false;
+            StartCoroutine(IChangeScene(SceneIndexFromName(targetSceneName), fadeOut, fadeIn, loadScreenDelay));
+        }
+    }
+
+    private IEnumerator IChangeScene(int targetSceneIndex, bool fadeOut, bool fadeIn, float loadScreenDelay)
+    {
+        if (fadeOut)
+        {
+            UIController.BlackScreenFade(true, LevelController.levelFadeTime);
+            yield return new WaitForSeconds(LevelController.levelFadeTime);
+        }
+
+        AudioListener oldestListener = FindObjectOfType<AudioListener>();
+
+        AsyncOperation loading = SceneManager.LoadSceneAsync(levelTransitionBuildIndex, LoadSceneMode.Additive);
+        while (!loading.isDone)
+        {
+            yield return null;
+            oldestListener.enabled = (FindObjectsOfType<AudioListener>().Length == 1);
+        }
+
+        AsyncOperation unloading = SceneManager.UnloadSceneAsync(SceneManager.GetActiveScene());
+        while (!unloading.isDone)
+        {
+            yield return null;
+        }
+        oldestListener = FindObjectOfType<AudioListener>();
+
+        FindObjectOfType<Camera>().backgroundColor = UIController.blackoutColour;
+        yield return new WaitForSeconds(loadScreenDelay);
+
+        loading = SceneManager.LoadSceneAsync(targetSceneIndex, LoadSceneMode.Additive);
+        while (!loading.isDone)
+        {
+            yield return null;
+            oldestListener.enabled = (FindObjectsOfType<AudioListener>().Length == 1);
+        }
+
+        unloading = SceneManager.UnloadSceneAsync(SceneManager.GetActiveScene());
+        while (!unloading.isDone)
+        {
+            yield return null;
+        }
+
+        sceneChangeComplete = true;
+
+        if (fadeIn)
+        {
+            UIController.BlackScreenFade(false, LevelController.levelFadeTime);
+            yield return new WaitForSeconds(LevelController.levelFadeTime);
+        }
+    }
+
+    private int SceneIndexFromName(string sceneName)
+    {
+        for (int i = 0; i < EditorBuildSettings.scenes.Length; i++)
+        {
+            string buildSceneName = EditorBuildSettings.scenes[i].path;
+            int n1 = buildSceneName.LastIndexOf('/') + 1;
+            int n2 = buildSceneName.LastIndexOf('.') - n1;
+            if (buildSceneName.Substring(n1, n2) == sceneName)
+            {
+                return i;
+            }
+        }
+        return -1;
+    }
 
     #endregion
 
@@ -223,7 +429,13 @@ public class GameManager : Core
 
     private void DebugOnStart()
     {
-
+        /*for (int i = 0; i < EditorBuildSettings.scenes.Length; i++)
+        {
+            string sceneName = EditorBuildSettings.scenes[i].path;
+            int n1 = sceneName.LastIndexOf('/') + 1;
+            int n2 = sceneName.LastIndexOf('.') - n1;
+            Debug.Log(sceneName.Substring(n1, n2));
+        }*/
     }
 
     private void DebugOnUpdate()

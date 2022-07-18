@@ -1701,8 +1701,8 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 7457477489808862131}
         m_TargetAssemblyTypeName: PauseMenu, Assembly-CSharp
-        m_MethodName: PauseMenuResume
-        m_Mode: 1
+        m_MethodName: ShowPauseMenu
+        m_Mode: 6
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
@@ -2864,6 +2864,7 @@ MonoBehaviour:
   hiddenOffset: {x: 0, y: 0}
   slideMovementStyle: 0
   opacity: 1
+  menuFrames: []
   menuFrame: {fileID: 7457477488264109448}
 --- !u!1 &7457477489811890851
 GameObject:

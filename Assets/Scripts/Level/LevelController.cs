@@ -12,7 +12,7 @@ public class LevelController : Core
 
     [Header("Level Properties")]
     public bool isGameplayLevel = true;
-    private float levelFadeTime = 0.8f;
+    public float levelFadeTime = 0.8f;
     [SerializeField] public float gridCellScale = 1.0f;
     [HideInInspector] public WorldGrid worldGrid;
     [HideInInspector] public List<LevelObject> levelObjects = new List<LevelObject>();
@@ -189,7 +189,7 @@ public class LevelController : Core
         GoToScene('+');
     }
 
-    public void PlayerControl()
+    public void PlayerInputs()
     {
         if (!player.isMoving && !levelCam.isRotating)
         {
@@ -327,7 +327,7 @@ public class LevelController : Core
         }
     }
 
-    public void CameraControl()
+    public void CameraInputs()
     {
         if (!levelCam.isRotating)
         {

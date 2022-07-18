@@ -88,7 +88,10 @@ public class AudioController : Core
             }
         }
 
-        playerSFX = GetChildrenWithComponent<SFXSource>(GameManager.Player.gameObject)[0].GetComponent<SFXSource>();
+        if (GameObject.FindGameObjectWithTag("Player") != null)
+        {
+            playerSFX = GetChildrenWithComponent<SFXSource>(GameManager.Player.gameObject)[0].GetComponent<SFXSource>();
+        }
         if (GameObject.FindGameObjectWithTag("ExitDoor") != null)
         {
             doorSFX = GameObject.FindGameObjectWithTag("ExitDoor").GetComponent<SFXSource>();

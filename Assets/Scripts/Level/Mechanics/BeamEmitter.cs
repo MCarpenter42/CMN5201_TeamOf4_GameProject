@@ -39,6 +39,28 @@ public class BeamEmitter : Core
 
     void Start()
     {
+        InstantiateBeam();
+    }
+
+    void Update()
+    {
+        if (isEmitting)
+        {
+            EmitBeam();
+        }
+    }
+
+    void FixedUpdate()
+    {
+        
+    }
+
+	#endregion
+
+    /* - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
+	
+    private void InstantiateBeam()
+    {
         beamObj = Instantiate(beamPrefab);
 
         if (beamPrefab != null)
@@ -54,15 +76,15 @@ public class BeamEmitter : Core
                     case BeamColours.White:
                         gradient.SetKeys(new GradientColorKey[] { new GradientColorKey(new Color(1.0f, 1.0f, 1.0f), 0.0f) }, new GradientAlphaKey[] { new GradientAlphaKey(1.0f, 0.0f) });
                         break;
-                        
+
                     case BeamColours.Red:
                         gradient.SetKeys(new GradientColorKey[] { new GradientColorKey(new Color(1.0f, 0.0f, 0.0f), 0.0f) }, new GradientAlphaKey[] { new GradientAlphaKey(1.0f, 0.0f) });
                         break;
-                        
+
                     case BeamColours.Green:
                         gradient.SetKeys(new GradientColorKey[] { new GradientColorKey(new Color(0.0f, 1.0f, 0.0f), 0.0f) }, new GradientAlphaKey[] { new GradientAlphaKey(1.0f, 0.0f) });
                         break;
-                        
+
                     case BeamColours.Blue:
                         gradient.SetKeys(new GradientColorKey[] { new GradientColorKey(new Color(0.0f, 0.0f, 1.0f), 0.0f) }, new GradientAlphaKey[] { new GradientAlphaKey(1.0f, 0.0f) });
                         break;
@@ -84,25 +106,13 @@ public class BeamEmitter : Core
         }
     }
 
-    void Update()
-    {
-        if (isEmitting)
-        {
-            EmitBeam();
-        }
-    }
-
-    void FixedUpdate()
-    {
-        
-    }
-
-	#endregion
-
-    /* - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
-	
     private void EmitBeam()
     {
+        if (beamObj == null)
+        {
+            InstantiateBeam();
+        }
+
         beamPoints.Clear();
         beamPoints.Add(transform.position);
         Vector3[] output = new Vector3[] { transform.position, transform.forward };

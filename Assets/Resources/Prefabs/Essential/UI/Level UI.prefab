@@ -398,7 +398,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &4528627218653397861
 RectTransform:
   m_ObjectHideFlags: 0
@@ -439,7 +439,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 0.05882353, g: 0.05882353, b: 0.05882353, a: 1}
+  m_Color: {r: 0.05882353, g: 0.05882353, b: 0.05882353, a: 0}
   m_RaycastTarget: 0
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
@@ -574,13 +574,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 748303c6c78038241a55337cb27e1747, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  mainMenu: {fileID: 0}
+  pauseMenu: {fileID: 6460029068152460474}
   hud: {fileID: 1987849959406376286}
   blackScreen: {fileID: 4528627218653397850}
-  pauseMenu: {fileID: 6460029068152460474}
   sfx: {fileID: 3368808409385861040}
   debugPanelInfo: 0
   debugPanel: {fileID: 0}
   fps: 0
+  blackoutColour: {r: 0, g: 0, b: 0, a: 1}
+  blackoutOnLoad: 1
 --- !u!114 &3368808409385861040
 MonoBehaviour:
   m_ObjectHideFlags: 0

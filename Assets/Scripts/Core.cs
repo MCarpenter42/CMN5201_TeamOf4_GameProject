@@ -53,9 +53,14 @@ public class Core : MonoBehaviour
         GameManager.isPaused = false;
     }
 
-    public void GoToScene(int index)
+    public void GoToScene(int targetSceneIndex)
     {
-        SceneManager.LoadScene(index, LoadSceneMode.Single);
+        GameManager.Instance.ChangeScene(targetSceneIndex);
+    }
+    
+    public void GoToScene(string targetSceneName)
+    {
+        GameManager.Instance.ChangeScene(targetSceneName);
     }
 
     public void GoToScene(char dir)

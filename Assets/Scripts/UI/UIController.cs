@@ -11,9 +11,10 @@ public class UIController : Core
     #region [ OBJECTS ]
 
     [Header("UI Components")]
+    public MainMenu mainMenu;
+    public PauseMenu pauseMenu;
     public HUD hud;
     public Image blackScreen;
-    public PauseMenu pauseMenu;
     public SFXSource sfx;
 
     [Header("Performance & Debug")]
@@ -27,7 +28,8 @@ public class UIController : Core
 
     #region [ PROPERTIES ]
 
-
+    public Color blackoutColour = Color.black;
+    [SerializeField] bool blackoutOnLoad = true;
 
     #endregion
 
@@ -41,6 +43,10 @@ public class UIController : Core
         if (blackScreen != null)
         {
             blackScreen.gameObject.SetActive(true);
+            if (blackoutOnLoad)
+            {
+                blackScreen.color = blackoutColour;
+            }
         }
     }
 
@@ -78,6 +84,16 @@ public class UIController : Core
     }
 
     #endregion
+
+    /* - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
+    
+    public void UIInputs()
+    {
+        if (Input.GetKeyDown(Controls.General.Pause.Key) && pauseMenu != null)
+        {
+            pauseMenu.Show(!GameManager.isPaused);
+        }
+    }
 
     /* - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
 
@@ -153,13 +169,16 @@ public class UIController : Core
     {
         blackScreen.gameObject.SetActive(true);
 
-        Color clrStart = new Color(0.059f, 0.059f, 0.059f, 1.000f);
-        Color clrEnd = new Color(0.059f, 0.059f, 0.059f, 0.000f);
+        Color clrStart = new Color(blackoutColour.r, blackoutColour.g, blackoutColour.b, 0.000f);
+        Color clrEnd = new Color(blackoutColour.r, blackoutColour.g, blackoutColour.b, 0.000f);
 
         if (show)
         {
-            clrStart = new Color(0.059f, 0.059f, 0.059f, 0.000f);
-            clrEnd = new Color(0.059f, 0.059f, 0.059f, 1.000f);
+            clrEnd.a = 1.000f;
+        }
+        else
+        {
+            clrStart.a = 1.000f;
         }
 
         float timePassed = 0.0f;
@@ -171,10 +190,5 @@ public class UIController : Core
             blackScreen.color = Color.Lerp(clrStart, clrEnd, delta);
         }
         blackScreen.color = clrEnd;
-
-        if (!show)
-        {
-            blackScreen.gameObject.SetActive(true);
-        }
     }
 }
