@@ -10,7 +10,10 @@ public class Menu : UI
 {
     #region [ PROPERTIES ]
 
+    [Header("Components")]
+    public List<GameObject> menuFrames;
 
+    [HideInInspector] public int activeFrame = -1;
 
     #endregion
 
@@ -25,7 +28,7 @@ public class Menu : UI
 
     void Start()
     {
-
+        SetActiveFrame(0);
     }
 
     void Update()
@@ -42,4 +45,36 @@ public class Menu : UI
 
     /* - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
 
+    public void SetActiveFrame(int index)
+    {
+        if (InBounds(index, menuFrames) && index != activeFrame)
+        {
+            for (int i = 0; i < menuFrames.Count; i++)
+            {
+                menuFrames[i].SetActive(i == index);
+            }
+            activeFrame = index;
+        }
+    }
+    
+    public void SetActiveFrame(GameObject menuFrame)
+    {
+        if (menuFrames.Contains(menuFrame))
+        {
+            int index = 0;
+            if (InBounds(index, menuFrames) && index != activeFrame)
+            {
+                for (int i = 0; i < menuFrames.Count; i++)
+                {
+                    menuFrames[i].SetActive(i == index);
+                }
+                activeFrame = index;
+            }
+        }
+        else
+        {
+            throw new Exception("ERROR: Object \"" + menuFrame.name + "\" is not a valid frame of menu \"" + "\"!");
+        }
+    }
+    
 }

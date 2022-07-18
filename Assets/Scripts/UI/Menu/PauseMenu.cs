@@ -6,7 +6,7 @@ using UnityEngine.SceneManagement;
 using UnityEditor;
 using TMPro;
 
-public class PauseMenu : UI
+public class PauseMenu : Menu
 {
     // Having a cariable local to this script to log whether the game is paused isn't
     // necessary - use GameManager.isPaused instead!
@@ -15,16 +15,17 @@ public class PauseMenu : UI
 
     /* - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
 
-    public void PauseMenuResume()
+    public void ShowPauseMenu(bool show)
     {
-        menuFrame.SetActive(false);
-        Resume();
-    }
-
-    public void PauseMenuPause()
-    {
-        Pause();
-        menuFrame.SetActive(true);
+        if (show)
+        {
+            Pause();
+        }
+        else
+        {
+            Resume();
+        }
+        menuFrame.SetActive(show);
     }
 
     public void LoadMenu()
@@ -35,7 +36,7 @@ public class PauseMenu : UI
     public void Restart()
     {
         SceneManager.LoadScene(SceneManager.GetActiveScene().name);
-        PauseMenuResume();
+        Resume();
     }
 
     public void Quit()
