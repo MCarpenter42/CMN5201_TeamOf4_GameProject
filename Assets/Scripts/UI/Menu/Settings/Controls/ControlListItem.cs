@@ -7,7 +7,7 @@ using UnityEngine.EventSystems;
 using UnityEditor;
 using TMPro;
 
-public class ControlListItem : UI
+public class ControlListItem : UIElement
 {
     #region [ PROPERTIES ]
 

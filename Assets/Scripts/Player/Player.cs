@@ -51,14 +51,6 @@ public class Player : LevelObject
         Debugging();
     }
 
-    void OnCollisionEnter(Collision collision)
-    {
-        if (collision.gameObject.GetComponent<EndPoint>() != null)
-        {
-            GameManager.LevelController.NextLevel();
-        }
-    }
-
     #endregion
 
     /* - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */

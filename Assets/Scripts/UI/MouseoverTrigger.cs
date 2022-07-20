@@ -8,19 +8,40 @@ using UnityEngine.EventSystems;
 using UnityEditor;
 using TMPro;
 
-public class MouseoverTrigger : UI
+public class MouseoverTrigger : UIElement
 {
+    public bool listenForMouseover = true;
+
     [Header("Mouse Pointer Enter/Exit Events")]
     public UnityEvent pointerEnterEvent;
     public UnityEvent pointerExitEvent;
 
+    /* - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
+
+    #region [ BUILT-IN UNITY FUNCTIONS ]
+
     public override void EventOnPointerEnter()
     {
-        pointerEnterEvent.Invoke();
+        if (listenForMouseover)
+        {
+            pointerEnterEvent.Invoke();
+        }
     }
 
     public override void EventOnPointerExit()
     {
-        pointerExitEvent.Invoke();
+        if (listenForMouseover)
+        {
+            pointerExitEvent.Invoke();
+        }
+    }
+
+    #endregion
+
+    /* - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
+
+    public void ListenForMouseover(bool listen)
+    {
+        this.listenForMouseover = listen;
     }
 }

@@ -6,7 +6,7 @@ using UnityEngine.UI;
 using UnityEditor;
 using TMPro;
 
-public class Prompt : UI
+public class Prompt : UIElement
 {
     #region [ PROPERTIES ]
 
@@ -69,14 +69,14 @@ public class Prompt : UI
         }
         else
         {
-            defaultWidths[0] = gameObject.GetComponent<RectTransform>().rect.width;
+            defaultWidths[0] = rTransform.rect.width;
             if (GetChildrenWithTag(gameObject, "Text").Count > 0)
             {
                 labels[0] = GetChildrenWithTag(gameObject, "Text")[0].GetComponent<TextMeshProUGUI>();
             }
         }
-        defaultWidths[2] = gameObject.GetComponent<RectTransform>().rect.width;
-        defaultHeights[2] = gameObject.GetComponent<RectTransform>().rect.height;
+        defaultWidths[2] = rTransform.rect.width;
+        defaultHeights[2] = rTransform.rect.height;
     }
 
     public void SetText(string text)

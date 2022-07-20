@@ -153,19 +153,6 @@ public class GameManager : Core
         Listener = FindObjectOfType<AudioListener>().gameObject;
     }
 
-    private void GetSceneIndices()
-    {
-        mainMenuBuildIndex = SceneIndexFromName(MainMenuScene.name);
-        
-        levelTransitionBuildIndex = SceneIndexFromName(LevelTransitionScene.name);
-
-        levelSceneIndices = new int[LevelScenes.Length];
-        for (int i = 0; i < LevelScenes.Length; i++)
-        {
-            levelSceneIndices[i] = SceneIndexFromName(LevelScenes[i].name);
-        }
-    }
-
     /* - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
 
     private float CalcFPS()
@@ -243,6 +230,34 @@ public class GameManager : Core
 
     #region [ SCENE HANDLING ]
 
+    private void GetSceneIndices()
+    {
+        mainMenuBuildIndex = SceneIndexFromName(MainMenuScene.name);
+        
+        levelTransitionBuildIndex = SceneIndexFromName(LevelTransitionScene.name);
+
+        levelSceneIndices = new int[LevelScenes.Length];
+        for (int i = 0; i < LevelScenes.Length; i++)
+        {
+            levelSceneIndices[i] = SceneIndexFromName(LevelScenes[i].name);
+        }
+    }
+
+    private int SceneIndexFromName(string sceneName)
+    {
+        for (int i = 0; i < EditorBuildSettings.scenes.Length; i++)
+        {
+            string buildSceneName = EditorBuildSettings.scenes[i].path;
+            int n1 = buildSceneName.LastIndexOf('/') + 1;
+            int n2 = buildSceneName.LastIndexOf('.') - n1;
+            if (buildSceneName.Substring(n1, n2) == sceneName)
+            {
+                return i;
+            }
+        }
+        return -1;
+    }
+
     public bool GoToMainMenu()
     {
         bool successful = false;
@@ -301,6 +316,15 @@ public class GameManager : Core
         }
 
         return successful;
+    }
+
+    public void NextLevel()
+    {
+        StartCoroutine(DelayedChangeScene(LevelController.levelFadeTime));
+        if (GameManager.UIController.blackScreen != null)
+        {
+            GameManager.UIController.BlackScreenFade(true, LevelController.levelFadeTime);
+        }
     }
 
     public void ChangeScene(int targetSceneIndex)
@@ -408,19 +432,10 @@ public class GameManager : Core
         }
     }
 
-    private int SceneIndexFromName(string sceneName)
+    private IEnumerator DelayedChangeScene(float time)
     {
-        for (int i = 0; i < EditorBuildSettings.scenes.Length; i++)
-        {
-            string buildSceneName = EditorBuildSettings.scenes[i].path;
-            int n1 = buildSceneName.LastIndexOf('/') + 1;
-            int n2 = buildSceneName.LastIndexOf('.') - n1;
-            if (buildSceneName.Substring(n1, n2) == sceneName)
-            {
-                return i;
-            }
-        }
-        return -1;
+        yield return new WaitForSecondsRealtime(time);
+        GoToScene('+');
     }
 
     #endregion

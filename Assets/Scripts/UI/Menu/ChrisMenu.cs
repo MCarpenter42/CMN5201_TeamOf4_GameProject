@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
-public class ChrisMenu : UI
+public class ChrisMenu : UIElement
 {
     public void Quit()
     {

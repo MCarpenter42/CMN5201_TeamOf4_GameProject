@@ -9,7 +9,7 @@ using UnityEditor;
 using TMPro;
 
 [ExecuteInEditMode]
-public class LevelSelectButton : UI
+public class LevelSelectButton : UIElement
 {
     #region [ PROPERTIES ]
 

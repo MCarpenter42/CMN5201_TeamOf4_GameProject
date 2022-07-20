@@ -56,7 +56,6 @@ public class LevelController : Core
                 player.GetGridPos();
                 Vector3 startingMove = player.GetGridDir(startPoint.GetFacing()).normalized * gridCellScale * (float)startPoint.moveMulti;
                 player.DelayedPlayerMove(0.3f, startingMove, 0.25f);
-                //player.ChangeFacing(startingMove);
             }
 
             LevelHint();
@@ -159,10 +158,14 @@ public class LevelController : Core
             if (levelHintText != null && levelHintText.Length > 0)
             {
                 Prompt levelHint = GameManager.UIController.hud.levelHint.GetComponent<Prompt>();
+                levelHint.gameObject.SetActive(true);
+                levelHint.SetText(levelHintText, AdjustCondition.Never, AdjustCondition.Always);
+                levelHint.hiddenOffset = new Vector2(0.0f, levelHint.rTransform.rect.height + 20.0f);
+                levelHint.rTransform.anchoredPosition += levelHint.hiddenOffset;
+
                 float initialShowDelay = 1.0f;
                 float initialHideDelay = initialShowDelay + levelHint.fixedShowHideDelay;
                 levelHint.DoDelayedShow(true, initialShowDelay);
-                levelHint.SetText(levelHintText, AdjustCondition.Never, AdjustCondition.Always);
                 levelHint.DoDelayedShow(false, initialHideDelay);
             }
             else
@@ -172,22 +175,12 @@ public class LevelController : Core
         }
     }
 
+    public void OnLevelEnd()
+    {
+        GameManager.Instance.NextLevel();
+    }
+
     /* - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
-
-    public void NextLevel()
-    {
-        StartCoroutine(DelayedSceneChange(levelFadeTime));
-        if (GameManager.UIController.blackScreen != null)
-        {
-            GameManager.UIController.BlackScreenFade(true, levelFadeTime);
-        }
-    }
-
-    private IEnumerator DelayedSceneChange(float time)
-    {
-        yield return new WaitForSecondsRealtime(time);
-        GoToScene('+');
-    }
 
     public void PlayerInputs()
     {
@@ -353,7 +346,5 @@ public class LevelController : Core
             }
         }
     }
-
-    /* - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
 
 }

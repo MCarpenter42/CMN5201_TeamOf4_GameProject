@@ -6,7 +6,7 @@ using UnityEngine.UI;
 using UnityEditor;
 using TMPro;
 
-public class Menu : UI
+public class Menu : UIElement
 {
     #region [ PROPERTIES ]
 

@@ -8,24 +8,25 @@ using UnityEngine.EventSystems;
 using UnityEditor;
 using TMPro;
 
-public class UI : Core, IPointerEnterHandler, IPointerExitHandler
+public class UIElement : Core, IPointerEnterHandler, IPointerExitHandler
 {
     #region [ PROPERTIES ]
 
-    protected List<Graphic> childGraphicElements = new List<Graphic>();
+    public enum ShowHide { Instant, Fade, Slide };
+
+    [HideInInspector] public RectTransform rTransform;
+    [HideInInspector] public List<Graphic> childGraphicElements = new List<Graphic>();
 
     [HideInInspector] public bool visible;
 
-    private enum ShowHide { Instant, Fade, Slide };
-
     [Header("UI Element Properties")]
     public float fixedShowHideDelay = 0.0f;
-    [SerializeField] ShowHide showHideType = ShowHide.Instant;
-    [SerializeField] float transitionTime = 0.1f;
-    [SerializeField] Vector2 hiddenOffset = Vector2.zero;
-    [SerializeField] InterpDelta.InterpTypes slideMovementStyle = InterpDelta.InterpTypes.Linear;
-    [HideInInspector] Vector2 visiblePos;
-    private bool isMoving = false;
+    [SerializeField] protected ShowHide showHideType = ShowHide.Instant;
+    [SerializeField] protected float transitionTime = 0.1f;
+    public Vector2 hiddenOffset = Vector2.zero;
+    [SerializeField] protected InterpDelta.InterpTypes slideMovementStyle = InterpDelta.InterpTypes.Linear;
+    public Vector2 visiblePos;
+    protected bool isMoving = false;
     public float opacity = 1.0f;
 
     #endregion
@@ -92,45 +93,8 @@ public class UI : Core, IPointerEnterHandler, IPointerExitHandler
     
     private void GetGenericComponents()
     {
-        visiblePos = transform.position;
-
-        /*
-        List<GameObject> parentObjects = new List<GameObject>();
-        List<GameObject> childObjects = new List<GameObject>();
-
-        parentObjects.Add(gameObject);
-        bool keepSearching = true;
-        do
-        {
-            foreach (GameObject obj in parentObjects)
-            {
-                for (int i = 0; i < obj.transform.childCount; i++)
-                {
-                    childObjects.Add(obj.transform.GetChild(i).gameObject);
-                }
-            }
-
-            if (childObjects.Count == 0)
-            {
-                keepSearching = false;
-                continue;
-            }
-
-            foreach (GameObject obj in childObjects)
-            {
-                if (obj.GetComponent<Graphic>() != null)
-                {
-                    childGraphicElements.Add(obj.GetComponent<Graphic>());
-                }
-            }
-
-            CopyListData(childObjects, parentObjects);
-            childObjects.Clear();
-        }
-        while (keepSearching);
-
-        Debug.Log(childGraphicElements.Count);
-        */
+        rTransform = GetComponent<RectTransform>();
+        visiblePos = rTransform.anchoredPosition;
     }
 
     /* - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
@@ -185,6 +149,11 @@ public class UI : Core, IPointerEnterHandler, IPointerExitHandler
 
     public void SetShown(bool show)
     {
+        SetShown(show, showHideType);
+    }
+    
+    public void SetShown(bool show, ShowHide showHideType)
+    {
         if (showHideType == ShowHide.Instant || showHideType == ShowHide.Fade)
         {
             gameObject.SetActive(show);
@@ -194,11 +163,11 @@ public class UI : Core, IPointerEnterHandler, IPointerExitHandler
         {
             if (show)
             {
-                transform.position = visiblePos;
+                rTransform.anchoredPosition = visiblePos;
             }
             else
             {
-                transform.position = visiblePos + hiddenOffset;
+                rTransform.anchoredPosition = visiblePos + hiddenOffset;
             }
             visible = show;
         }
@@ -220,16 +189,18 @@ public class UI : Core, IPointerEnterHandler, IPointerExitHandler
         Show(show);
     }
 
+    /* - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
+
     public void Move(Vector3 posEnd)
     {
-        Vector3 posStart = transform.position;
+        Vector3 posStart = rTransform.anchoredPosition;
         float animTime = 0.5f;
         StartCoroutine(MoveAnim(slideMovementStyle, posStart, posEnd, animTime, true));
     }
     
     public void Move(Vector3 posEnd, float animTime)
     {
-        Vector3 posStart = transform.position;
+        Vector3 posStart = rTransform.anchoredPosition;
         StartCoroutine(MoveAnim(slideMovementStyle, posStart, posEnd, animTime, true));
     }
     
@@ -240,14 +211,14 @@ public class UI : Core, IPointerEnterHandler, IPointerExitHandler
     
     public void Move(Vector3 posEnd, bool forward)
     {
-        Vector3 posStart = transform.position;
+        Vector3 posStart = rTransform.anchoredPosition;
         float animTime = 0.5f;
         StartCoroutine(MoveAnim(slideMovementStyle, posStart, posEnd, animTime, forward));
     }
     
     public void Move(Vector3 posEnd, float animTime, bool forward)
     {
-        Vector3 posStart = transform.position;
+        Vector3 posStart = rTransform.anchoredPosition;
         StartCoroutine(MoveAnim(slideMovementStyle, posStart, posEnd, animTime, forward));
     }
     
@@ -258,14 +229,14 @@ public class UI : Core, IPointerEnterHandler, IPointerExitHandler
     
     public void Move(InterpDelta.InterpTypes moveType, Vector3 posEnd, bool forward)
     {
-        Vector3 posStart = transform.position;
+        Vector3 posStart = rTransform.anchoredPosition;
         float animTime = 0.5f;
         StartCoroutine(MoveAnim(moveType, posStart, posEnd, animTime, forward));
     }
     
     public void Move(InterpDelta.InterpTypes moveType, Vector3 posEnd, float animTime, bool forward)
     {
-        Vector3 posStart = transform.position;
+        Vector3 posStart = rTransform.anchoredPosition;
         StartCoroutine(MoveAnim(moveType, posStart, posEnd, animTime, forward));
     }
     
@@ -317,9 +288,12 @@ public class UI : Core, IPointerEnterHandler, IPointerExitHandler
 
             yield return null;
 
-            transform.position = Vector3.Lerp(posStart, posEnd, delta);
+            rTransform.anchoredPosition = Vector3.Lerp(posStart, posEnd, delta);
         }
 
         isMoving = false;
     }
+
+    /* - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
+
 }

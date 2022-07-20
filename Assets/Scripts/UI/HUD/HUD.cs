@@ -6,7 +6,7 @@ using UnityEngine.UI;
 using UnityEditor;
 using TMPro;
 
-public class HUD : UI
+public class HUD : UIElement
 {
     #region [ OBJECTS ]
 
