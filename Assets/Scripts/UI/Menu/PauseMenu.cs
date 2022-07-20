@@ -14,9 +14,9 @@ public class PauseMenu : Menu
 
     #region [ BUILT-IN UNITY FUNCTIONS ]
 
-    void Awake()
+    protected override void Awake()
     {
-        OnAwake();
+        base.Awake();
         onShow.AddListener(OnShow);
     }
 

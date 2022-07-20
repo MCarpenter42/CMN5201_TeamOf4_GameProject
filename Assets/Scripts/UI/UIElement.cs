@@ -37,14 +37,24 @@ public class UIElement : Core, IPointerEnterHandler, IPointerExitHandler
 
     #region [ BUILT-IN UNITY FUNCTIONS ]
 
-    void Awake()
+    protected virtual void Awake()
     {
-        OnAwake();
+        GetGenericComponents();
     }
 
-    void Start()
+    protected virtual void Start()
     {
-        OnStart();
+
+    }
+    
+    protected virtual void Update()
+    {
+
+    }
+    
+    protected virtual void FixedUpdate()
+    {
+
     }
 
     public void OnPointerEnter(PointerEventData eventData)
@@ -59,16 +69,6 @@ public class UIElement : Core, IPointerEnterHandler, IPointerExitHandler
     #endregion
 
     /* - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
-
-    protected void OnAwake()
-    {
-        GetGenericComponents();
-    }
-
-    protected void OnStart()
-    {
-
-    }
 
     public virtual void EventOnPointerEnter()
     {

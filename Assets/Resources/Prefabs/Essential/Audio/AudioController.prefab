@@ -51,6 +51,7 @@ MonoBehaviour:
   sfxSources: []
   playerSFX: {fileID: 0}
   beamSFX: []
+  doorSFX: {fileID: 0}
   uiSFX: {fileID: 0}
   walkStone:
   - {fileID: 8300000, guid: f4eae66817237524f85f219d855f1de1, type: 3}
@@ -127,14 +128,12 @@ MonoBehaviour:
   doorStop:
   - {fileID: 8300000, guid: 51a337e6a5a4868458ce920bd5d2466e, type: 3}
   buttonStandard:
-  - {fileID: 8300000, guid: 034538e3ff9fd364b9092c38165713d0, type: 3}
-  - {fileID: 8300000, guid: 8e14591a78ad18246ab48e3a3353ccfa, type: 3}
+  - {fileID: 8300000, guid: 71b25e40dc3520349a89d8087e4b923c, type: 3}
   buttonHeavy:
-  - {fileID: 8300000, guid: 241b52867e8295042b50ca577a583d65, type: 3}
-  - {fileID: 8300000, guid: e5ec52fdf1331ee4182cdb39063231a4, type: 3}
+  - {fileID: 8300000, guid: b922db980e5030f4781fb005d7d67133, type: 3}
   slider:
-  - {fileID: 8300000, guid: 330ea3d94b6911348910712ee7bc25e9, type: 3}
-  - {fileID: 8300000, guid: 1bd36ef442d018142b688b9919058a22, type: 3}
+  - {fileID: 8300000, guid: 974b0f28bde7fbb42a0fb1934682c0b9, type: 3}
+  buttonVolumeScale: 0.4
 --- !u!82 &1936744473378142413
 AudioSource:
   m_ObjectHideFlags: 0

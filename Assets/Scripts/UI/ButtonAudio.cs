@@ -12,19 +12,20 @@ public class ButtonAudio : Core
 
     [Header("Audio")]
     [SerializeField] ButtonType weight;
-    private AudioSource sfx;
+    private SFXSource sfx;
+
+    /* - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
 
     void Awake()
     {
-        if (gameObject.GetComponent<AudioSource>() == null)
+        sfx = gameObject.GetComponent<SFXSource>();
+        if (sfx == null)
         {
-            sfx = gameObject.AddComponent<AudioSource>();
-        }
-        else
-        {
-            sfx = gameObject.GetComponent<AudioSource>();
+            sfx = gameObject.AddComponent<SFXSource>();
         }
     }
+
+    /* - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
 
     public void PlayClickSound()
     {

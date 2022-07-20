@@ -7,31 +7,78 @@ using UnityEngine.EventSystems;
 using UnityEditor;
 using TMPro;
 
-public class AudioButton : Button, IPointerClickHandler
+[ExecuteInEditMode]
+public class AudioButton : UIElement
 {
-    [Header("Audio")]
-    [SerializeField] public AudioClip clickSound;
-    private AudioSource sfx;
+    public enum ButtonType { Standard, Heavy, Slider };
+
+    protected Button button;
+    [Header("Button Properties")]
+    [SerializeField] Graphic targetGraphic;
+    [SerializeField] ColorBlock colours = new ColorBlock
+    {
+        colorMultiplier = 1.0f,
+        fadeDuration = 0.1f
+    };
+
+    [Header("Audio Properties")]
+    [SerializeField] ButtonType type;
+
+    /* - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
+
+    #region [ BUILT-IN UNITY FUNCTIONS ]
 
     protected override void Awake()
     {
         base.Awake();
-        if (gameObject.GetComponent<AudioSource>() == null)
-        {
-            sfx = gameObject.AddComponent<AudioSource>();
-        }
-        else
-        {
-            sfx = gameObject.GetComponent<AudioSource>();
-        }
+        ButtonComponent();
     }
 
-    public override void OnPointerClick(PointerEventData eventData)
+    protected override void Start()
     {
-        if (eventData.button == PointerEventData.InputButton.Left)
+        base.Start();
+        AddListeners();
+    }
+
+#if UNITY_EDITOR
+    protected override void Update()
+    {
+        ButtonComponent();
+        ApplyButtonProperties();
+    }
+#endif
+
+    #endregion
+
+    /* - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
+
+    protected void ButtonComponent()
+    {
+        button = gameObject.GetComponent<Button>();
+        if (button == null)
         {
-            base.OnPointerClick(eventData);
-            sfx.PlayOneShot(clickSound);
+            button = gameObject.AddComponent<Button>();
         }
+        ApplyButtonProperties();
+    }
+
+    protected void ApplyButtonProperties()
+    {
+        if (targetGraphic == null)
+        {
+            targetGraphic = gameObject.GetComponent<Graphic>();
+        }
+        button.targetGraphic = targetGraphic;
+        button.colors = colours;
+    }
+
+    protected virtual void AddListeners()
+    {
+        button.onClick.AddListener(ClickSound);
+    }
+
+    public void ClickSound()
+    {
+        GameManager.AudioController.ButtonClick(type);
     }
 }

@@ -24,9 +24,9 @@ public class Prompt : UIElement
 
 	#region [ BUILT-IN UNITY FUNCTIONS ]
 
-    void Awake()
+    protected override void Awake()
     {
-        OnAwake();
+        base.Awake();
         GetComponents();
     }
 

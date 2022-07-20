@@ -9,7 +9,7 @@ using UnityEditor;
 using TMPro;
 
 [ExecuteInEditMode]
-public class LevelSelectButton : UIElement
+public class LevelSelectButton : AudioButton
 {
     #region [ PROPERTIES ]
 
@@ -19,13 +19,10 @@ public class LevelSelectButton : UIElement
     private Color presetOrange = new Color(1.0f, 0.6383666f, 0.0f, 1.0f);
     private Color presetRed = new Color(1.0f, 0.248857f, 0.0f, 1.0f);
 
-    [Header("Button")]
+    [Header("Level Button Properties")]
     [SerializeField] ColourPreset colour;
     [SerializeField] int level;
     [SerializeField] TMP_Text label;
-
-    [Header("Text Colours")]
-    [SerializeField] ColorBlock textColours;
 
     private Image img;
 
@@ -35,24 +32,22 @@ public class LevelSelectButton : UIElement
 
     #region [ BUILT-IN UNITY FUNCTIONS ]
 
-    void Awake()
+    protected override void Awake()
     {
-        OnAwake();
+        base.Awake();
         UpdateVisuals();
-        UpdateButtonProperties();
     }
 
-    void Start()
+    protected override void Start()
     {
-        gameObject.GetComponent<Button>().onClick.AddListener(ButtonLevelLoad);
-        OnStart();
+        base.Start();
     }
 
 #if UNITY_EDITOR
-    void Update()
+    protected override void Update()
     {
+        base.Update();
         UpdateVisuals();
-        UpdateButtonProperties();
     }
 #endif
 
@@ -60,14 +55,10 @@ public class LevelSelectButton : UIElement
 
     /* - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
 
-    public override void EventOnPointerEnter()
+    protected override void AddListeners()
     {
-
-    }
-
-    public override void EventOnPointerExit()
-    {
-
+        base.AddListeners();
+        button.onClick.AddListener(ButtonLevelLoad);
     }
 
     /* - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
@@ -107,19 +98,6 @@ public class LevelSelectButton : UIElement
                 img.color = presetRed;
                 break;
         }
-    }
-
-    private void UpdateButtonProperties()
-    {
-        Button btn = gameObject.GetComponent<Button>();
-        if (gameObject.GetComponent<Button>() == null)
-        {
-            btn = gameObject.AddComponent<Button>();
-        }
-
-        btn.targetGraphic = label;
-
-        btn.colors = textColours;
     }
 
     private void ButtonLevelLoad()

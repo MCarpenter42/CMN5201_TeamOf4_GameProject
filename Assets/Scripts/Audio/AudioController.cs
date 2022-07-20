@@ -48,6 +48,8 @@ public class AudioController : Core
     public List<AudioClip> buttonStandard = new List<AudioClip>();
     public List<AudioClip> buttonHeavy = new List<AudioClip>();
     public List<AudioClip> slider = new List<AudioClip>();
+    [Range(0.0f, 1.0f)]
+    [SerializeField] float buttonVolumeScale = 1.0f;
 
     #endregion
 
@@ -318,22 +320,6 @@ public class AudioController : Core
 
     #endregion
 
-    public void ButtonClick(bool isHeavy)
-    {
-
-    }
-
-    public void StartObjectMove(SFXSource source)
-    {
-        AudioClip clip = PickFromList(moveObject);
-        source.PlayAudioLoop(clip);
-    }
-    
-    public void StopObjectMove(SFXSource source)
-    {
-        source.Stop();
-    }
-
     #region [ MUSIC ]
 
     private IEnumerator MusicVolumeCheck()
@@ -368,12 +354,44 @@ public class AudioController : Core
         {
             yield return null;
             timePassed += Time.deltaTime;
-            float delta = timePassed / fadeTime;
+            float delta = InterpDelta.CosCurve(timePassed / fadeTime);
             musicPlayer.volume = Mathf.Lerp(volStart, volTarget, delta);
         }
         musicPlayer.volume = volTarget;
     }
 
     #endregion
+
+    public void ButtonClick(AudioButton.ButtonType type)
+    {
+        AudioClip clip;
+        switch (type)
+        {
+            default:
+            case AudioButton.ButtonType.Standard:
+                clip = PickFromList(buttonStandard);
+                break;
+                
+            case AudioButton.ButtonType.Heavy:
+                clip = PickFromList(buttonHeavy);
+                break;
+                
+            case AudioButton.ButtonType.Slider:
+                clip = PickFromList(slider);
+                break;
+        }
+        uiSFX.PlayAudioClip(clip, 1.0f, buttonVolumeScale);
+    }
+
+    public void StartObjectMove(SFXSource source)
+    {
+        AudioClip clip = PickFromList(moveObject);
+        source.PlayAudioLoop(clip);
+    }
+    
+    public void StopObjectMove(SFXSource source)
+    {
+        source.Stop();
+    }
 
 }

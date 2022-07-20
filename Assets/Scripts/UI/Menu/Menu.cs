@@ -21,13 +21,14 @@ public class Menu : UIElement
 
     #region [ BUILT-IN UNITY FUNCTIONS ]
 
-    void Awake()
+    protected override void Awake()
     {
-
+        base.Awake();
     }
 
-    void Start()
+    protected override void Start()
     {
+        base.Start();
         SetActiveFrame(0);
     }
 

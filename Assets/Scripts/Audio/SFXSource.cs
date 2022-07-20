@@ -6,6 +6,7 @@ using UnityEngine.UI;
 using UnityEditor;
 using TMPro;
 
+[ExecuteInEditMode]
 public class SFXSource : Core
 {
     #region [ PROPERTIES ]
@@ -15,7 +16,7 @@ public class SFXSource : Core
     public AudioClip clip;
 
     [Header("Settings")]
-    [SerializeField] float baseVolume = 1.0f;
+    public float baseVolume = 1.0f;
     [SerializeField] bool volumeFalloff;
     [Range(0.0f, 100.0f)]
     [SerializeField] float minDistance = 0.0f;
@@ -31,6 +32,38 @@ public class SFXSource : Core
 
     void Awake()
     {
+        AudioSourceComponent();
+    }
+
+    void Update()
+    {
+#if UNITY_EDITOR
+        AudioSourceComponent();
+#endif
+        if (volumeFalloff)
+        {
+            DoVolumeFalloff();
+        }
+    }
+
+#endregion
+
+    /* - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
+	
+    private void AudioSourceComponent()
+    {
+        if (source == null)
+        {
+            if (gameObject.GetComponent<AudioSource>() == null)
+            {
+                source = gameObject.AddComponent<AudioSource>();
+            }
+            else
+            {
+                source = gameObject.GetComponent<AudioSource>();
+            }
+        }
+
         if (minDistance >= maxDistance)
         {
             minDistance = maxDistance - 0.1f;
@@ -39,18 +72,6 @@ public class SFXSource : Core
         source.volume = baseVolume;
     }
 
-    void Update()
-    {
-        if (volumeFalloff)
-        {
-            DoVolumeFalloff();
-        }
-    }
-
-	#endregion
-
-    /* - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
-	
     private void DoVolumeFalloff()
     {
         float distance = (GameManager.Listener.transform.position - transform.position).magnitude;
@@ -103,6 +124,8 @@ public class SFXSource : Core
 
     public bool PlayAudioClip(AudioClip clip, float pitch, float volume)
     {
+        volume = Mathf.Clamp(volume, 0.0f, 1.0f);
+
         bool alreadyPlaying = source.isPlaying;
         if (!alreadyPlaying)
         {
@@ -111,9 +134,9 @@ public class SFXSource : Core
             source.pitch = pitch;
             source.volume = volume;
 
-            source.PlayOneShot(clip);
+            source.PlayOneShot(clip, volume);
 
-            StartCoroutine(DelayedSetPV(prePitch, preVolume, clip.length));
+            StartCoroutine(DelayedSetPitch(prePitch, clip.length));
         }
         return alreadyPlaying;
     }
@@ -124,6 +147,18 @@ public class SFXSource : Core
         source.Play();
     }
 
+    private IEnumerator DelayedSetPitch(float pitch, float delay)
+    {
+        yield return new WaitForSeconds(delay);
+        source.pitch = pitch;
+    }
+    
+    private IEnumerator DelayedSetVolume(float volume, float delay)
+    {
+        yield return new WaitForSeconds(delay);
+        source.volume = volume;
+    }
+    
     private IEnumerator DelayedSetPV(float pitch, float volume, float delay)
     {
         yield return new WaitForSeconds(delay);
