@@ -61,7 +61,7 @@ public class Menu : UIElement
     {
         if (menuFrames.Contains(menuFrame))
         {
-            int index = 0;
+            int index = menuFrames.IndexOf(menuFrame);
             if (InBounds(index, menuFrames) && index != activeFrame)
             {
                 for (int i = 0; i < menuFrames.Count; i++)
@@ -73,7 +73,7 @@ public class Menu : UIElement
         }
         else
         {
-            throw new Exception("ERROR: Object \"" + menuFrame.name + "\" is not a valid frame of menu \"" + "\"!");
+            throw new Exception("ERROR: Object \"" + menuFrame.name + "\" is not a valid frame of menu \"" + gameObject.name + "\"!");
         }
     }
     

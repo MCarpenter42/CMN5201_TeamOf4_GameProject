@@ -17,6 +17,7 @@ public class AudioController : Core
     [Header("Music")]
     [SerializeField] AudioClip levelMusic;
     private AudioSource musicPlayer;
+    private float defaultMusicVolume = 0.2f;
 
     [Header("Sources")]
     [SerializeField] SFXSource sfxSourcePrefab;
@@ -67,7 +68,12 @@ public class AudioController : Core
 
     void Start()
     {
+        musicPlayer.volume = 0.0f;
         musicPlayer.Play();
+        if (levelMusic != null && musicPlayer != null)
+        {
+            StartCoroutine(MusicVolumeCheck());
+        }
     }
 
     #endregion
@@ -78,6 +84,7 @@ public class AudioController : Core
     {
         musicPlayer = gameObject.GetComponent<AudioSource>();
         musicPlayer.clip = levelMusic;
+        defaultMusicVolume = musicPlayer.volume;
 
         for (int i = 0; i < transform.childCount; i++)
         {
@@ -109,6 +116,8 @@ public class AudioController : Core
     }
 
     /* - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
+
+    #region [ SFX SOURCE MANAGEMENT ]
 
     public int CreateSFXSource(Vector3 pos)
     {
@@ -236,7 +245,9 @@ public class AudioController : Core
         return indexInBounds;
     }
 
-    /* - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
+    #endregion
+
+    #region [ PLAYER MOVEMENT ]
 
     public void PlayerWalk(float time, int stepCount)
     {
@@ -305,6 +316,8 @@ public class AudioController : Core
         }
     }
 
+    #endregion
+
     public void ButtonClick(bool isHeavy)
     {
 
@@ -320,5 +333,47 @@ public class AudioController : Core
     {
         source.Stop();
     }
+
+    #region [ MUSIC ]
+
+    private IEnumerator MusicVolumeCheck()
+    {
+        yield return new WaitForSeconds(0.2f);
+        if (musicPlayer.volume == 0.0f && defaultMusicVolume > 0.0f)
+        {
+            MusicFade(false, 0.4f);
+        }
+    }
+
+    public void MusicFade(bool fadeOut, float fadeTime)
+    {
+        StartCoroutine(IMusicFade(fadeOut, fadeTime));
+    }
+
+    private IEnumerator IMusicFade(bool fadeOut, float fadeTime)
+    {
+        float volStart = 0.0f;
+        float volTarget = 0.0f;
+        if (fadeOut)
+        {
+            volStart = defaultMusicVolume;
+        }
+        else
+        {
+            volTarget = defaultMusicVolume;
+        }
+
+        float timePassed = 0.0f;
+        while (timePassed <= fadeTime)
+        {
+            yield return null;
+            timePassed += Time.deltaTime;
+            float delta = timePassed / fadeTime;
+            musicPlayer.volume = Mathf.Lerp(volStart, volTarget, delta);
+        }
+        musicPlayer.volume = volTarget;
+    }
+
+    #endregion
 
 }

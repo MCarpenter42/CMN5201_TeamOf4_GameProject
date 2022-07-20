@@ -29,6 +29,8 @@ public class UIElement : Core, IPointerEnterHandler, IPointerExitHandler
     protected bool isMoving = false;
     public float opacity = 1.0f;
 
+    protected UnityEvent_bool onShow = new UnityEvent_bool();
+
     #endregion
 
     /* - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
@@ -45,16 +47,6 @@ public class UIElement : Core, IPointerEnterHandler, IPointerExitHandler
         OnStart();
     }
 
-    void Update()
-    {
-
-    }
-
-    void FixedUpdate()
-    {
-
-    }
-
     public void OnPointerEnter(PointerEventData eventData)
     {
         EventOnPointerEnter();
@@ -65,7 +57,6 @@ public class UIElement : Core, IPointerEnterHandler, IPointerExitHandler
         EventOnPointerExit();
     }
     #endregion
-
 
     /* - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
 
@@ -171,6 +162,8 @@ public class UIElement : Core, IPointerEnterHandler, IPointerExitHandler
             }
             visible = show;
         }
+
+        onShow.Invoke(show);
     }
 
     public void DoDelayedShow(bool show, float delayTime)

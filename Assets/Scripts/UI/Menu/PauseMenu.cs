@@ -8,14 +8,23 @@ using TMPro;
 
 public class PauseMenu : Menu
 {
-    // Having a cariable local to this script to log whether the game is paused isn't
-    // necessary - use GameManager.isPaused instead!
-    //public static bool gamePaused = false;
     public GameObject menuFrame;
 
     /* - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
 
-    public void ShowPauseMenu(bool show)
+    #region [ BUILT-IN UNITY FUNCTIONS ]
+
+    void Awake()
+    {
+        OnAwake();
+        onShow.AddListener(OnShow);
+    }
+
+    #endregion
+
+    /* - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
+
+    private void OnShow(bool show)
     {
         if (show)
         {
@@ -27,10 +36,12 @@ public class PauseMenu : Menu
         }
         menuFrame.SetActive(show);
     }
+    
+    /* - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
 
     public void LoadMenu()
     {
-        SceneManager.LoadScene(1);
+        GameManager.Instance.GoToMainMenu();
     }
 
     public void Restart()

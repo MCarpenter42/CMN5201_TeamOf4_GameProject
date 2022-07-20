@@ -160,6 +160,8 @@ MonoBehaviour:
   debugPanelInfo: 0
   debugPanel: {fileID: 0}
   fps: 0
+  blackoutColour: {r: 0, g: 0, b: 0, a: 1}
+  blackoutOnLoad: 1
 --- !u!4 &71971180
 Transform:
   m_ObjectHideFlags: 0
@@ -241,7 +243,7 @@ PrefabInstance:
     - target: {fileID: 1320784580130822803, guid: 80645a44179b51a48bdf5902fd28ef37, type: 3}
       propertyPath: levelMusic
       value: 
-      objectReference: {fileID: 8300000, guid: 350c0666d810963489b2b3a5eff59e4d, type: 3}
+      objectReference: {fileID: 0}
     - target: {fileID: 4988167350392545826, guid: 80645a44179b51a48bdf5902fd28ef37, type: 3}
       propertyPath: m_Name
       value: AudioController
@@ -378,7 +380,7 @@ AudioListener:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2032598400}
-  m_Enabled: 1
+  m_Enabled: 0
 --- !u!20 &2032598402
 Camera:
   m_ObjectHideFlags: 0

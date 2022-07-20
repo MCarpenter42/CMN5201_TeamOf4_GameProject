@@ -175,6 +175,11 @@ public class LevelController : Core
         }
     }
 
+    public void RestartLevel()
+    {
+        GameManager.UIController.pauseMenu.Show(false);
+    }
+
     public void OnLevelEnd()
     {
         GameManager.Instance.NextLevel();

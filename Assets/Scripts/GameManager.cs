@@ -388,6 +388,7 @@ public class GameManager : Core
         if (fadeOut)
         {
             UIController.BlackScreenFade(true, LevelController.levelFadeTime);
+            AudioController.MusicFade(true, LevelController.levelFadeTime);
             yield return new WaitForSeconds(LevelController.levelFadeTime);
         }
 
@@ -428,6 +429,7 @@ public class GameManager : Core
         if (fadeIn)
         {
             UIController.BlackScreenFade(false, LevelController.levelFadeTime);
+            AudioController.MusicFade(false, LevelController.levelFadeTime);
             yield return new WaitForSeconds(LevelController.levelFadeTime);
         }
     }
