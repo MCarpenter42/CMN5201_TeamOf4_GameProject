@@ -14,6 +14,7 @@ public class Core : MonoBehaviour
 
 	public static Controls Controls;
     public static VideoSettings VideoSettings;
+    public static EncryptionHandler Encryption;
 
     #endregion
 
@@ -38,13 +39,6 @@ public class Core : MonoBehaviour
     public delegate void VoidDelegate();
 
     #endregion
-
-    /* - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
-    
-    public virtual void OnDestroy()
-    {
-
-    }
 
     /* - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
 
