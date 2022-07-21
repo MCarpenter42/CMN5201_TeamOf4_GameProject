@@ -22,6 +22,7 @@ public class BeamEmitter : Core
     private LineRenderer lightBeam;
 
     private List<SFXSource> beamAudio = new List<SFXSource>();
+    [SerializeField] SFXSource sfxPrefab;
 
     private bool validTriggerHit = false;
     private LightTrigger triggerCurrent = null;
@@ -55,10 +56,10 @@ public class BeamEmitter : Core
         
     }
 
-	#endregion
+    #endregion
 
     /* - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
-	
+
     private void InstantiateBeam()
     {
         beamObj = Instantiate(beamPrefab);
@@ -127,7 +128,12 @@ public class BeamEmitter : Core
                 output = BeamCast(output[0], output[1]);
             }
         }
-        DrawBeam();
+
+        BeamPath();
+        if (sfxPrefab != null)
+        {
+            BeamAudio();
+        }
     }
 
     private Vector3[] BeamCast(Vector3 origin, Vector3 dir)
@@ -169,7 +175,7 @@ public class BeamEmitter : Core
         }
     }
 
-    private void DrawBeam()
+    private void BeamPath()
     {
         beamPath.Clear();
         CopyListData(beamPoints, beamPath);
@@ -188,5 +194,65 @@ public class BeamEmitter : Core
             endPos = beamPath[i];
         }
         lightBeam.SetPositions(positions);
+    }
+
+    private void BeamAudio()
+    {
+        bool posCountChanged = beamPoints.Count != beamAudio.Count;
+        
+        if (posCountChanged)
+        {
+            if (beamAudio.Count < beamPath.Count)
+            {
+                int c = beamAudio.Count;
+                int n = beamPath.Count - beamAudio.Count;
+                for (int i = 0; i < n; i++)
+                {
+                    GameObject sfxObj = Instantiate(sfxPrefab.gameObject, transform);
+                    SFXSource sfx = sfxObj.GetComponent<SFXSource>();
+                    sfx.SetProperties(0.5f, true, 0.0f, 3.0f);
+                    beamAudio.Add(sfx);
+                }
+            }
+            else if (beamAudio.Count > beamPath.Count)
+            {
+                int c = beamAudio.Count;
+                int n = beamAudio.Count - beamPath.Count;
+                for (int i = 0 - 1; i < n; i++)
+                {
+                    Destroy(beamAudio[c - i].gameObject, 0.02f);
+                    beamAudio.RemoveAt(c - i);
+                }
+            }
+        }
+        
+        for (int i = 0; i < beamAudio.Count; i++)
+        {
+            if (posCountChanged || !beamAudio[i].source.isPlaying)
+            {
+                AudioClip loop;
+                if (i == 0)
+                {
+                    loop = GameManager.AudioController.beamEmitterActive;
+                }
+                else if (i + 1 == beamAudio.Count)
+                {
+                    if (triggerCurrent == null)
+                    {
+                        loop = GameManager.AudioController.beamHitNormal;
+                    }
+                    else
+                    {
+                        loop = GameManager.AudioController.beamTriggerActive;
+                    }
+                }
+                else
+                {
+                    loop = GameManager.AudioController.beamHitReflect;
+                }
+                GameManager.AudioController.ChangeAudioLoop(beamAudio[i], loop);
+            }
+            beamAudio[i].gameObject.transform.position = beamPoints[i];
+        }
     }
 }

@@ -327,8 +327,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   source: {fileID: 5456139554778790768}
   clip: {fileID: 0}
-  baseVolume: 1
-  volumeFalloff: 0
+  baseVolume: 0.5
+  volumeFalloff: 1
   minDistance: 0
   maxDistance: 20
 --- !u!82 &5456139554778790768
@@ -343,7 +343,7 @@ AudioSource:
   OutputAudioMixerGroup: {fileID: 0}
   m_audioClip: {fileID: 0}
   m_PlayOnAwake: 0
-  m_Volume: 0.2
+  m_Volume: 0.5
   m_Pitch: 1
   Loop: 0
   Mute: 0

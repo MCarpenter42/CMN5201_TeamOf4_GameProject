@@ -43,6 +43,12 @@ public class AudioController : Core
     public List<AudioClip> doorOpen = new List<AudioClip>();
     public List<AudioClip> doorClose = new List<AudioClip>();
     public List<AudioClip> doorStop = new List<AudioClip>();
+    public AudioClip beamEmitterActive;
+    public AudioClip beamEmitterDeactivate;
+    public AudioClip beamTriggerActive;
+    public AudioClip beamTriggerDeactivate;
+    public AudioClip beamHitNormal;
+    public AudioClip beamHitReflect;
 
     [Header("UI SFX")]
     public List<AudioClip> buttonStandard = new List<AudioClip>();
@@ -315,6 +321,19 @@ public class AudioController : Core
             default:
                 playerSFX.PlayAudioClip(PickFromList(walkStone));
                 break;
+
+            case FloorTypes.Wood:
+                playerSFX.PlayAudioClip(PickFromList(walkWood));
+                break;
+
+            case FloorTypes.Grass:
+            case FloorTypes.Foliage:
+                playerSFX.PlayAudioClip(PickFromList(walkFoliage));
+                break;
+
+            case FloorTypes.UnderWater:
+                playerSFX.PlayAudioClip(PickFromList(walkWater));
+                break;
         }
     }
 
@@ -392,6 +411,22 @@ public class AudioController : Core
     public void StopObjectMove(SFXSource source)
     {
         source.Stop();
+    }
+
+    public void ChangeAudioLoop(SFXSource sfx, AudioClip loop)
+    {
+        if (!sfx.CompareClip(loop))
+        {
+            if (sfx.source.isPlaying)
+            {
+                sfx.Stop();
+                sfx.PlayAudioLoop(loop);
+            }
+            else
+            {
+                sfx.PlayAudioLoop(loop);
+            }
+        }
     }
 
 }

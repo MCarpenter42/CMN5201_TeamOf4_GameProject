@@ -893,3 +893,4 @@ MonoBehaviour:
   beamPrefab: {fileID: 2414597896980347911, guid: b5f795b6cda5d564aa4e4abc4dee44dd, type: 3}
   beamColour: 0
   isEmitting: 1
+  sfxPrefab: {fileID: -1874640132433861565, guid: 98449a369f4206d4e9244a5736c0afbf, type: 3}

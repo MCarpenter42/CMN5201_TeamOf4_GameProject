@@ -127,6 +127,12 @@ MonoBehaviour:
   - {fileID: 8300000, guid: 92efd8c249b26b94b88936cb900c0aa7, type: 3}
   doorStop:
   - {fileID: 8300000, guid: 51a337e6a5a4868458ce920bd5d2466e, type: 3}
+  beamEmitterActive: {fileID: 8300000, guid: 178426de48a55a146b909fa931400b19, type: 3}
+  beamEmitterDeactivate: {fileID: 8300000, guid: ad46c6f603b8f164eaf2497172e87d77, type: 3}
+  beamTriggerActive: {fileID: 8300000, guid: 2a138d7d719bd4941b7026d33e097672, type: 3}
+  beamTriggerDeactivate: {fileID: 8300000, guid: 59c91603f6e3b2244b183527ab62cb68, type: 3}
+  beamHitNormal: {fileID: 8300000, guid: 46b816742af2de24d92eed335381e68c, type: 3}
+  beamHitReflect: {fileID: 8300000, guid: aabd292b0c3014f40954b8da4c98507c, type: 3}
   buttonStandard:
   - {fileID: 8300000, guid: 71b25e40dc3520349a89d8087e4b923c, type: 3}
   buttonHeavy:
