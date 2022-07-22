@@ -1,6 +1,7 @@
 using System;
 using System.IO;
 using System.Text;
+using System.Reflection;
 using System.Collections;
 using System.Collections.Generic;
 using System.Security.Cryptography;
@@ -10,57 +11,96 @@ public class EncryptionHandler
 {
     public enum EncryptionType { AES, DES, XOR };
 
-    public Encryption_AES AES;
-    public Encryption_DES DES;
-    public Encryption_XOR XOR;
+    public static Encryption_AES AES = new Encryption_AES();
+    public static Encryption_DES DES = new Encryption_DES();
+    public static Encryption_XOR XOR = new Encryption_XOR();
 
     /* - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
-    
-    public EncryptionHandler()
+
+    public void SetAllDefaults(string aesKey, string aesIV, string desKey, int xorKey)
     {
-        AES = new Encryption_AES();
-        DES = new Encryption_DES();
-        XOR = new Encryption_XOR();
+        AES.SetDefaults(aesKey, aesIV);
+        DES.SetDefault(desKey);
+        XOR.SetDefault(xorKey);
     }
 
-    public EncryptionHandler(string aesKey, string aesIV)
+    public void RandomiseAllDefaults(string aesKey, string aesIV, string desKey, int xorKey)
     {
-        AES = new Encryption_AES(aesKey, aesIV);
-        DES = new Encryption_DES();
-        XOR = new Encryption_XOR();
-    }
-
-    public EncryptionHandler(string desKey)
-    {
-        AES = new Encryption_AES();
-        DES = new Encryption_DES(desKey);
-        XOR = new Encryption_XOR();
-    }
-
-    public EncryptionHandler(int xorKey)
-    {
-        AES = new Encryption_AES();
-        DES = new Encryption_DES();
-        XOR = new Encryption_XOR(xorKey);
-    }
-
-    public EncryptionHandler(string aesKey, string aesIV, string desKey, int xorKey)
-    {
-        AES = new Encryption_AES(aesKey, aesIV);
-        DES = new Encryption_DES(desKey);
-        XOR = new Encryption_XOR(xorKey);
+        AES.SetRandomDefaults();
+        DES.SetRandomDefault();
+        XOR.SetRandomDefault();
     }
 
     /* - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
 
-    public EncryptedObject EncryptObject(EncryptionHandler handler, UnityEngine.Object obj)
+    public static EncryptedObject EncryptObject(object obj)
     {
-        return new EncryptedObject(handler, obj);
+        return EncryptObject(obj, EncryptionType.AES);
     }
 
-    public EncryptedObject EncryptObject(EncryptionHandler handler, UnityEngine.Object obj, EncryptionHandler.EncryptionType encType)
+    public static EncryptedObject EncryptObject(object obj, EncryptionType encType)
     {
-        return new EncryptedObject(handler, obj, encType);
+        Type objType = obj.GetType();
+        string data;
+        try
+        {
+            switch (encType)
+            {
+                default:
+                case EncryptionType.AES:
+                    data = AES.Encrypt(JsonUtility.ToJson(obj));
+                    break;
+
+                case EncryptionType.DES:
+                    data = DES.Encrypt(JsonUtility.ToJson(obj));
+                    break;
+
+                case EncryptionType.XOR:
+                    data = XOR.EncryptDecrypt(JsonUtility.ToJson(obj));
+                    break;
+            }
+            return new EncryptedObject(objType, data);
+        }
+        catch
+        {
+            throw new Exception("ERROR: Cannot encrypt object \"" + obj + "\", as it is a non-serializable type! <" + obj.GetType().ToString() + ">");
+        }
+    }
+
+    public static object DecryptObject(EncryptedObject encObj)
+    {
+        return DecryptObject(encObj, EncryptionType.AES);
+    }
+
+    public static object DecryptObject(EncryptedObject encObj, EncryptionType encType)
+    {
+        string dataString;
+        switch (encType)
+        {
+            default:
+            case EncryptionType.AES:
+                dataString = AES.Decrypt(encObj.dataString);
+                break;
+
+            case EncryptionType.DES:
+                dataString = DES.Decrypt(encObj.dataString);
+                break;
+
+            case EncryptionType.XOR:
+                dataString = XOR.EncryptDecrypt(encObj.dataString);
+                break;
+        }
+
+        MethodInfo method = typeof(EncryptionHandler).GetMethod(nameof(EncryptionHandler.TypedObjectFromJson));
+        MethodInfo generic = method.MakeGenericMethod(encObj.objectType);
+        object[] args = { dataString };
+
+        return generic.Invoke(null, args);
+    }
+
+    public static T TypedObjectFromJson<T>(string dataString)
+    {
+        return JsonUtility.FromJson<T>(dataString);
     }
 }
 
@@ -68,89 +108,89 @@ public class EncryptionHandler
 
 public class Encryption_AES
 {
-    private string key; //set any string of 32 chars
     private string keyDefault = "A60A5770FE5E7AB200BA9CFC94E4E8B0"; //set any string of 32 chars
-    private string iv; //set any string of 16 chars
+    private byte[] keyDefaultBytes = new byte[256]; //set any string of 32 chars
     private string ivDefault = "1234567887654321"; //set any string of 16 chars
+    private byte[] ivDefaultBytes = new byte[128]; //set any string of 16 chars
 
     /* - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
-    
+
     public Encryption_AES()
     {
-        key = keyDefault;
-        iv = ivDefault;
-    }
-    
-    public Encryption_AES(string key, string iv)
-    {
-        if (key.Length == 32)
-        {
-            this.key = key;
-        }
-        else
-        {
-            this.key = keyDefault;
-            Debug.LogWarning("AES encryption key must be 32 characters, but the given string was " + key.Length + ". Reverting to default.");
-        }
-        if (iv.Length == 16)
-        {
-            this.iv = iv;
-        }
-        else
-        {
-            this.iv = ivDefault;
-            Debug.LogWarning("AES encryption IV must be 16 characters, but the given string was " + iv.Length + ". Reverting to default.");
-        }
+        keyDefaultBytes = Encoding.ASCII.GetBytes(keyDefault);
+        ivDefaultBytes = Encoding.ASCII.GetBytes(ivDefault);
     }
 
     /* - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
 
-    public void SetKeys(string newKey, string newIV)
+    public void SetDefaults(string keyDefaultNew, string ivDefaultNew)
     {
-        if (key.Length == 32)
-        {
-            key = newKey;
-        }
-        else
-        {
-            key = keyDefault;
-            Debug.LogWarning("AES encryption key must be 32 characters, but the given string was " + key.Length + ". Reverting to default.");
-        }
-        if (iv.Length == 16)
-        {
-            iv = newIV;
-        }
-        else
-        {
-            iv = ivDefault;
-            Debug.LogWarning("AES encryption IV must be 16 characters, but the given string was " + iv.Length + ". Reverting to default.");
-        }
+        keyDefault = keyDefaultNew;
+        keyDefaultBytes = Encoding.ASCII.GetBytes(keyDefaultNew);
+        ivDefault = ivDefaultNew;
+        ivDefaultBytes = Encoding.ASCII.GetBytes(ivDefaultNew);
     }
+
+    public void SetRandomDefaults()
+    {
+        SetDefaults(GenerateRandomKey(), GenerateRandomIV());
+    }
+
+    public string GenerateRandomKey()
+    {
+        string randKey = "";
+
+        char[] alphaNumeric = new char[] {
+            'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm',
+            'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z',
+            '0', '1', '2', '3', '4', '5', '6', '7', '8', '9'
+        };
+        for (int i = 0; i < 32; i++)
+        {
+            randKey += alphaNumeric[UnityEngine.Random.Range(0, alphaNumeric.Length)];
+        }
+
+        return randKey;
+    }
+
+    public string GenerateRandomIV()
+    {
+        string randIV = "";
+
+        char[] alphaNumeric = new char[] {
+            'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm',
+            'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z',
+            '0', '1', '2', '3', '4', '5', '6', '7', '8', '9'
+        };
+        for (int i = 0; i < 16; i++)
+        {
+            randIV += alphaNumeric[UnityEngine.Random.Range(0, alphaNumeric.Length)];
+        }
+
+        return randIV;
+    }
+
+    /* - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
 
     public string Encrypt(string input)
     {
-        AesCryptoServiceProvider aesProvider = new AesCryptoServiceProvider();
-        aesProvider.BlockSize = 128;
-        aesProvider.KeySize = 256;
-        aesProvider.Key = Encoding.ASCII.GetBytes(key);
-        aesProvider.IV = Encoding.ASCII.GetBytes(iv);
-        aesProvider.Mode = CipherMode.CBC;
-        aesProvider.Padding = PaddingMode.PKCS7;
-
-        byte[] textBytes = Encoding.ASCII.GetBytes(input);
-        ICryptoTransform cryptoTransform = aesProvider.CreateEncryptor(aesProvider.Key, aesProvider.IV);
-
-        byte[] result = cryptoTransform.TransformFinalBlock(textBytes, 0, textBytes.Length);
-        return Convert.ToBase64String(result);
+        return Encrypt(input, keyDefaultBytes, ivDefaultBytes);
     }
-    
+
     public string Encrypt(string input, string key, string iv)
     {
+        byte[] keyBytes = Encoding.ASCII.GetBytes(key);
+        byte[] ivBytes = Encoding.ASCII.GetBytes(iv);
+        return Encrypt(input, keyBytes, ivBytes);
+    }
+
+    public string Encrypt(string input, byte[] key, byte[] iv)
+    {
         AesCryptoServiceProvider aesProvider = new AesCryptoServiceProvider();
         aesProvider.BlockSize = 128;
         aesProvider.KeySize = 256;
-        aesProvider.Key = Encoding.ASCII.GetBytes(key);
-        aesProvider.IV = Encoding.ASCII.GetBytes(iv);
+        aesProvider.Key = key;
+        aesProvider.IV = iv;
         aesProvider.Mode = CipherMode.CBC;
         aesProvider.Padding = PaddingMode.PKCS7;
 
@@ -160,14 +200,58 @@ public class Encryption_AES
         byte[] result = cryptoTransform.TransformFinalBlock(textBytes, 0, textBytes.Length);
         return Convert.ToBase64String(result);
     }
-    
+
+    public EncryptedObject Encrypt(object obj)
+    {
+        return Encrypt(obj, keyDefaultBytes, ivDefaultBytes);
+    }
+
+    public EncryptedObject Encrypt(object obj, string key, string iv)
+    {
+        byte[] keyBytes = Encoding.ASCII.GetBytes(key);
+        byte[] ivBytes = Encoding.ASCII.GetBytes(iv);
+        return Encrypt(obj, keyBytes, ivBytes);
+    }
+
+    public EncryptedObject Encrypt(object obj, byte[] key, byte[] iv)
+    {
+        Type objType = obj.GetType();
+        string data = JsonUtility.ToJson(obj);
+
+        AesCryptoServiceProvider aesProvider = new AesCryptoServiceProvider();
+        aesProvider.BlockSize = 128;
+        aesProvider.KeySize = 256;
+        aesProvider.Key = key;
+        aesProvider.IV = iv;
+        aesProvider.Mode = CipherMode.CBC;
+        aesProvider.Padding = PaddingMode.PKCS7;
+
+        byte[] textBytes = Encoding.ASCII.GetBytes(data);
+        ICryptoTransform cryptoTransform = aesProvider.CreateEncryptor(aesProvider.Key, aesProvider.IV);
+
+        byte[] byteData = cryptoTransform.TransformFinalBlock(textBytes, 0, textBytes.Length);
+        return new EncryptedObject(objType, Convert.ToBase64String(byteData));
+    }
+
     public string Decrypt(string input)
+    {
+        return Decrypt(input, keyDefaultBytes, ivDefaultBytes);
+    }
+
+    public string Decrypt(string input, string key, string iv)
+    {
+        byte[] keyBytes = Encoding.ASCII.GetBytes(key);
+        byte[] ivBytes = Encoding.ASCII.GetBytes(iv);
+        return Decrypt(input, keyBytes, ivBytes);
+    }
+
+    public string Decrypt(string input, byte[] key, byte[] iv)
     {
         AesCryptoServiceProvider aesProvider = new AesCryptoServiceProvider();
         aesProvider.BlockSize = 128;
         aesProvider.KeySize = 256;
-        aesProvider.Key = Encoding.ASCII.GetBytes(key);
-        aesProvider.IV = Encoding.ASCII.GetBytes(iv);
+        aesProvider.Key = key;
+        aesProvider.IV = iv;
         aesProvider.Mode = CipherMode.CBC;
         aesProvider.Padding = PaddingMode.PKCS7;
 
@@ -177,95 +261,99 @@ public class Encryption_AES
         byte[] result = cryptoTransform.TransformFinalBlock(textBytes, 0, textBytes.Length);
         return Encoding.ASCII.GetString(result);
     }
-    
-    public string Decrypt(string input, string key, string iv)
+
+    public object Decrypt(EncryptedObject encObj)
+    {
+        return Decrypt(encObj, keyDefaultBytes, ivDefaultBytes);
+    }
+
+    public object Decrypt(EncryptedObject encObj, string key, string iv)
+    {
+        byte[] keyBytes = Encoding.ASCII.GetBytes(key);
+        byte[] ivBytes = Encoding.ASCII.GetBytes(iv);
+        return Decrypt(encObj, keyBytes, ivBytes);
+    }
+
+    public object Decrypt(EncryptedObject encObj, byte[] key, byte[] iv)
     {
         AesCryptoServiceProvider aesProvider = new AesCryptoServiceProvider();
         aesProvider.BlockSize = 128;
         aesProvider.KeySize = 256;
-        aesProvider.Key = Encoding.ASCII.GetBytes(key);
-        aesProvider.IV = Encoding.ASCII.GetBytes(iv);
+        aesProvider.Key = key;
+        aesProvider.IV = iv;
         aesProvider.Mode = CipherMode.CBC;
         aesProvider.Padding = PaddingMode.PKCS7;
 
-        byte[] textBytes = Convert.FromBase64String(input);
+        byte[] textBytes = Convert.FromBase64String(encObj.dataString);
         ICryptoTransform cryptoTransform = aesProvider.CreateDecryptor();
 
-        byte[] result = cryptoTransform.TransformFinalBlock(textBytes, 0, textBytes.Length);
-        return Encoding.ASCII.GetString(result);
+        byte[] objData = cryptoTransform.TransformFinalBlock(textBytes, 0, textBytes.Length);
+        string dataString = Encoding.ASCII.GetString(objData);
+
+        MethodInfo method = typeof(EncryptionHandler).GetMethod(nameof(EncryptionHandler.TypedObjectFromJson));
+        MethodInfo generic = method.MakeGenericMethod(encObj.objectType);
+        object[] args = { dataString };
+
+        return (object)generic.Invoke(this, args);
     }
 }
 
 public class Encryption_DES
 {
-    private string key;
-    private string keyDefault;
+    private string keyDefault = "fY8k0Wn2";
+    private byte[] keyDefaultBytes = new byte[64];
 
     /* - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
 
     public Encryption_DES()
     {
-        key = "fY8k0Wn2";
-    }
-    
-    public Encryption_DES(string key)
-    {
-        if (key.Length == 8)
-        {
-            this.key = key;
-        }
-        else
-        {
-            this.key = "fY8k0Wn2";
-            Debug.Log("DES encryption key must be 8 characters, but the given string was " + key.Length + ". Reverting to default.");
-        }
+        keyDefaultBytes = Encoding.ASCII.GetBytes(keyDefault);
     }
 
     /* - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
 
-    public void SetKey(string newKey)
+    public void SetDefault(string keyDefaultNew)
     {
-        if (key.Length == 8)
-        {
-            key = newKey;
-        }
-        else
-        {
-            key = "fY8k0Wn2";
-            Debug.Log("DES encryption key must be 8 characters, but the given string was " + key.Length + ". Reverting to default.");
-        }
+        keyDefault = keyDefaultNew;
+        keyDefaultBytes = Encoding.ASCII.GetBytes(keyDefaultNew);
     }
+
+    public void SetRandomDefault()
+    {
+        SetDefault(GenerateRandomKey());
+    }
+
+    public string GenerateRandomKey()
+    {
+        string randKey = "";
+
+        char[] alphaNumeric = new char[] {
+            'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm',
+            'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z',
+            '0', '1', '2', '3', '4', '5', '6', '7', '8', '9'
+        };
+        for (int i = 0; i < 8; i++)
+        {
+            randKey += alphaNumeric[UnityEngine.Random.Range(0, alphaNumeric.Length)];
+        }
+
+        return randKey;
+    }
+
+    /* - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
 
     public string Encrypt(string input)
     {
-        byte[] textBytes = Encoding.ASCII.GetBytes(input);
-        byte[] keyBytes = Encoding.ASCII.GetBytes(key);
-
-        DESCryptoServiceProvider DEScryptoProvider = new DESCryptoServiceProvider();
-        ICryptoTransform cryptoTransform = DEScryptoProvider.CreateEncryptor(keyBytes, keyBytes);
-        CryptoStreamMode mode = CryptoStreamMode.Write;
-
-        //Set up Stream & Write Encript data
-        MemoryStream mStream = new MemoryStream();
-        CryptoStream cStream = new CryptoStream(mStream, cryptoTransform, mode);
-        cStream.Write(textBytes, 0, textBytes.Length);
-        cStream.FlushFinalBlock();
-
-        //Read Ecncrypted Data From Memory Stream
-        byte[] result = new byte[mStream.Length];
-        mStream.Position = 0;
-        mStream.Read(result, 0, result.Length);
-
-        return Convert.ToBase64String(result);
+        return Encrypt(input, keyDefault);
     }
-    
+
     public string Encrypt(string input, string key)
     {
         byte[] textBytes = Encoding.ASCII.GetBytes(input);
         byte[] keyBytes = Encoding.ASCII.GetBytes(key);
 
-        DESCryptoServiceProvider DEScryptoProvider = new DESCryptoServiceProvider();
-        ICryptoTransform cryptoTransform = DEScryptoProvider.CreateEncryptor(keyBytes, keyBytes);
+        DESCryptoServiceProvider desProvider = new DESCryptoServiceProvider();
+        ICryptoTransform cryptoTransform = desProvider.CreateEncryptor(keyBytes, keyBytes);
         CryptoStreamMode mode = CryptoStreamMode.Write;
 
         //Set up Stream & Write Encript data
@@ -281,14 +369,22 @@ public class Encryption_DES
 
         return Convert.ToBase64String(result);
     }
-    
-    public string Decrypt(string input)
+
+    public EncryptedObject Encrypt(object obj)
     {
-        byte[] textBytes = Convert.FromBase64String(input);
+        return Encrypt(obj, keyDefault);
+    }
+
+    public EncryptedObject Encrypt(object obj, string key)
+    {
+        Type objType = obj.GetType();
+        string data = JsonUtility.ToJson(obj);
+
+        byte[] textBytes = Encoding.ASCII.GetBytes(data);
         byte[] keyBytes = Encoding.ASCII.GetBytes(key);
 
-        DESCryptoServiceProvider DEScryptoProvider = new DESCryptoServiceProvider();
-        ICryptoTransform cryptoTransform = DEScryptoProvider.CreateDecryptor(keyBytes, keyBytes);
+        DESCryptoServiceProvider desProvider = new DESCryptoServiceProvider();
+        ICryptoTransform cryptoTransform = desProvider.CreateEncryptor(keyBytes, keyBytes);
         CryptoStreamMode mode = CryptoStreamMode.Write;
 
         //Set up Stream & Write Encript data
@@ -298,11 +394,16 @@ public class Encryption_DES
         cStream.FlushFinalBlock();
 
         //Read Ecncrypted Data From Memory Stream
-        byte[] result = new byte[mStream.Length];
+        byte[] byteData = new byte[mStream.Length];
         mStream.Position = 0;
-        mStream.Read(result, 0, result.Length);
+        mStream.Read(byteData, 0, byteData.Length);
 
-        return Encoding.ASCII.GetString(result);
+        return new EncryptedObject(objType, Convert.ToBase64String(byteData));
+    }
+
+    public string Decrypt(string input)
+    {
+        return Decrypt(input, keyDefault);
     }
 
     public string Decrypt(string input, string key)
@@ -310,8 +411,8 @@ public class Encryption_DES
         byte[] textBytes = Convert.FromBase64String(input);
         byte[] keyBytes = Encoding.ASCII.GetBytes(key);
 
-        DESCryptoServiceProvider DEScryptoProvider = new DESCryptoServiceProvider();
-        ICryptoTransform cryptoTransform = DEScryptoProvider.CreateDecryptor(keyBytes, keyBytes);
+        DESCryptoServiceProvider desProvider = new DESCryptoServiceProvider();
+        ICryptoTransform cryptoTransform = desProvider.CreateDecryptor(keyBytes, keyBytes);
         CryptoStreamMode mode = CryptoStreamMode.Write;
 
         //Set up Stream & Write Encript data
@@ -327,41 +428,60 @@ public class Encryption_DES
 
         return Encoding.ASCII.GetString(result);
     }
+
+    public object Decrypt(EncryptedObject encObj, string key)
+    {
+        byte[] textBytes = Convert.FromBase64String(encObj.dataString);
+        byte[] keyBytes = Encoding.ASCII.GetBytes(key);
+
+        DESCryptoServiceProvider desProvider = new DESCryptoServiceProvider();
+        ICryptoTransform cryptoTransform = desProvider.CreateDecryptor(keyBytes, keyBytes);
+        CryptoStreamMode mode = CryptoStreamMode.Write;
+
+        //Set up Stream & Write Encript data
+        MemoryStream mStream = new MemoryStream();
+        CryptoStream cStream = new CryptoStream(mStream, cryptoTransform, mode);
+        cStream.Write(textBytes, 0, textBytes.Length);
+        cStream.FlushFinalBlock();
+
+        //Read Ecncrypted Data From Memory Stream
+        byte[] objData = new byte[mStream.Length];
+        mStream.Position = 0;
+        mStream.Read(objData, 0, objData.Length);
+        string dataString = Encoding.ASCII.GetString(objData);
+
+        MethodInfo method = typeof(EncryptionHandler).GetMethod(nameof(EncryptionHandler.TypedObjectFromJson));
+        MethodInfo generic = method.MakeGenericMethod(encObj.objectType);
+        object[] args = { dataString };
+
+        return (object)generic.Invoke(this, args);
+    }
 }
 
 public class Encryption_XOR
 {
-    private int key;
-    private int keyDeault;
+    private int keyDefault = 80714292;
 
     /* - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
 
-    public Encryption_XOR()
+    public void SetDefault(int keyDefaultNew)
     {
-        key = 80714292;
+        keyDefault = keyDefaultNew;
     }
 
-    public Encryption_XOR(int key)
+    public void SetRandomDefault()
     {
-        this.key = key;
+        keyDefault = GenerateRandomKey();
     }
 
-    /* - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
-
-    public void SetKey(int newKey)
+    public int GenerateRandomKey()
     {
-        key = newKey;
+        return UnityEngine.Random.Range(0, (int)short.MaxValue);
     }
 
     public string EncryptDecrypt(string input)
     {
-        StringBuilder output = new StringBuilder(input.Length);
-        for (int i = 0; i < input.Length; i++)
-        {
-            char ch = (char)(input[i] ^ key);
-            output.Append(ch);
-        }
-        return output.ToString();
+        return EncryptDecrypt(input, keyDefault);
     }
 
     public string EncryptDecrypt(string input, int key)
@@ -374,13 +494,51 @@ public class Encryption_XOR
         }
         return output.ToString();
     }
+
+    public EncryptedObject EncryptDecrypt(object obj)
+    {
+        return EncryptDecrypt(obj, keyDefault);
+    }
+
+    public EncryptedObject EncryptDecrypt(object obj, int key)
+    {
+        Type objType = obj.GetType();
+        string data = JsonUtility.ToJson(obj);
+
+        StringBuilder output = new StringBuilder(data.Length);
+        for (int i = 0; i < data.Length; i++)
+        {
+            char ch = (char)(data[i] ^ key);
+            output.Append(ch);
+        }
+
+        return new EncryptedObject(objType, output.ToString());
+    }
+
+    public object EncryptDecrypt(EncryptedObject encObj, int key)
+    {
+        int l = encObj.dataString.Length;
+
+        StringBuilder dataString = new StringBuilder(l);
+        for (int i = 0; i < l; i++)
+        {
+            char ch = (char)(encObj.dataString[i] ^ key);
+            dataString.Append(ch);
+        }
+
+        MethodInfo method = typeof(EncryptionHandler).GetMethod(nameof(EncryptionHandler.TypedObjectFromJson));
+        MethodInfo generic = method.MakeGenericMethod(encObj.objectType);
+        object[] args = { dataString };
+
+        return (object)generic.Invoke(this, args);
+    }
 }
 
 /* - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
 
 public class EncryptedObject
 {
-    public string objectType;
+    public Type objectType;
     public string dataString;
 
     /* - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
@@ -388,55 +546,19 @@ public class EncryptedObject
     public EncryptedObject()
     { }
 
-    public EncryptedObject(EncryptionHandler handler, UnityEngine.Object obj)
+    public EncryptedObject(Type objectType, string dataString)
     {
-        dataString = EncryptObj(handler, obj, EncryptionHandler.EncryptionType.AES);
-    }
-    
-    public EncryptedObject(EncryptionHandler handler, UnityEngine.Object obj, EncryptionHandler.EncryptionType encType)
-    {
-        dataString = EncryptObj(handler, obj, encType);
+        this.objectType = objectType;
+        this.dataString = dataString;
     }
 
     /* - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
 
-    public void EncryptNewObject(EncryptionHandler handler, UnityEngine.Object obj)
+    public string json
     {
-        dataString = EncryptObj(handler, obj, EncryptionHandler.EncryptionType.AES);
-    }
-    
-    public void EncryptNewObject(EncryptionHandler handler, UnityEngine.Object obj, EncryptionHandler.EncryptionType encType)
-    {
-        dataString = EncryptObj(handler, obj, encType);
-    }
-
-    private string EncryptObj(EncryptionHandler handler, UnityEngine.Object obj, EncryptionHandler.EncryptionType encType)
-    {
-        try
+        get
         {
-            objectType = obj.GetType().ToString();
-
-            string output;
-            switch (encType)
-            {
-                default:
-                case EncryptionHandler.EncryptionType.AES:
-                    output = handler.AES.Encrypt(JsonUtility.ToJson(obj));
-                    break;
-
-                case EncryptionHandler.EncryptionType.DES:
-                    output = handler.DES.Encrypt(JsonUtility.ToJson(obj));
-                    break;
-
-                case EncryptionHandler.EncryptionType.XOR:
-                    output = handler.XOR.EncryptDecrypt(JsonUtility.ToJson(obj));
-                    break;
-            }
-            return output;
-        }
-        catch
-        {
-            throw new Exception("ERROR: Cannot encrypt object \"" + obj.name + "\", as it is a non-serializable type! <" + obj.GetType().ToString() + ">");
+            return JsonUtility.ToJson(this);
         }
     }
 }
