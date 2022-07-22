@@ -62,3 +62,6 @@ crashlytics-build.properties
 # Editor user settings because the fact that Git keeps overriding these is annoying
 EditorUserSettings.asset
 UserSettings/EditorUserSettings.asset
+
+# Generated JSON files
+*.json

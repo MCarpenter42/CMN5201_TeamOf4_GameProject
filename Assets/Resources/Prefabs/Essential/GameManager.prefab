@@ -10,6 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 7696325542080762367}
   - component: {fileID: 7696325542080762366}
+  - component: {fileID: -8650939316069208973}
   m_Layer: 0
   m_Name: GameManager
   m_TagString: gamemanager
@@ -62,3 +63,38 @@ MonoBehaviour:
   - {fileID: 102900000, guid: a28e03ddf07569e47ad780bb9b316d9e, type: 3}
   - {fileID: 102900000, guid: 6d4dc08bdfa08e548a9162409ddef292, type: 3}
   - {fileID: 102900000, guid: e7c5ab9cee0cd4e489add692cf08e408, type: 3}
+  scenePath_MainMenu: 
+  scenePath_LevelTransition: 
+  scenePath_Levels: []
+--- !u!114 &-8650939316069208973
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7696325542080762360}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 70abce7fb0c40dd4fa48889f54498e4b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  gameManager: {fileID: 7696325542080762366}
+  scenePath_MainMenu: Assets/Scenes/Game Scenes/MainMenu.unity
+  scenePath_LevelTransition: Assets/Scenes/Game Scenes/LevelTransition.unity
+  scenePath_Levels:
+  - Assets/Scenes/Game Scenes/Levels/Level 0.1.unity
+  - Assets/Scenes/Game Scenes/Levels/Level 0.2.unity
+  - Assets/Scenes/Game Scenes/Levels/Level 0.3.unity
+  - Assets/Scenes/Game Scenes/Levels/Level 0.4.unity
+  - Assets/Scenes/Game Scenes/Levels/Level 0.5.unity
+  - Assets/Scenes/Personal Working Scenes/Chris/Level 6.unity
+  - Assets/Scenes/Personal Working Scenes/Chris/Level 7.unity
+  - Assets/Scenes/Personal Working Scenes/Chris/Level 8.unity
+  - Assets/Scenes/Personal Working Scenes/Chris/Level 9.unity
+  - Assets/Scenes/Personal Working Scenes/Chris/Level 10.unity
+  - Assets/Scenes/Personal Working Scenes/Chris/Level 11.unity
+  - Assets/Scenes/Personal Working Scenes/Chris/Level 12.unity
+  - Assets/Scenes/Personal Working Scenes/Chris/Level 13.unity
+  - Assets/Scenes/Personal Working Scenes/Chris/Level 14.unity
+  - Assets/Scenes/Personal Working Scenes/Chris/Level 15.unity
+  - Assets/Scenes/Personal Working Scenes/Chris/Level 16.unity

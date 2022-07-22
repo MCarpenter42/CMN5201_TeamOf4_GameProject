@@ -36,7 +36,7 @@ public class EndPoint : LevelObject
     {
         if (collision.gameObject.CompareTag("Player"))
         {
-            GameManager.LevelController.OnLevelEnd();
+            GameManager.LevelController.OnLevelComplete();
         }
     }
 

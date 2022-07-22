@@ -79,29 +79,38 @@ public class LevelSelectButton : AudioButton
             img = GetComponent<Image>();
         }
 
+        Color clr;
         switch (colour)
         {
             default:
             case ColourPreset.Green:
-                img.color = presetGreen;
+                clr = presetGreen;
                 break;
 
             case ColourPreset.Yellow:
-                img.color = presetYellow;
+                clr = presetYellow;
                 break;
 
             case ColourPreset.Orange:
-                img.color = presetOrange;
+                clr = presetOrange;
                 break;
 
             case ColourPreset.Red:
-                img.color = presetRed;
+                clr = presetRed;
                 break;
         }
+
+        if (!button.enabled)
+        {
+            clr *= 0.6f;
+        }
+
+        img.color = clr;
     }
 
     private void ButtonLevelLoad()
     {
+        //GameManager.Instance.LoadUnlockedLevelAdjusted(level);
         GameManager.Instance.LoadLevelAdjusted(level);
     }
 

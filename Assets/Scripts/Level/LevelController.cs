@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.SceneManagement;
 using UnityEditor;
 using TMPro;
 
@@ -18,6 +19,8 @@ public class LevelController : Core
     [HideInInspector] public List<LevelObject> levelObjects = new List<LevelObject>();
     [SerializeField] public bool useTileGrid = true;
     [HideInInspector] public List<FloorTile> floorTiles = new List<FloorTile>();
+
+    private int levelIndex = -1;
 
     private Player player;
     private StartPoint startPoint;
@@ -108,6 +111,12 @@ public class LevelController : Core
         {
             SetTileColours();
         }
+
+        int currentSceneIndex = SceneManager.GetActiveScene().buildIndex;
+        if (GameManager.Instance.IsLevelScene(currentSceneIndex))
+        {
+            levelIndex = currentSceneIndex;
+        }
     }
 
     private void GetGridPositions()
@@ -180,7 +189,7 @@ public class LevelController : Core
         GameManager.UIController.pauseMenu.Show(false);
     }
 
-    public void OnLevelEnd()
+    public void OnLevelComplete()
     {
         GameManager.Instance.NextLevel();
     }

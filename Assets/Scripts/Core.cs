@@ -10,7 +10,7 @@ using TMPro;
 
 public class Core : MonoBehaviour
 {
-	#region [ OBJECTS ]
+    #region [ OBJECTS ]
 
 	public static Controls Controls;
     public static VideoSettings VideoSettings;
@@ -61,11 +61,6 @@ public class Core : MonoBehaviour
         GameManager.Instance.ChangeScene(targetSceneIndex);
     }
     
-    public void GoToScene(string targetSceneName)
-    {
-        GameManager.Instance.ChangeScene(targetSceneName);
-    }
-
     public void GoToScene(char dir)
     {
         int index = SceneManager.GetActiveScene().buildIndex;
@@ -77,7 +72,7 @@ public class Core : MonoBehaviour
         {
             index -= 1;
         }
-        SceneManager.LoadScene(index, LoadSceneMode.Single);
+        GameManager.Instance.ChangeScene(index);
     }
 
     public void Exit()
@@ -297,6 +292,18 @@ public class Core : MonoBehaviour
     #endregion
 
     #region [ OBJECT HANDLING ]
+
+    public T GetOrAddComponent<T>(GameObject obj) where T : Component
+    {
+        if (obj.GetComponent<T>() != null)
+        {
+            return obj.GetComponent<T>();
+        }
+        else
+        {
+            return obj.AddComponent<T>();
+        }
+    }
 
     // I makes lists of children with a specific component often enough that
     // this was worth creating as a static function.

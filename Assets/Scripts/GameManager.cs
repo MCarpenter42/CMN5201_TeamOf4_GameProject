@@ -6,9 +6,12 @@ using UnityEngine.SceneManagement;
 using UnityEditor;
 using TMPro;
 
+[ExecuteInEditMode]
 public class GameManager : Core
 {
     #region [ OBJECTS ]
+
+    public static GameDataHandler GameDataHandler;
 
     private static GameManager instance = null;
     private Controls controlsInstance;
@@ -23,14 +26,23 @@ public class GameManager : Core
     public static AudioController AudioController;
     public static GameObject Listener;
 
-    public SceneAsset MainMenuScene;
-    private int mainMenuBuildIndex = -1;
-    
-    public SceneAsset LevelTransitionScene;
-    private int levelTransitionBuildIndex = -1;
+#if UNITY_EDITOR
+    private EditorSceneHandler editorSceneHandler;
 
-    public SceneAsset[] LevelScenes;
-    private int[] levelSceneIndices;
+    public SceneAsset MainMenuScene;
+    public SceneAsset LevelTransitionScene;
+    public List<SceneAsset> LevelScenes = new List<SceneAsset>();
+#endif
+
+    [HideInInspector] public string pathListLocalPath = "/Scripts/Data/ScenePathList.json";
+    [HideInInspector] public string pathListFilepath { get { return Application.dataPath + "/Scripts/Data/ScenePathList.json"; } }
+    private ScenePathList scenePaths = new ScenePathList();
+
+    private int mainMenuBuildIndex = -1;
+    private int levelTransitionBuildIndex = -1;
+    private List<int> levelSceneIndices = new List<int>();
+
+    private List<bool> levelsUnlocked = new List<bool>();
 
     #endregion
 
@@ -94,17 +106,21 @@ public class GameManager : Core
 
     void Awake()
     {
-        if (instance == null)
+        if (Application.isPlaying)
         {
-            instance = this;
-        }
-        else
-        {
-            Destroy(this.gameObject);
-        }
-        DontDestroyOnLoad(gameObject);
+            if (instance == null)
+            {
+                instance = this;
+            }
+            else
+            {
+                Destroy(this.gameObject);
+            }
+        
+            DontDestroyOnLoad(gameObject);
 
-        Setup();
+            Setup();
+        }
     }
 
     void Start()
@@ -114,10 +130,44 @@ public class GameManager : Core
 
     void Update()
     {
-        UIController.fps = CalcFPS();
-        HandleInputs();
+        if (Application.isPlaying)
+        {
+            UIController.fps = CalcFPS();
+            HandleInputs();
 
-        DebugOnUpdate();
+            DebugOnUpdate();
+        }
+        else
+        {
+#if UNITY_EDITOR
+            if (editorSceneHandler == null)
+            {
+                if (gameObject.GetComponent<EditorSceneHandler>() == null)
+                {
+                    editorSceneHandler = gameObject.AddComponent<EditorSceneHandler>();
+                    editorSceneHandler.gameManager = this;
+                }
+                else
+                {
+                    editorSceneHandler = gameObject.GetComponent<EditorSceneHandler>();
+                    editorSceneHandler.gameManager = this;
+                }
+            }
+            else if (editorSceneHandler.gameManager == null)
+            {
+                editorSceneHandler.gameManager = this;
+            }
+#endif
+            if (scenePaths.paths.Length == 0)
+            {
+                GetScenePaths();
+            }
+        }
+    }
+
+    void OnApplicationQuit()
+    {
+        
     }
 
     #endregion
@@ -126,12 +176,13 @@ public class GameManager : Core
 
     private void Setup()
     {
-        controlsInstance = gameObject.AddComponent<Controls>();
+        GameDataHandler = GetOrAddComponent<GameDataHandler>(gameObject);
+        controlsInstance = GetOrAddComponent<Controls>(gameObject);
         Controls = controlsInstance;
-        vidSettingsInstance = gameObject.AddComponent<VideoSettings>();
+        vidSettingsInstance = GetOrAddComponent<VideoSettings>(gameObject);
         VideoSettings = vidSettingsInstance;
 
-        GetSceneIndices();
+        GetScenePaths();
         OnLevelLoad();
     }
 
@@ -183,6 +234,12 @@ public class GameManager : Core
         UIController.UIInputs();
     }
 
+    #region [ GAME DATA ]
+
+
+
+    #endregion
+
     #region [ SETTINGS ]
 
     public void LoadSettings()
@@ -230,24 +287,17 @@ public class GameManager : Core
 
     #region [ SCENE HANDLING ]
 
-    private void GetSceneIndices()
+    private void GetScenePaths()
     {
-        mainMenuBuildIndex = SceneIndexFromName(MainMenuScene.name);
-        
-        levelTransitionBuildIndex = SceneIndexFromName(LevelTransitionScene.name);
-
-        levelSceneIndices = new int[LevelScenes.Length];
-        for (int i = 0; i < LevelScenes.Length; i++)
-        {
-            levelSceneIndices[i] = SceneIndexFromName(LevelScenes[i].name);
-        }
+        string jsonData = System.IO.File.ReadAllText(pathListFilepath);
+        scenePaths = JsonUtility.FromJson<ScenePathList>(jsonData);
     }
-
-    private int SceneIndexFromName(string sceneName)
+    
+    public int SceneIndexFromName(string sceneName)
     {
-        for (int i = 0; i < EditorBuildSettings.scenes.Length; i++)
+        for (int i = 0; i < scenePaths.paths.Length; i++)
         {
-            string buildSceneName = EditorBuildSettings.scenes[i].path;
+            string buildSceneName = scenePaths.paths[i];
             int n1 = buildSceneName.LastIndexOf('/') + 1;
             int n2 = buildSceneName.LastIndexOf('.') - n1;
             if (buildSceneName.Substring(n1, n2) == sceneName)
@@ -257,16 +307,16 @@ public class GameManager : Core
         }
         return -1;
     }
-
+    
     public bool GoToMainMenu()
     {
         bool successful = false;
 
-        if (MainMenuScene != null)
+        if (scenePaths.mainMenu != -1)
         {
             try
             {
-                ChangeScene(mainMenuBuildIndex);
+                ChangeScene(scenePaths.mainMenu);
                 successful = true;
             }
             catch
@@ -282,11 +332,11 @@ public class GameManager : Core
     {
         bool successful = false;
 
-        if (InBounds(index, LevelScenes))
+        if (InBounds(index, scenePaths.levels))
         {
             try
             {
-                ChangeScene(levelSceneIndices[index]);
+                ChangeScene(scenePaths.levels[index]);
                 successful = true;
             }
             catch
@@ -300,22 +350,31 @@ public class GameManager : Core
     
     public bool LoadLevelAdjusted(int index)
     {
-        bool successful = false;
-
-        if (InBounds(index - 1, LevelScenes))
+        return LoadLevel(index - 1);
+    }
+    
+    public bool LoadUnlockedLevel(int index)
+    {
+        if (InBounds(index, levelsUnlocked) && levelsUnlocked[index])
         {
-            try
-            {
-                ChangeScene(levelSceneIndices[index - 1]);
-                successful = true;
-            }
-            catch
-            {
-                throw new System.Exception("ERROR: Could not load scene, as it was not found in the build index!");
-            }
+            return LoadLevel(index);
         }
-
-        return successful;
+        else
+        {
+            return false;
+        }
+    }
+    
+    public bool LoadUnlockedLevelAdjusted(int index)
+    {
+        if (InBounds(index, levelsUnlocked) && levelsUnlocked[index])
+        {
+            return LoadLevelAdjusted(index);
+        }
+        else
+        {
+            return false;
+        }
     }
 
     public void NextLevel()
@@ -327,24 +386,28 @@ public class GameManager : Core
         }
     }
 
+    public bool IsLevelScene(int sceneIndex)
+    {
+        bool isLevelScene = false;
+        foreach (int index in scenePaths.levels)
+        {
+            if (sceneIndex == index)
+            {
+                isLevelScene = true;
+                break;
+            }
+        }
+        return isLevelScene;
+    }
+
     public void ChangeScene(int targetSceneIndex)
     {
         ChangeScene(targetSceneIndex, true, true);
     }
-    
-    public void ChangeScene(string targetSceneName)
-    {
-        ChangeScene(targetSceneName, true, true);
-    }
-    
+
     public void ChangeScene(int targetSceneIndex, float loadScreenDelay)
     {
         ChangeScene(targetSceneIndex, true, true, loadScreenDelay);
-    }
-    
-    public void ChangeScene(string targetSceneName, float loadScreenDelay)
-    {
-        ChangeScene(targetSceneName, true, true, loadScreenDelay);
     }
     
     public void ChangeScene(int targetSceneIndex, bool fadeOut, bool fadeIn)
@@ -353,15 +416,6 @@ public class GameManager : Core
         {
             sceneChangeComplete = false;
             StartCoroutine(IChangeScene(targetSceneIndex, fadeOut, fadeIn, 0.5f));
-        }
-    }
-    
-    public void ChangeScene(string targetSceneName, bool fadeOut, bool fadeIn)
-    {
-        if (sceneChangeComplete)
-        {
-            sceneChangeComplete = false;
-            StartCoroutine(IChangeScene(SceneIndexFromName(targetSceneName), fadeOut, fadeIn, 0.5f));
         }
     }
     
@@ -374,15 +428,6 @@ public class GameManager : Core
         }
     }
     
-    public void ChangeScene(string targetSceneName, bool fadeOut, bool fadeIn, float loadScreenDelay)
-    {
-        if (sceneChangeComplete)
-        {
-            sceneChangeComplete = false;
-            StartCoroutine(IChangeScene(SceneIndexFromName(targetSceneName), fadeOut, fadeIn, loadScreenDelay));
-        }
-    }
-
     private IEnumerator IChangeScene(int targetSceneIndex, bool fadeOut, bool fadeIn, float loadScreenDelay)
     {
         if (fadeOut)
@@ -394,7 +439,7 @@ public class GameManager : Core
 
         AudioListener oldestListener = FindObjectOfType<AudioListener>();
 
-        AsyncOperation loading = SceneManager.LoadSceneAsync(levelTransitionBuildIndex, LoadSceneMode.Additive);
+        AsyncOperation loading = SceneManager.LoadSceneAsync(scenePaths.levelTransition, LoadSceneMode.Additive);
         while (!loading.isDone)
         {
             yield return null;

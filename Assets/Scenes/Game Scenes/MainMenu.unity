@@ -3013,10 +3013,6 @@ PrefabInstance:
       propertyPath: m_Name
       value: GameManager
       objectReference: {fileID: 0}
-    - target: {fileID: 7696325542080762366, guid: 7f3d74ffff9427443baefd1de0c1f8d7, type: 3}
-      propertyPath: levels.Array.size
-      value: 16
-      objectReference: {fileID: 0}
     - target: {fileID: 7696325542080762367, guid: 7f3d74ffff9427443baefd1de0c1f8d7, type: 3}
       propertyPath: m_RootOrder
       value: 0
