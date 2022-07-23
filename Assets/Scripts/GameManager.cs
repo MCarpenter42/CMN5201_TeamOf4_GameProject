@@ -1,3 +1,4 @@
+using System.IO;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -34,19 +35,11 @@ public class GameManager : Core
     public List<SceneAsset> LevelScenes = new List<SceneAsset>();
 #endif
 
-    [HideInInspector] public string pathListLocalPath = "/Scripts/Data/ScenePathList.json";
-    [HideInInspector] public string pathListFilepath { get { return Application.dataPath + "/Scripts/Data/ScenePathList.json"; } }
-    private ScenePathList scenePaths = new ScenePathList();
-
-    private int mainMenuBuildIndex = -1;
-    private int levelTransitionBuildIndex = -1;
-    private List<int> levelSceneIndices = new List<int>();
-
-    private List<bool> levelsUnlocked = new List<bool>();
-
     #endregion
 
     #region [ PROPERTIES ]
+
+    public static bool onGameLoad = true;
 
     public static float FPS;
     private List<float> frameTimes = new List<float>();
@@ -55,6 +48,12 @@ public class GameManager : Core
     public static bool showHints = true;
 
     public static bool sceneChangeComplete = true;
+
+    public static string pathListLocalPath = "/Scripts/Data/ScenePathList.json";
+    public static string pathListFilepath { get { return Application.dataPath + "/Scripts/Data/ScenePathList.json"; } }
+    public static ScenePathList scenePaths = new ScenePathList();
+
+    public static bool[] levelsUnlocked = new bool[0];
 
     #endregion
 
@@ -167,7 +166,7 @@ public class GameManager : Core
 
     void OnApplicationQuit()
     {
-        
+        GameDataHandler.DataToDisk();
     }
 
     #endregion
@@ -181,6 +180,14 @@ public class GameManager : Core
         Controls = controlsInstance;
         vidSettingsInstance = GetOrAddComponent<VideoSettings>(gameObject);
         VideoSettings = vidSettingsInstance;
+
+        if (onGameLoad)
+        {
+            GameDataHandler.LoadEncryptionKeys();
+            GameDataHandler.DataFromDisk();
+            GameDataHandler.GameStateFromData();
+            onGameLoad = false;
+        }
 
         GetScenePaths();
         OnLevelLoad();
@@ -202,6 +209,16 @@ public class GameManager : Core
 
         AudioController = FindObjectOfType<AudioController>();
         Listener = FindObjectOfType<AudioListener>().gameObject;
+    }
+
+    public void OnPause()
+    {
+        GameDataHandler.GameStateToData();
+    }
+
+    public void OnResume()
+    {
+
     }
 
     /* - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
@@ -289,7 +306,7 @@ public class GameManager : Core
 
     private void GetScenePaths()
     {
-        string jsonData = System.IO.File.ReadAllText(pathListFilepath);
+        string jsonData = File.ReadAllText(pathListFilepath);
         scenePaths = JsonUtility.FromJson<ScenePathList>(jsonData);
     }
     

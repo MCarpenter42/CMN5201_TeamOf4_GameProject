@@ -17,14 +17,14 @@ public class EncryptionHandler
 
     /* - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
 
-    public void SetAllDefaults(string aesKey, string aesIV, string desKey, int xorKey)
+    public static void SetAllDefaults(string aesKey, string aesIV, string desKey, int xorKey)
     {
         AES.SetDefaults(aesKey, aesIV);
         DES.SetDefault(desKey);
         XOR.SetDefault(xorKey);
     }
 
-    public void RandomiseAllDefaults(string aesKey, string aesIV, string desKey, int xorKey)
+    public static void RandomiseAllDefaults()
     {
         AES.SetRandomDefaults();
         DES.SetRandomDefault();
@@ -40,7 +40,7 @@ public class EncryptionHandler
 
     public static EncryptedObject EncryptObject(object obj, EncryptionType encType)
     {
-        Type objType = obj.GetType();
+        string objType = obj.GetType().ToString();
         string data;
         try
         {
@@ -67,12 +67,12 @@ public class EncryptionHandler
         }
     }
 
-    public static object DecryptObject(EncryptedObject encObj)
+    public static T DecryptObject<T>(EncryptedObject encObj)
     {
-        return DecryptObject(encObj, EncryptionType.AES);
+        return DecryptObject<T>(encObj, EncryptionType.AES);
     }
 
-    public static object DecryptObject(EncryptedObject encObj, EncryptionType encType)
+    public static T DecryptObject<T>(EncryptedObject encObj, EncryptionType encType)
     {
         string dataString;
         switch (encType)
@@ -92,10 +92,10 @@ public class EncryptionHandler
         }
 
         MethodInfo method = typeof(EncryptionHandler).GetMethod(nameof(EncryptionHandler.TypedObjectFromJson));
-        MethodInfo generic = method.MakeGenericMethod(encObj.objectType);
+        MethodInfo generic = method.MakeGenericMethod(Type.GetType(encObj.objectType));
         object[] args = { dataString };
 
-        return generic.Invoke(null, args);
+        return (T)generic.Invoke(null, args);
     }
 
     public static T TypedObjectFromJson<T>(string dataString)
@@ -134,6 +134,11 @@ public class Encryption_AES
     public void SetRandomDefaults()
     {
         SetDefaults(GenerateRandomKey(), GenerateRandomIV());
+    }
+
+    public string[] GetDefaults()
+    {
+        return new string[] { keyDefault, ivDefault };
     }
 
     public string GenerateRandomKey()
@@ -215,7 +220,7 @@ public class Encryption_AES
 
     public EncryptedObject Encrypt(object obj, byte[] key, byte[] iv)
     {
-        Type objType = obj.GetType();
+        string objType = obj.GetType().ToString();
         string data = JsonUtility.ToJson(obj);
 
         AesCryptoServiceProvider aesProvider = new AesCryptoServiceProvider();
@@ -262,19 +267,19 @@ public class Encryption_AES
         return Encoding.ASCII.GetString(result);
     }
 
-    public object Decrypt(EncryptedObject encObj)
+    public T Decrypt<T>(EncryptedObject encObj)
     {
-        return Decrypt(encObj, keyDefaultBytes, ivDefaultBytes);
+        return Decrypt<T>(encObj, keyDefaultBytes, ivDefaultBytes);
     }
 
-    public object Decrypt(EncryptedObject encObj, string key, string iv)
+    public T Decrypt<T>(EncryptedObject encObj, string key, string iv)
     {
         byte[] keyBytes = Encoding.ASCII.GetBytes(key);
         byte[] ivBytes = Encoding.ASCII.GetBytes(iv);
-        return Decrypt(encObj, keyBytes, ivBytes);
+        return Decrypt<T>(encObj, keyBytes, ivBytes);
     }
 
-    public object Decrypt(EncryptedObject encObj, byte[] key, byte[] iv)
+    public T Decrypt<T>(EncryptedObject encObj, byte[] key, byte[] iv)
     {
         AesCryptoServiceProvider aesProvider = new AesCryptoServiceProvider();
         aesProvider.BlockSize = 128;
@@ -291,10 +296,10 @@ public class Encryption_AES
         string dataString = Encoding.ASCII.GetString(objData);
 
         MethodInfo method = typeof(EncryptionHandler).GetMethod(nameof(EncryptionHandler.TypedObjectFromJson));
-        MethodInfo generic = method.MakeGenericMethod(encObj.objectType);
+        MethodInfo generic = method.MakeGenericMethod(Type.GetType(encObj.objectType));
         object[] args = { dataString };
 
-        return (object)generic.Invoke(this, args);
+        return (T)generic.Invoke(null, args);
     }
 }
 
@@ -321,6 +326,11 @@ public class Encryption_DES
     public void SetRandomDefault()
     {
         SetDefault(GenerateRandomKey());
+    }
+
+    public string GetDefault()
+    {
+        return keyDefault;
     }
 
     public string GenerateRandomKey()
@@ -377,7 +387,7 @@ public class Encryption_DES
 
     public EncryptedObject Encrypt(object obj, string key)
     {
-        Type objType = obj.GetType();
+        string objType = obj.GetType().ToString();
         string data = JsonUtility.ToJson(obj);
 
         byte[] textBytes = Encoding.ASCII.GetBytes(data);
@@ -429,7 +439,12 @@ public class Encryption_DES
         return Encoding.ASCII.GetString(result);
     }
 
-    public object Decrypt(EncryptedObject encObj, string key)
+    public T Decrypt<T>(EncryptedObject encObj)
+    {
+        return Decrypt<T>(encObj, keyDefault);
+    }
+
+    public T Decrypt<T>(EncryptedObject encObj, string key)
     {
         byte[] textBytes = Convert.FromBase64String(encObj.dataString);
         byte[] keyBytes = Encoding.ASCII.GetBytes(key);
@@ -451,10 +466,10 @@ public class Encryption_DES
         string dataString = Encoding.ASCII.GetString(objData);
 
         MethodInfo method = typeof(EncryptionHandler).GetMethod(nameof(EncryptionHandler.TypedObjectFromJson));
-        MethodInfo generic = method.MakeGenericMethod(encObj.objectType);
+        MethodInfo generic = method.MakeGenericMethod(Type.GetType(encObj.objectType));
         object[] args = { dataString };
 
-        return (object)generic.Invoke(this, args);
+        return (T)generic.Invoke(this, args);
     }
 }
 
@@ -472,6 +487,11 @@ public class Encryption_XOR
     public void SetRandomDefault()
     {
         keyDefault = GenerateRandomKey();
+    }
+
+    public int GetDefault()
+    {
+        return keyDefault;
     }
 
     public int GenerateRandomKey()
@@ -502,7 +522,7 @@ public class Encryption_XOR
 
     public EncryptedObject EncryptDecrypt(object obj, int key)
     {
-        Type objType = obj.GetType();
+        string objType = obj.GetType().ToString();
         string data = JsonUtility.ToJson(obj);
 
         StringBuilder output = new StringBuilder(data.Length);
@@ -515,7 +535,12 @@ public class Encryption_XOR
         return new EncryptedObject(objType, output.ToString());
     }
 
-    public object EncryptDecrypt(EncryptedObject encObj, int key)
+    public T EncryptDecrypt<T>(EncryptedObject encObj)
+    {
+        return EncryptDecrypt<T>(encObj, keyDefault);
+    }
+
+    public T EncryptDecrypt<T>(EncryptedObject encObj, int key)
     {
         int l = encObj.dataString.Length;
 
@@ -527,10 +552,10 @@ public class Encryption_XOR
         }
 
         MethodInfo method = typeof(EncryptionHandler).GetMethod(nameof(EncryptionHandler.TypedObjectFromJson));
-        MethodInfo generic = method.MakeGenericMethod(encObj.objectType);
+        MethodInfo generic = method.MakeGenericMethod(Type.GetType(encObj.objectType));
         object[] args = { dataString };
 
-        return (object)generic.Invoke(this, args);
+        return (T)generic.Invoke(this, args);
     }
 }
 
@@ -538,7 +563,7 @@ public class Encryption_XOR
 
 public class EncryptedObject
 {
-    public Type objectType;
+    public string objectType;
     public string dataString;
 
     /* - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
@@ -546,7 +571,7 @@ public class EncryptedObject
     public EncryptedObject()
     { }
 
-    public EncryptedObject(Type objectType, string dataString)
+    public EncryptedObject(string objectType, string dataString)
     {
         this.objectType = objectType;
         this.dataString = dataString;

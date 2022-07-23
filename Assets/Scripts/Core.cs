@@ -48,12 +48,14 @@ public class Core : MonoBehaviour
     {
         Time.timeScale = 0.0f;
         GameManager.isPaused = true;
+        GameManager.Instance.OnPause();
     }
 
     public void Resume()
     {
         Time.timeScale = 1.0f;
         GameManager.isPaused = false;
+        GameManager.Instance.OnResume();
     }
 
     public void GoToScene(int targetSceneIndex)
@@ -78,6 +80,9 @@ public class Core : MonoBehaviour
     public void Exit()
     {
         Debug.Log("Exiting game...");
+#if UNITY_EDITOR
+        EditorApplication.ExitPlaymode();
+#endif
         Application.Quit();
     }
 

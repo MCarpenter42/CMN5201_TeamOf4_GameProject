@@ -1,3 +1,4 @@
+using System.IO;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -97,7 +98,7 @@ public class EditorSceneHandler : Core
 
         scenePaths.timeModified = "UTC " + System.DateTime.UtcNow;
         string jsonData = JsonUtility.ToJson(scenePaths);
-        System.IO.File.WriteAllText(gameManager.pathListFilepath, jsonData);
+        File.WriteAllText(GameManager.pathListFilepath, jsonData);
     }
 #endif
 }
