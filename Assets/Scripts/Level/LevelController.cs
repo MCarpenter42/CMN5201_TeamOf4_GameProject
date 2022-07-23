@@ -169,7 +169,7 @@ public class LevelController : Core
                 Prompt levelHint = GameManager.UIController.hud.levelHint.GetComponent<Prompt>();
                 levelHint.gameObject.SetActive(true);
                 levelHint.SetText(levelHintText, AdjustCondition.Never, AdjustCondition.Always);
-                levelHint.hiddenOffset = new Vector2(0.0f, levelHint.rTransform.rect.height + 20.0f);
+                levelHint.SetHiddenOffset(new Vector2(0.0f, levelHint.rTransform.rect.height + 20.0f));
                 levelHint.rTransform.anchoredPosition += levelHint.hiddenOffset;
 
                 float initialShowDelay = 1.0f;

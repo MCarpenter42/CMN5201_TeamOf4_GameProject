@@ -21,15 +21,16 @@ public class UIElement : Core, IPointerEnterHandler, IPointerExitHandler
 
     [Header("UI Element Properties")]
     public float fixedShowHideDelay = 0.0f;
-    [SerializeField] protected ShowHide showHideType = ShowHide.Instant;
-    [SerializeField] protected float transitionTime = 0.1f;
+    public ShowHide showHideType = ShowHide.Instant;
+    public float transitionTime = 0.1f;
+    public InterpDelta.InterpTypes slideMovementStyle = InterpDelta.InterpTypes.Linear;
+    public Vector2 visiblePos = Vector2.zero;
     public Vector2 hiddenOffset = Vector2.zero;
-    [SerializeField] protected InterpDelta.InterpTypes slideMovementStyle = InterpDelta.InterpTypes.Linear;
-    public Vector2 visiblePos;
     protected bool isMoving = false;
     public float opacity = 1.0f;
 
-    protected UnityEvent_bool onShow = new UnityEvent_bool();
+    [SerializeField] public UnityEvent onShow = new UnityEvent();
+    [SerializeField] public UnityEvent onHide = new UnityEvent();
 
     #endregion
 
@@ -81,11 +82,48 @@ public class UIElement : Core, IPointerEnterHandler, IPointerExitHandler
     }
 
     /* - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
-    
-    private void GetGenericComponents()
+
+    public void GetGenericComponents()
     {
         rTransform = GetComponent<RectTransform>();
-        visiblePos = rTransform.anchoredPosition;
+        if (visiblePos == Vector2.zero)
+        {
+            visiblePos = rTransform.anchoredPosition;
+        }
+    }
+
+    public void SetShowHideTransition(float fixedShowHideDelay)
+    {
+        SetShowHideTransition(fixedShowHideDelay, ShowHide.Instant, 0.0f, InterpDelta.InterpTypes.Linear);
+    }
+    
+    public void SetShowHideTransition(float fixedShowHideDelay, ShowHide showHideType, float transitionTime, InterpDelta.InterpTypes slideMovementStyle)
+    {
+        this.fixedShowHideDelay = fixedShowHideDelay;
+        this.showHideType = showHideType;
+        this.transitionTime = transitionTime;
+        this.slideMovementStyle = slideMovementStyle;
+    }
+
+    public void SetHiddenOffset(Vector2 hiddenOffset)
+    {
+        this.hiddenOffset = hiddenOffset;
+    }
+    
+    public void SetShowHidePositions(Vector2 hiddenOffset, Vector2 visiblePos)
+    {
+        this.hiddenOffset = hiddenOffset;
+        this.visiblePos = visiblePos;
+    }
+
+    public void SetOnShowEvent(UnityEvent onShow)
+    {
+        this.onShow = onShow;
+    }
+    
+    public void SetOnHideEvent(UnityEvent onHide)
+    {
+        this.onHide = onHide;
     }
 
     /* - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
@@ -147,23 +185,33 @@ public class UIElement : Core, IPointerEnterHandler, IPointerExitHandler
     {
         if (showHideType == ShowHide.Instant || showHideType == ShowHide.Fade)
         {
-            gameObject.SetActive(show);
             visible = show;
+            gameObject.SetActive(show);
         }
         else if (showHideType == ShowHide.Slide)
         {
+            visible = show;
+            Vector2 posStart = visiblePos;
+            Vector2 posEnd = visiblePos;
             if (show)
             {
-                rTransform.anchoredPosition = visiblePos;
+                posStart += hiddenOffset;
             }
             else
             {
-                rTransform.anchoredPosition = visiblePos + hiddenOffset;
+                posEnd += hiddenOffset;
             }
-            visible = show;
+            Move(slideMovementStyle, posStart, posEnd, transitionTime, show);
         }
 
-        onShow.Invoke(show);
+        if (show)
+        {
+            onShow.Invoke();
+        }
+        else
+        {
+            onHide.Invoke();
+        }
     }
 
     public void DoDelayedShow(bool show, float delayTime)

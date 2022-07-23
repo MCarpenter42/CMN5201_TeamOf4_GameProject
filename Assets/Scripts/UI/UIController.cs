@@ -15,6 +15,7 @@ public class UIController : Core
     public PauseMenu pauseMenu;
     public HUD hud;
     public Image blackScreen;
+    public DeveloperConsole devConsole;
     public SFXSource sfx;
 
     [Header("Performance & Debug")]

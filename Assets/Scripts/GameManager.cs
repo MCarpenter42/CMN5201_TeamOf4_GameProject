@@ -35,6 +35,8 @@ public class GameManager : Core
     public List<SceneAsset> LevelScenes = new List<SceneAsset>();
 #endif
 
+    public DebugLogging DebugLogging;
+
     #endregion
 
     #region [ PROPERTIES ]
@@ -167,6 +169,9 @@ public class GameManager : Core
     void OnApplicationQuit()
     {
         GameDataHandler.DataToDisk();
+#if UNITY_EDITOR
+        DebugLogging.LogToFile();
+#endif
     }
 
     #endregion
@@ -176,13 +181,19 @@ public class GameManager : Core
     private void Setup()
     {
         GameDataHandler = GetOrAddComponent<GameDataHandler>(gameObject);
+
         controlsInstance = GetOrAddComponent<Controls>(gameObject);
         Controls = controlsInstance;
+
         vidSettingsInstance = GetOrAddComponent<VideoSettings>(gameObject);
         VideoSettings = vidSettingsInstance;
 
+        DebugLogging = GetOrAddComponent<DebugLogging>(gameObject);
+
         if (onGameLoad)
         {
+            DebugLogging.StartLogging();
+
             GameDataHandler.LoadEncryptionKeys();
             GameDataHandler.DataFromDisk();
             GameDataHandler.GameStateFromData();
@@ -219,6 +230,14 @@ public class GameManager : Core
     public void OnResume()
     {
 
+    }
+
+    public void OnLog()
+    {
+        if (UIController.devConsole.console.visible)
+        {
+            UIController.devConsole.UpdateLog();
+        }
     }
 
     /* - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */

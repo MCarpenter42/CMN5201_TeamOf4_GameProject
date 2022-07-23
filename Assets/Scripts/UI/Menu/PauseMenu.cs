@@ -18,25 +18,25 @@ public class PauseMenu : Menu
     {
         base.Awake();
         onShow.AddListener(OnShow);
+        onHide.AddListener(OnHide);
     }
 
     #endregion
 
     /* - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
 
-    private void OnShow(bool show)
+    private void OnShow()
     {
-        if (show)
-        {
-            Pause();
-        }
-        else
-        {
-            Resume();
-        }
-        menuFrame.SetActive(show);
+        Pause();
+        menuFrame.SetActive(true);
     }
     
+    private void OnHide()
+    {
+        Resume();
+        menuFrame.SetActive(false);
+    }
+
     /* - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
 
     public void LoadMenu()
