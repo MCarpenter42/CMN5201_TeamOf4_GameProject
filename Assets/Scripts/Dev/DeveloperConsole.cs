@@ -154,7 +154,16 @@ public class DeveloperConsole : Core
         bool parseSuccessful = false;
         string input = inputBox.text;
 
-
+        if (char.Parse(input.Substring(0, 1)) == '/')
+        {
+            string[] args = input.Substring(1).Split(' ');
+            
+            switch (args[0])
+            {
+                default:
+                    break;
+            }
+        }
 
         inputBox.text = "";
         return parseSuccessful;

@@ -12,8 +12,16 @@ public class LevelController : Core
     #region [ PROPERTIES ]
 
     [Header("Level Properties")]
-    public bool isGameplayLevel = true;
+    public SceneType sceneType = SceneType.LevelGeneric;
+    [HideInInspector] public bool isGameplayLevel { get { return (sceneType.ToString().Substring(0, 5) == "Level"); } }
     public float levelFadeTime = 0.8f;
+    public bool useAudioMusic = true;
+    public bool useAudioAtmospheric = false;
+    public bool useAudioBreeze = false;
+    public bool useAudioFauna = false;
+    public bool useAudioFoliage = false;
+
+    [Header("World Space Properties")]
     [SerializeField] public float gridCellScale = 1.0f;
     [HideInInspector] public WorldGrid worldGrid;
     [HideInInspector] public List<LevelObject> levelObjects = new List<LevelObject>();
@@ -27,7 +35,8 @@ public class LevelController : Core
     private CameraController levelCam;
 
     [Header("Puzzle Properties")]
-    [SerializeField][TextArea] string levelHintText = "";
+    [TextArea(1, 5)]
+    [SerializeField] string levelHintText = "";
 
     #endregion
 
@@ -37,7 +46,6 @@ public class LevelController : Core
 
     void Awake()
     {
-        GameManager.Instance.OnLevelLoad();
         GetComponents();
         Setup();
     }

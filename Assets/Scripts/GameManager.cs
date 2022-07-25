@@ -201,10 +201,10 @@ public class GameManager : Core
         }
 
         GetScenePaths();
-        OnLevelLoad();
+        OnSceneLoad();
     }
 
-    public void OnLevelLoad()
+    public void OnSceneLoad()
     {
         LevelController = FindObjectOfType<LevelController>();
         if (LevelController.isGameplayLevel)
@@ -504,6 +504,8 @@ public class GameManager : Core
         {
             yield return null;
         }
+
+        OnSceneLoad();
 
         sceneChangeComplete = true;
 

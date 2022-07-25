@@ -24,6 +24,7 @@ public class Core : MonoBehaviour
     public enum CompassBearing { North, East, South, West };
     public enum AdjustCondition { Never, Always, LessThan, GreaterThan };
 
+    public enum SceneType { LevelGeneric, MenuAndUI, CutsceneAndTransition, LevelBright, LevelDim, LevelDark, LevelSpecial };
     public enum ObjectTypes { Empty, Static, Dynamic, Player, StartPoint, EndPoint };
     public enum FloorTypes { Empty, Stone, Wood, Grass, Foliage, UnderWater };
 

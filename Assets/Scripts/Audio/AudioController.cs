@@ -10,14 +10,15 @@ public class AudioController : Core
 {
     #region [ PROPERTIES ]
 
+    #region < General >
+
     [Header("General Settings")]
     [SerializeField] Vector3 levelCentre;
     private List<GameObject> reverbZones = new List<GameObject>();
 
-    [Header("Music")]
-    [SerializeField] AudioClip levelMusic;
-    private AudioSource musicPlayer;
-    private float defaultMusicVolume = 0.2f;
+    #endregion
+    
+    #region < Sources >
 
     [Header("Sources")]
     [SerializeField] SFXSource sfxSourcePrefab;
@@ -26,6 +27,26 @@ public class AudioController : Core
     [HideInInspector] public List<SFXSource> beamSFX = new List<SFXSource>();
     [HideInInspector] public SFXSource doorSFX;
     [HideInInspector] public SFXSource uiSFX;
+
+    #endregion
+
+    #region < Music >
+
+    [Header("Music")]
+    [SerializeField] AudioClip musicMenu;
+    [SerializeField] AudioClip musicSceneLoad;
+    [SerializeField] AudioClip musicLevelBright;
+    [SerializeField] AudioClip musicLevelDim;
+    [SerializeField] AudioClip musicLevelDark;
+    [SerializeField] bool useAltMusic = false;
+    [SerializeField] AudioClip musicOther;
+    private AudioSource musicPlayer;
+    private float defaultMusicVolume = 0.2f;
+    private bool musicPlaying = false;
+
+    #endregion
+
+    #region < Player >
 
     [Header("Player SFX")]
     public List<AudioClip> walkStone = new List<AudioClip>();
@@ -37,6 +58,10 @@ public class AudioController : Core
     public List<AudioClip> jump = new List<AudioClip>();
     public List<AudioClip> land = new List<AudioClip>();
     private Coroutine playerJumpCycle = null;
+
+    #endregion
+
+    #region < World >
 
     [Header("World SFX")]
     public List<AudioClip> moveObject = new List<AudioClip>();
@@ -50,12 +75,35 @@ public class AudioController : Core
     public AudioClip beamHitNormal;
     public AudioClip beamHitReflect;
 
+    #endregion
+
+    #region < UI >
+
     [Header("UI SFX")]
     public List<AudioClip> buttonStandard = new List<AudioClip>();
     public List<AudioClip> buttonHeavy = new List<AudioClip>();
     public List<AudioClip> slider = new List<AudioClip>();
     [Range(0.0f, 1.0f)]
     [SerializeField] float buttonVolumeScale = 1.0f;
+
+    #endregion
+
+    #region < Ambient >
+
+    [Header("Ambient SFX")]
+    public List<AudioClip> stingersBright;
+    public List<AudioClip> stingersDim;
+    public List<AudioClip> stingersDark;
+    public List<AudioClip> breeze;
+    public List<AudioClip> fauna;
+    public List<AudioClip> foliage;
+
+    public AmbientSource atmosphericSource;
+    public AmbientSource breezeSource;
+    public AmbientSource faunaSource;
+    public AmbientSource foliageSource;
+
+    #endregion
 
     #endregion
 
@@ -76,12 +124,18 @@ public class AudioController : Core
 
     void Start()
     {
+        AudioClip music = SetupMusic();
+        musicPlayer.clip = music;
+
         musicPlayer.volume = 0.0f;
         musicPlayer.Play();
-        if (levelMusic != null && musicPlayer != null)
+
+        if (music != null && musicPlayer != null && GameManager.LevelController.useAudioMusic)
         {
             StartCoroutine(MusicVolumeCheck());
         }
+
+        SetupAmbient();
     }
 
     #endregion
@@ -91,7 +145,6 @@ public class AudioController : Core
     private void GetComponents()
     {
         musicPlayer = gameObject.GetComponent<AudioSource>();
-        musicPlayer.clip = levelMusic;
         defaultMusicVolume = musicPlayer.volume;
 
         for (int i = 0; i < transform.childCount; i++)
@@ -123,7 +176,103 @@ public class AudioController : Core
         CopyListData(sources, sfxSources);
     }
 
-    /* - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
+    private AudioClip SetupMusic()
+    {
+        if (!useAltMusic)
+        {
+            switch (GameManager.LevelController.sceneType)
+            {
+                case SceneType.LevelGeneric:
+                default:
+                    return musicOther;
+
+                case SceneType.MenuAndUI:
+                    return musicMenu;
+
+                case SceneType.CutsceneAndTransition:
+                    return musicSceneLoad;
+
+                case SceneType.LevelBright:
+                    return musicLevelBright;
+
+                case SceneType.LevelDim:
+                    return musicLevelDim;
+
+                case SceneType.LevelDark:
+                    return musicLevelDark;
+
+                case SceneType.LevelSpecial:
+                    return musicOther;
+            }
+        }
+        else
+        {
+            return musicOther;
+        }
+    }
+
+    private void SetupAmbient()
+    {
+        if (GameManager.LevelController.isGameplayLevel)
+        {
+            if (atmosphericSource != null && GameManager.LevelController.useAudioAtmospheric)
+            {
+                int n = 0;
+                switch (GameManager.LevelController.sceneType)
+                {
+                    default:
+                    case SceneType.LevelGeneric:
+                        break;
+
+                    case SceneType.LevelBright:
+                        atmosphericSource.SetClipsList(stingersBright);
+                        n = stingersBright.Count;
+                        break;
+
+                    case SceneType.LevelDim:
+                        atmosphericSource.SetClipsList(stingersDim);
+                        n = stingersDim.Count;
+                        break;
+
+                    case SceneType.LevelDark:
+                        atmosphericSource.SetClipsList(stingersDark);
+                        n = stingersDark.Count;
+                        break;
+
+                    case SceneType.LevelSpecial:
+                        break;
+                }
+                if (n > 0)
+                {
+                    atmosphericSource.Play();
+                }
+            }
+            if (breezeSource != null && GameManager.LevelController.useAudioBreeze)
+            {
+                breezeSource.SetClipsList(breeze);
+                if (breeze.Count > 0)
+                {
+                    breezeSource.Play();
+                }
+            }
+            if (faunaSource != null && GameManager.LevelController.useAudioFauna)
+            {
+                faunaSource.SetClipsList(fauna);
+                if (fauna.Count > 0)
+                {
+                    faunaSource.Play();
+                }
+            }
+            if (foliageSource != null && GameManager.LevelController.useAudioFoliage)
+            {
+                foliageSource.SetClipsList(foliage);
+                if (foliage.Count > 0)
+                {
+                    foliageSource.Play();
+                }
+            }
+        }
+    }
 
     #region [ SFX SOURCE MANAGEMENT ]
 
@@ -254,6 +403,8 @@ public class AudioController : Core
     }
 
     #endregion
+
+    /* - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
 
     #region [ PLAYER MOVEMENT ]
 

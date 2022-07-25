@@ -156,6 +156,7 @@ MonoBehaviour:
   pauseMenu: {fileID: 0}
   hud: {fileID: 0}
   blackScreen: {fileID: 0}
+  devConsole: {fileID: 0}
   sfx: {fileID: 0}
   debugPanelInfo: 0
   debugPanel: {fileID: 0}
@@ -301,6 +302,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 291198861330458768, guid: ff1fe3ac905ca534986a1171691b8742, type: 3}
+      propertyPath: sceneType
+      value: 2
+      objectReference: {fileID: 0}
     - target: {fileID: 291198861330458768, guid: ff1fe3ac905ca534986a1171691b8742, type: 3}
       propertyPath: isGameplayLevel
       value: 0

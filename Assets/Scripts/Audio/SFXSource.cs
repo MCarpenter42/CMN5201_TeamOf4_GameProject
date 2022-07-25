@@ -1,4 +1,3 @@
-using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -209,7 +208,7 @@ public class SFXSource : Core
         source.volume = volume;
     }
 
-    public void Stop()
+    public virtual void Stop()
     {
         source.Stop();
     }
