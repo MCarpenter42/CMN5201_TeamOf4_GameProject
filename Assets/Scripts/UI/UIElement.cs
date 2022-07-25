@@ -29,8 +29,8 @@ public class UIElement : Core, IPointerEnterHandler, IPointerExitHandler
     protected bool isMoving = false;
     public float opacity = 1.0f;
 
-    [SerializeField] public UnityEvent onShow = new UnityEvent();
-    [SerializeField] public UnityEvent onHide = new UnityEvent();
+    public UnityEvent onShow = new UnityEvent();
+    public UnityEvent onHide = new UnityEvent();
 
     #endregion
 

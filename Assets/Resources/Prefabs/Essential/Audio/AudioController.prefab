@@ -50,10 +50,11 @@ MonoBehaviour:
   volumeFalloff: 0
   minDistance: 0
   maxDistance: 20
-  interval: 0.2
+  interval: 1.5
   intervalRandomness: 0.25
   triggerChance: 0.05
-  cooldown: 5
+  adjustPerCheck: 0.2
+  cooldown: 2
   debug_Name: {fileID: 0}
   debug_IsPlaying: {fileID: 0}
   debug_Cooldown: {fileID: 0}
@@ -240,10 +241,11 @@ MonoBehaviour:
   volumeFalloff: 0
   minDistance: 0
   maxDistance: 20
-  interval: 0.2
+  interval: 1.5
   intervalRandomness: 0.25
   triggerChance: 0.05
-  cooldown: 5
+  adjustPerCheck: 0.2
+  cooldown: 2
   debug_Name: {fileID: 0}
   debug_IsPlaying: {fileID: 0}
   debug_Cooldown: {fileID: 0}
@@ -396,10 +398,11 @@ MonoBehaviour:
   volumeFalloff: 0
   minDistance: 0
   maxDistance: 20
-  interval: 0.2
+  interval: 1.5
   intervalRandomness: 0.25
   triggerChance: 0.05
-  cooldown: 5
+  adjustPerCheck: 0.2
+  cooldown: 2
   debug_Name: {fileID: 0}
   debug_IsPlaying: {fileID: 0}
   debug_Cooldown: {fileID: 0}
@@ -878,10 +881,11 @@ MonoBehaviour:
   volumeFalloff: 0
   minDistance: 0
   maxDistance: 20
-  interval: 0.2
+  interval: 1.5
   intervalRandomness: 0.25
   triggerChance: 0.05
-  cooldown: 5
+  adjustPerCheck: 0.2
+  cooldown: 2
   debug_Name: {fileID: 0}
   debug_IsPlaying: {fileID: 0}
   debug_Cooldown: {fileID: 0}

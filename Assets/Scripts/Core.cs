@@ -326,6 +326,18 @@ public class Core : MonoBehaviour
         }
     }
 
+    public static List<T> GetSubList<T>(List<List<T>> listOfLists, int index)
+    {
+        if (InBounds(index, listOfLists))
+        {
+            return listOfLists[index];
+        }
+        else
+        {
+            return null;
+        }
+    }
+    
     #endregion
 
     #region [ OBJECT HANDLING ]

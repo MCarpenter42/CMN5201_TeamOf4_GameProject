@@ -141,7 +141,7 @@ public class AmbientSource : SFXSource
                 triggerTimeTotal += timeToTrigger;
                 triggerCount++;
                 timesToTrigger += DecimalPlacesString(timeToTrigger, 2) + "s, ";
-                Debug.Log("Average trigger time over " + triggerCount + " instances: " + (triggerTimeTotal / (float)triggerCount));
+                //Debug.Log("Average trigger time over " + triggerCount + " instances: " + (triggerTimeTotal / (float)triggerCount));
                 timeToTrigger = 0.0f;
 
                 if (doReadout)

@@ -35,7 +35,7 @@ public class GameManager : Core
     public List<SceneAsset> LevelScenes = new List<SceneAsset>();
 #endif
 
-    public DebugLogging DebugLogging;
+    public static DebugLogging DebugLogging;
 
     #endregion
 

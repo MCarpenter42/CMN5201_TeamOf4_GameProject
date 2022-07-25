@@ -53,35 +53,38 @@ public class DebugLogging : Core
         debugLog.Add(">> LOGGING STARTED: " + logStart + " <<");
         debugLog.Add("");
         debugLog.Add("");
+        //GameManager.Instance.OnLog();
     }
 
     public void Log(string logString, string stackTrace, LogType type)
     {
-        string timestamp = DateTime.Now.ToString().Substring(11);
-
+        stack = stackTrace;
         string typeString = type.ToString();
 
-        logLineHeader = timestamp + " | " + typeString;
-        debugLog.Add(logLineHeader);
-        logLineContent = ">>> " + logString;
-        debugLog.Add(logLineContent);
-        debugLog.Add("");
-
-        stack = stackTrace;
-
-        GameManager.Instance.OnLog();
+        SendLogMessage(logString, typeString);
     }
 
     public void LogCommand(string logString)
     {
-        string timestamp = DateTime.Now.ToString().Substring(11);
-        string typeString = "ConsoleCommand";
+        SendLogMessage(logString, "ConsoleCommand");
+    }
+    
+    public void LogSystemMessage(string logString)
+    {
+        SendLogMessage(logString, "SystemMessage");
+    }
 
-        logLineHeader = timestamp + " | " + typeString;
+    public void SendLogMessage(string logString, string logType)
+    {
+        string timestamp = DateTime.Now.ToString().Substring(11);
+
+        logLineHeader = timestamp + " | " + logType;
         debugLog.Add(logLineHeader);
         logLineContent = ">>> " + logString;
         debugLog.Add(logLineContent);
         debugLog.Add("");
+
+        GameManager.Instance.OnLog();
     }
 
     public void LogToFile()
