@@ -228,6 +228,37 @@ public class Core : MonoBehaviour
         return new string[] { strMinutes, strSeconds, strSubSecs };
     }
 
+    public static string DecimalPlacesString(float value, int decPlc)
+    {
+        string valString = value.ToString();
+        if (valString.Contains("."))
+        {
+            int n = valString.IndexOf('.') + 1 + decPlc;
+            n = Mathf.Clamp(n, 0, valString.Length);
+            //Debug.Log(valString + ", " + valString.Length + ", " + n);
+            return valString.Substring(0, n);
+        }
+        else
+        {
+            return valString;
+        }
+    }
+    
+    public static float DecimalPlacesFloat(float value, int decPlc)
+    {
+        string valString = value.ToString();
+        if (valString.Contains("."))
+        {
+            int n = valString.IndexOf('.') + 1 + decPlc;
+            n = Mathf.Clamp(n, 0, valString.Length);
+            return float.Parse(valString.Substring(0, n));
+        }
+        else
+        {
+            return value;
+        }
+    }
+
     #endregion
 
     #region [ DATA STRUCTURE HANDLING ]

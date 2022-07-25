@@ -11,17 +11,19 @@ public class LevelController : Core
 {
     #region [ PROPERTIES ]
 
-    [Header("Level Properties")]
+    [Header("Scene Properties")]
     public SceneType sceneType = SceneType.LevelGeneric;
     [HideInInspector] public bool isGameplayLevel { get { return (sceneType.ToString().Substring(0, 5) == "Level"); } }
     public float levelFadeTime = 0.8f;
+
+    [Header("Ambient Audio")]
     public bool useAudioMusic = true;
     public bool useAudioAtmospheric = false;
     public bool useAudioBreeze = false;
     public bool useAudioFauna = false;
     public bool useAudioFoliage = false;
 
-    [Header("World Space Properties")]
+    [Header("World Space")]
     [SerializeField] public float gridCellScale = 1.0f;
     [HideInInspector] public WorldGrid worldGrid;
     [HideInInspector] public List<LevelObject> levelObjects = new List<LevelObject>();
@@ -172,14 +174,14 @@ public class LevelController : Core
     {
         if (GameManager.UIController.hud.levelHint != null)
         {
+            Prompt levelHint = GameManager.UIController.hud.levelHint.GetComponent<Prompt>();
+            levelHint.gameObject.SetActive(true);
+            levelHint.SetText(levelHintText, AdjustCondition.Never, AdjustCondition.Always);
+            levelHint.SetHiddenOffset(new Vector2(0.0f, levelHint.rTransform.rect.height + 20.0f));
+            levelHint.rTransform.anchoredPosition += levelHint.hiddenOffset;
+
             if (levelHintText != null && levelHintText.Length > 0)
             {
-                Prompt levelHint = GameManager.UIController.hud.levelHint.GetComponent<Prompt>();
-                levelHint.gameObject.SetActive(true);
-                levelHint.SetText(levelHintText, AdjustCondition.Never, AdjustCondition.Always);
-                levelHint.SetHiddenOffset(new Vector2(0.0f, levelHint.rTransform.rect.height + 20.0f));
-                levelHint.rTransform.anchoredPosition += levelHint.hiddenOffset;
-
                 float initialShowDelay = 1.0f;
                 float initialHideDelay = initialShowDelay + levelHint.fixedShowHideDelay;
                 levelHint.DoDelayedShow(true, initialShowDelay);
@@ -187,7 +189,7 @@ public class LevelController : Core
             }
             else
             {
-                GameManager.UIController.hud.levelHint.GetComponent<Prompt>().SetShown(false);
+                GameManager.UIController.hud.levelHint.SetShown(false);
             }
         }
     }
