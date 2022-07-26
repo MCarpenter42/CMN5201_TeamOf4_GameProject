@@ -32,14 +32,14 @@ public class Menu : UIElement
         SetActiveFrame(0);
     }
 
-    void Update()
+    protected override void Update()
     {
-
+        base.Update();
     }
 
-    void FixedUpdate()
+    protected override void FixedUpdate()
     {
-
+        base.FixedUpdate();
     }
 
     #endregion

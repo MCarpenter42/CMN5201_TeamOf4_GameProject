@@ -57,6 +57,8 @@ public class GameManager : Core
 
     public static bool[] levelsUnlocked = new bool[0];
 
+    public static bool gameEndProcessComplete = false;
+
     #endregion
 
     #region [ COROUTINES ]
@@ -112,15 +114,22 @@ public class GameManager : Core
             if (instance == null)
             {
                 instance = this;
+                DontDestroyOnLoad(gameObject);
             }
             else
             {
                 Destroy(this.gameObject);
             }
         
-            DontDestroyOnLoad(gameObject);
-
-            Setup();
+            if (onGameLoad)
+            {
+                OnAwake();
+                Setup();
+            }
+            else
+            {
+                OnAwake();
+            }
         }
     }
 
@@ -168,43 +177,17 @@ public class GameManager : Core
 
     void OnApplicationQuit()
     {
-        GameDataHandler.DataToDisk();
-#if UNITY_EDITOR
-        DebugLogging.LogToFile();
-#endif
+        if (!gameEndProcessComplete)
+        {
+            GameEndProcess();
+        }
     }
 
     #endregion
 
     /* - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
 
-    private void Setup()
-    {
-        GameDataHandler = GetOrAddComponent<GameDataHandler>(gameObject);
-
-        controlsInstance = GetOrAddComponent<Controls>(gameObject);
-        Controls = controlsInstance;
-
-        vidSettingsInstance = GetOrAddComponent<VideoSettings>(gameObject);
-        VideoSettings = vidSettingsInstance;
-
-        DebugLogging = GetOrAddComponent<DebugLogging>(gameObject);
-
-        if (onGameLoad)
-        {
-            DebugLogging.StartLogging();
-
-            GameDataHandler.LoadEncryptionKeys();
-            GameDataHandler.DataFromDisk();
-            GameDataHandler.GameStateFromData();
-            onGameLoad = false;
-        }
-
-        GetScenePaths();
-        OnSceneLoad();
-    }
-
-    public void OnSceneLoad()
+    public void OnAwake()
     {
         LevelController = FindObjectOfType<LevelController>();
         if (LevelController.isGameplayLevel)
@@ -219,7 +202,35 @@ public class GameManager : Core
         }
 
         AudioController = FindObjectOfType<AudioController>();
-        Listener = FindObjectOfType<AudioListener>().gameObject;
+    }
+
+    private void Setup()
+    {
+        GameDataHandler = GetOrAddComponent<GameDataHandler>(gameObject);
+
+        controlsInstance = GetOrAddComponent<Controls>(gameObject);
+        Controls = controlsInstance;
+
+        vidSettingsInstance = GetOrAddComponent<VideoSettings>(gameObject);
+        VideoSettings = vidSettingsInstance;
+
+        DebugLogging = GetOrAddComponent<DebugLogging>(gameObject);
+
+        GetScenePaths();
+
+        if (onGameLoad)
+        {
+            DebugLogging.StartLogging();
+
+            GameDataHandler.LoadEncryptionKeys();
+            GameDataHandler.DataFromDisk();
+            GameDataHandler.GameStateFromData();
+            onGameLoad = false;
+        }
+
+        Listener = GetChildrenWithComponent<AudioListener>(gameObject)[0];
+        DontDestroyOnLoad(Listener);
+        OnSceneLoad();
     }
 
     public void OnPause()
@@ -234,9 +245,12 @@ public class GameManager : Core
 
     public void OnLog()
     {
-        if (UIController.devConsole.console.visible)
+        if (UIController != null && UIController.devConsole != null)
         {
-            UIController.devConsole.UpdateLog();
+            if (UIController.devConsole.console.visible)
+            {
+                UIController.devConsole.UpdateLog();
+            }
         }
     }
 
@@ -323,6 +337,39 @@ public class GameManager : Core
 
     #region [ SCENE HANDLING ]
 
+    #region [ SETUP & QUERY ]
+
+    public void OnSceneLoad()
+    {
+        if (LevelController.isGameplayLevel)
+        {
+            Debug.Log("Gameplay level loaded");
+            Listener.transform.SetParent(Player.gameObject.transform, false);
+            Listener.transform.localPosition = new Vector3(0.0f, 0.4f, 0.0f);
+        }
+        else
+        {
+            Listener.transform.localPosition = new Vector3(0.0f, 200.0f, 0.0f);
+        }
+    }
+    
+    public void OnSceneLoad(int sceneIndex)
+    {
+        OnSceneLoad();
+
+        LevelController.sceneIndex = sceneIndex;
+        if (LevelController.isGameplayLevel)
+        {
+            for (int i = 0; i < scenePaths.levels.Length; i++)
+            {
+                if (sceneIndex == scenePaths.levels[i])
+                {
+                    LevelController.levelIndex = i;
+                }
+            }
+        }
+    }
+
     private void GetScenePaths()
     {
         string jsonData = File.ReadAllText(pathListFilepath);
@@ -344,6 +391,24 @@ public class GameManager : Core
         return -1;
     }
     
+    public bool IsLevelScene(int sceneIndex)
+    {
+        bool isLevelScene = false;
+        foreach (int index in scenePaths.levels)
+        {
+            if (sceneIndex == index)
+            {
+                isLevelScene = true;
+                break;
+            }
+        }
+        return isLevelScene;
+    }
+
+    #endregion
+
+    #region [ SCENE CATEGORIES ]
+
     public bool GoToMainMenu()
     {
         bool successful = false;
@@ -352,7 +417,7 @@ public class GameManager : Core
         {
             try
             {
-                ChangeScene(scenePaths.mainMenu);
+                ChangeScene(scenePaths.mainMenu, true, true, 2.0f);
                 successful = true;
             }
             catch
@@ -372,7 +437,7 @@ public class GameManager : Core
         {
             try
             {
-                ChangeScene(scenePaths.levels[index]);
+                ChangeScene(scenePaths.levels[index], true, true, 2.0f);
                 successful = true;
             }
             catch
@@ -382,11 +447,6 @@ public class GameManager : Core
         }
 
         return successful;
-    }
-    
-    public bool LoadLevelAdjusted(int index)
-    {
-        return LoadLevel(index - 1);
     }
     
     public bool LoadUnlockedLevel(int index)
@@ -400,41 +460,25 @@ public class GameManager : Core
             return false;
         }
     }
-    
-    public bool LoadUnlockedLevelAdjusted(int index)
-    {
-        if (InBounds(index, levelsUnlocked) && levelsUnlocked[index])
-        {
-            return LoadLevelAdjusted(index);
-        }
-        else
-        {
-            return false;
-        }
-    }
 
     public void NextLevel()
     {
-        StartCoroutine(DelayedChangeScene(LevelController.levelFadeTime));
-        if (GameManager.UIController.blackScreen != null)
+        UnlockLevel(LevelController.levelIndex + 1);
+
+        ChangeScene(LevelController.sceneIndex + 1, true, true);
+    }
+
+    public void UnlockLevel(int index)
+    {
+        if (InBounds(index, levelsUnlocked) && levelsUnlocked[index] == false)
         {
-            GameManager.UIController.BlackScreenFade(true, LevelController.levelFadeTime);
+            levelsUnlocked[index] = true;
         }
     }
 
-    public bool IsLevelScene(int sceneIndex)
-    {
-        bool isLevelScene = false;
-        foreach (int index in scenePaths.levels)
-        {
-            if (sceneIndex == index)
-            {
-                isLevelScene = true;
-                break;
-            }
-        }
-        return isLevelScene;
-    }
+    #endregion
+
+    #region [ SCENE CHANGES ]
 
     public void ChangeScene(int targetSceneIndex)
     {
@@ -466,14 +510,18 @@ public class GameManager : Core
     
     private IEnumerator IChangeScene(int targetSceneIndex, bool fadeOut, bool fadeIn, float loadScreenDelay)
     {
+        Listener.transform.parent = gameObject.transform;
+
         if (fadeOut)
         {
             UIController.BlackScreenFade(true, LevelController.levelFadeTime);
             AudioController.MusicFade(true, LevelController.levelFadeTime);
-            yield return new WaitForSeconds(LevelController.levelFadeTime);
+            yield return new WaitForSecondsRealtime(LevelController.levelFadeTime);
         }
 
-        AudioListener oldestListener = FindObjectOfType<AudioListener>();
+        Resume();
+
+        /*AudioListener oldestListener = FindObjectOfType<AudioListener>();
 
         AsyncOperation loading = SceneManager.LoadSceneAsync(scenePaths.levelTransition, LoadSceneMode.Additive);
         while (!loading.isDone)
@@ -490,7 +538,7 @@ public class GameManager : Core
         oldestListener = FindObjectOfType<AudioListener>();
 
         FindObjectOfType<Camera>().backgroundColor = UIController.blackoutColour;
-        yield return new WaitForSeconds(loadScreenDelay);
+        yield return new WaitForSecondsRealtime(loadScreenDelay);
 
         loading = SceneManager.LoadSceneAsync(targetSceneIndex, LoadSceneMode.Additive);
         while (!loading.isDone)
@@ -503,9 +551,16 @@ public class GameManager : Core
         while (!unloading.isDone)
         {
             yield return null;
+        }*/
+
+        AsyncOperation loading = SceneManager.LoadSceneAsync(targetSceneIndex);
+        while (!loading.isDone)
+        {
+            yield return null;
         }
 
-        OnSceneLoad();
+        OnSceneLoad(targetSceneIndex);
+        GameDataHandler.GameStateToData();
 
         sceneChangeComplete = true;
 
@@ -513,15 +568,17 @@ public class GameManager : Core
         {
             UIController.BlackScreenFade(false, LevelController.levelFadeTime);
             AudioController.MusicFade(false, LevelController.levelFadeTime);
-            yield return new WaitForSeconds(LevelController.levelFadeTime);
+            yield return new WaitForSecondsRealtime(LevelController.levelFadeTime);
         }
     }
 
-    private IEnumerator DelayedChangeScene(float time)
+    private IEnumerator DelayedChangeScene(float delay)
     {
-        yield return new WaitForSecondsRealtime(time);
+        yield return new WaitForSecondsRealtime(delay);
         GoToScene('+');
     }
+    
+    #endregion
 
     #endregion
 
@@ -541,6 +598,35 @@ public class GameManager : Core
     private void DebugOnUpdate()
     {
         //Debug.Log(FPS);
+    }
+
+    #endregion
+
+    #region [ ON QUIT ]
+
+    public void DelayedQuit(float delay)
+    {
+        GameEndProcess();
+        StartCoroutine(IDelayedQuit(delay));
+    }
+
+    private IEnumerator IDelayedQuit(float delay)
+    {
+        yield return new WaitForSecondsRealtime(delay);
+#if UNITY_EDITOR
+        EditorApplication.ExitPlaymode();
+#endif
+        Application.Quit();
+    }
+
+    private void GameEndProcess()
+    {
+        GameDataHandler.DataToDisk();
+#if UNITY_EDITOR
+        DebugLogging.LogToFile();
+#endif
+
+        gameEndProcessComplete = true;
     }
 
     #endregion

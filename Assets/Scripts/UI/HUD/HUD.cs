@@ -30,30 +30,23 @@ public class HUD : UIElement
 
 	#region [ BUILT-IN UNITY FUNCTIONS ]
 
-    void Awake()
+    protected override void Awake()
     {
+        base.Awake();
         GetComponents();
     }
 
-    void Start()
+    protected override void Start()
     {
+        base.Start();
         SetKeyPromptLabels();
         foreach (Prompt prompt in prompts)
         {
-            prompt.SetShown(false);
+            prompt.SetShown(false, ShowHide.Instant);
+            prompt.gameObject.SetActive(true);
         }
     }
 	
-    void Update()
-    {
-        
-    }
-
-    void FixedUpdate()
-    {
-        
-    }
-
 	#endregion
 
     /* - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */

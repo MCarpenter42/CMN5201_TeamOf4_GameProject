@@ -26,8 +26,6 @@ public class GameDataHandler : Core
 #endif
 
     private bool keysLoaded = false;
-    private bool doSave = false;
-    private bool startupLoaded = false;
 
     #endregion
 
@@ -72,19 +70,12 @@ public class GameDataHandler : Core
 
     public void GameStateToData()
     {
-        if (doSave)
-        {
-
-        }
+        DataMaster.levelsUnlocked = GameManager.levelsUnlocked;
     }
 
     public void GameStateFromData()
     {
-        if (startupLoaded)
-        {
-            doSave = true;
-            GameManager.levelsUnlocked = DataMaster.levelsUnlocked;
-        }
+        GameManager.levelsUnlocked = DataMaster.levelsUnlocked;
     }
 
     #endregion
@@ -121,40 +112,42 @@ public class GameDataHandler : Core
         {
             string encString = File.ReadAllText(saveDataFilepath);
             EncryptedObject encData = JsonUtility.FromJson<EncryptedObject>(encString);
-            /*try
-            {*/
-                DataMaster = EncryptionHandler.AES.Decrypt<GameData>(encData, keys.aesKey, keys.aesIV);
-            /*}
-            catch
+            DataMaster = EncryptionHandler.AES.Decrypt<GameData>(encData, keys.aesKey, keys.aesIV);
+            if (DataMaster.levelsUnlocked.Length == 0)
             {
-                throw new Exception("ERROR: Failed to decrypt save file, as it was saved using different encryption keys to those currently in use!");
-            }*/
+                Debug.Log("Length of loaded level unlock array is 0!");
+                SetupUnlockArray();
+                DataToDisk();
+            }
         }
         else
         {
-            int n = GameManager.scenePaths.levels.Length;
-            DataMaster.levelsUnlocked = new bool[n];
-            for (int i = 0; i < n; i++)
-            {
-                if (i == 0)
-                {
-                    DataMaster.levelsUnlocked[i] = true;
-                }
-                else
-                {
-                    DataMaster.levelsUnlocked[i] = false;
-                }
-            }
-
+            SetupUnlockArray();
+            
             DataToDisk();
         }
     }
 
     #endregion
     
-    #region [  ]
+    #region [ OTHER ]
 
-
+    private void SetupUnlockArray()
+    {
+        int n = GameManager.scenePaths.levels.Length;
+        DataMaster.levelsUnlocked = new bool[n];
+        for (int i = 0; i < n; i++)
+        {
+            if (i == 0)
+            {
+                DataMaster.levelsUnlocked[i] = true;
+            }
+            else
+            {
+                DataMaster.levelsUnlocked[i] = false;
+            }
+        }
+    }
 
     #endregion
 

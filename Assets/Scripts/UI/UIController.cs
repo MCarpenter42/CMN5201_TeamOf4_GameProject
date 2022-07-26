@@ -186,7 +186,7 @@ public class UIController : Core
         while (timePassed < duration)
         {
             yield return null;
-            timePassed += Time.deltaTime;
+            timePassed += Time.unscaledDeltaTime;
             float delta = timePassed / duration;
             blackScreen.color = Color.Lerp(clrStart, clrEnd, delta);
         }

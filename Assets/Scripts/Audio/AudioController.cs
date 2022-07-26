@@ -495,6 +495,7 @@ public class AudioController : Core
     private IEnumerator MusicVolumeCheck()
     {
         yield return new WaitForSeconds(0.2f);
+        musicPlayer.clip = SetupMusic();
         if (musicPlayer.volume == 0.0f && defaultMusicVolume > 0.0f)
         {
             MusicFade(false, 0.4f);
@@ -523,7 +524,7 @@ public class AudioController : Core
         while (timePassed <= fadeTime)
         {
             yield return null;
-            timePassed += Time.deltaTime;
+            timePassed += Time.unscaledDeltaTime;
             float delta = InterpDelta.CosCurve(timePassed / fadeTime);
             musicPlayer.volume = Mathf.Lerp(volStart, volTarget, delta);
         }

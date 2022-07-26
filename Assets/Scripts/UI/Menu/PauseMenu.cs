@@ -41,6 +41,7 @@ public class PauseMenu : Menu
 
     public void LoadMenu()
     {
+        SetShown(false);
         GameManager.Instance.GoToMainMenu();
     }
 
@@ -52,6 +53,6 @@ public class PauseMenu : Menu
 
     public void Quit()
     {
-        Application.Quit();
+        GameManager.Instance.Exit();
     }
 }

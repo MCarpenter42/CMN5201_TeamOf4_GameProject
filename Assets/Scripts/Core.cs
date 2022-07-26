@@ -81,10 +81,7 @@ public class Core : MonoBehaviour
     public void Exit()
     {
         Debug.Log("Exiting game...");
-        Application.Quit();
-#if UNITY_EDITOR
-        EditorApplication.ExitPlaymode();
-#endif
+        GameManager.Instance.DelayedQuit(0.25f);
     }
 
     #endregion

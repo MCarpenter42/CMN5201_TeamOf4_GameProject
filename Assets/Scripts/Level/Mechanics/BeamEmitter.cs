@@ -211,6 +211,7 @@ public class BeamEmitter : Core
                     GameObject sfxObj = Instantiate(sfxPrefab.gameObject, transform);
                     SFXSource sfx = sfxObj.GetComponent<SFXSource>();
                     sfx.SetProperties(0.5f, true, 0.0f, 3.0f);
+                    sfx.source.playOnAwake = false; 
                     beamAudio.Add(sfx);
                 }
             }

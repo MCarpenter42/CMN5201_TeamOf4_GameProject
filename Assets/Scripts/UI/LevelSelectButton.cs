@@ -35,6 +35,7 @@ public class LevelSelectButton : AudioButton
     protected override void Awake()
     {
         base.Awake();
+        button.enabled = CheckUnlockState();
         UpdateVisuals();
     }
 
@@ -62,6 +63,12 @@ public class LevelSelectButton : AudioButton
     }
 
     /* - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
+
+    private bool CheckUnlockState()
+    {
+        int index = level - 1;
+        return GameManager.levelsUnlocked[index];
+    }
 
     private void UpdateVisuals()
     {
@@ -100,18 +107,31 @@ public class LevelSelectButton : AudioButton
                 break;
         }
 
-        if (!button.enabled)
+        if (button.enabled)
         {
-            clr *= 0.6f;
+            img.color = clr;
+            button.targetGraphic.color = Color.white;
         }
-
-        img.color = clr;
+        else
+        {
+            img.color = GetDisableColour(clr);
+            button.targetGraphic.color = GetDisableColour(Color.white);
+        }
     }
 
     private void ButtonLevelLoad()
     {
-        //GameManager.Instance.LoadUnlockedLevelAdjusted(level);
-        GameManager.Instance.LoadLevelAdjusted(level);
+        //GameManager.Instance.LoadUnlockedLevel(level - 1);
+        GameManager.Instance.LoadLevel(level - 1);
+    }
+
+    private Color GetDisableColour(Color clr)
+    {
+        Color disClr = Color.white;
+        disClr.r = clr.r * 0.5f;
+        disClr.g = clr.g * 0.5f;
+        disClr.b = clr.b * 0.5f;
+        return disClr;
     }
 
 }

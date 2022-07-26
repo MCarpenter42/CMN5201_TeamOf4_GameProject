@@ -9,6 +9,7 @@ TagManager:
   - Pivot
   - gamemanager
   - ExitDoor
+  - GameStartup
   layers:
   - Default
   - TransparentFX

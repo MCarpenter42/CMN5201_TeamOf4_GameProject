@@ -132,7 +132,16 @@ public class UIElement : Core, IPointerEnterHandler, IPointerExitHandler
     {
         if (showHideType == ShowHide.Instant || showHideType == ShowHide.Fade)
         {
-            gameObject.SetActive(show);
+            if (show)
+            {
+                gameObject.SetActive(show);
+                rTransform.anchoredPosition = visiblePos;
+            }
+            else
+            {
+                rTransform.anchoredPosition = visiblePos + hiddenOffset;
+                gameObject.SetActive(show);
+            }
             visible = show;
         }
         else if (showHideType == ShowHide.Slide)
@@ -156,7 +165,16 @@ public class UIElement : Core, IPointerEnterHandler, IPointerExitHandler
     {
         if (showHideType == ShowHide.Instant || showHideType == ShowHide.Fade)
         {
-            gameObject.SetActive(show);
+            if (show)
+            {
+                gameObject.SetActive(show);
+                rTransform.anchoredPosition = visiblePos;
+            }
+            else
+            {
+                rTransform.anchoredPosition = visiblePos + hiddenOffset;
+                gameObject.SetActive(show);
+            }
             visible = show;
         }
         else if (showHideType == ShowHide.Slide)
@@ -186,7 +204,16 @@ public class UIElement : Core, IPointerEnterHandler, IPointerExitHandler
         if (showHideType == ShowHide.Instant || showHideType == ShowHide.Fade)
         {
             visible = show;
-            gameObject.SetActive(show);
+            if (show)
+            {
+                gameObject.SetActive(show);
+                rTransform.anchoredPosition = visiblePos;
+            }
+            else
+            {
+                rTransform.anchoredPosition = visiblePos + hiddenOffset;
+                gameObject.SetActive(show);
+            }
         }
         else if (showHideType == ShowHide.Slide)
         {

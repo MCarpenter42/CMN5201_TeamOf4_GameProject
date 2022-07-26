@@ -30,7 +30,8 @@ public class LevelController : Core
     [SerializeField] public bool useTileGrid = true;
     [HideInInspector] public List<FloorTile> floorTiles = new List<FloorTile>();
 
-    private int levelIndex = -1;
+    [HideInInspector] public int sceneIndex = -1;
+    [HideInInspector] public int levelIndex = -1;
 
     private Player player;
     private StartPoint startPoint;
@@ -120,12 +121,6 @@ public class LevelController : Core
         if (useTileGrid)
         {
             SetTileColours();
-        }
-
-        int currentSceneIndex = SceneManager.GetActiveScene().buildIndex;
-        if (GameManager.Instance.IsLevelScene(currentSceneIndex))
-        {
-            levelIndex = currentSceneIndex;
         }
     }
 
