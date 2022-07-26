@@ -46,8 +46,13 @@ public class UIController : Core
             blackScreen.gameObject.SetActive(true);
             if (blackoutOnLoad)
             {
-                blackScreen.color = blackoutColour;
+                blackoutColour.a = 1.0f;
             }
+            else
+            {
+                blackoutColour.a = 0.0f;
+            }
+            blackScreen.color = blackoutColour;
         }
     }
 
@@ -191,5 +196,10 @@ public class UIController : Core
             blackScreen.color = Color.Lerp(clrStart, clrEnd, delta);
         }
         blackScreen.color = clrEnd;
+    }
+
+    public void GoToMainMenu()
+    {
+        GameManager.Instance.GoToMainMenu();
     }
 }

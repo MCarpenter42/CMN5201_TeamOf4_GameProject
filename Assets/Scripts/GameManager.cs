@@ -57,6 +57,8 @@ public class GameManager : Core
 
     public static bool[] levelsUnlocked = new bool[0];
 
+    public Color blackoutColour;
+
     public static bool gameEndProcessComplete = false;
 
     #endregion
@@ -200,6 +202,7 @@ public class GameManager : Core
         {
             UIController.pauseMenu.Show(false);
         }
+        UIController.blackoutColour = blackoutColour;
 
         AudioController = FindObjectOfType<AudioController>();
     }
@@ -229,7 +232,6 @@ public class GameManager : Core
         }
 
         Listener = GetChildrenWithComponent<AudioListener>(gameObject)[0];
-        DontDestroyOnLoad(Listener);
         OnSceneLoad();
     }
 
@@ -275,7 +277,7 @@ public class GameManager : Core
 
     private void HandleInputs()
     {
-        if (LevelController.isGameplayLevel)
+        if (LevelController.isGameplayLevel && !UIController.devConsole.console.visible)
         {
             LevelController.PlayerInputs();
             LevelController.CameraInputs();
@@ -341,9 +343,13 @@ public class GameManager : Core
 
     public void OnSceneLoad()
     {
+        OnSceneLoad(SceneIndexFromName(SceneManager.GetActiveScene().name));
+    }
+    
+    public void OnSceneLoad(int sceneIndex)
+    {
         if (LevelController.isGameplayLevel)
         {
-            Debug.Log("Gameplay level loaded");
             Listener.transform.SetParent(Player.gameObject.transform, false);
             Listener.transform.localPosition = new Vector3(0.0f, 0.4f, 0.0f);
         }
@@ -351,13 +357,9 @@ public class GameManager : Core
         {
             Listener.transform.localPosition = new Vector3(0.0f, 200.0f, 0.0f);
         }
-    }
-    
-    public void OnSceneLoad(int sceneIndex)
-    {
-        OnSceneLoad();
 
         LevelController.sceneIndex = sceneIndex;
+
         if (LevelController.isGameplayLevel)
         {
             for (int i = 0; i < scenePaths.levels.Length; i++)
@@ -510,43 +512,54 @@ public class GameManager : Core
     
     private IEnumerator IChangeScene(int targetSceneIndex, bool fadeOut, bool fadeIn, float loadScreenDelay)
     {
-        Listener.transform.parent = gameObject.transform;
+        Listener.transform.SetParent(gameObject.transform);
+        int currentSceneIndex = LevelController.sceneIndex;
 
         if (fadeOut)
         {
             UIController.BlackScreenFade(true, LevelController.levelFadeTime);
-            AudioController.MusicFade(true, LevelController.levelFadeTime);
+            AudioController.AudioFade(true, LevelController.levelFadeTime);
             yield return new WaitForSecondsRealtime(LevelController.levelFadeTime);
         }
 
         Resume();
 
-        AsyncOperation loading = SceneManager.LoadSceneAsync(scenePaths.levelTransition);
+        AsyncOperation loading = SceneManager.LoadSceneAsync(scenePaths.levelTransition, LoadSceneMode.Additive);
         while (!loading.isDone)
         {
             yield return null;
         }
+        loading = null;
 
-        /*AsyncOperation unloading = SceneManager.UnloadSceneAsync(SceneManager.GetActiveScene());
+        Scene sceneToSetActive = SceneManager.GetSceneByPath(scenePaths.paths[scenePaths.levelTransition]);
+        SceneManager.SetActiveScene(sceneToSetActive);
+
+        AsyncOperation unloading = SceneManager.UnloadSceneAsync(scenePaths.paths[currentSceneIndex]);
         while (!unloading.isDone)
         {
             yield return null;
-        }*/
+        }
+        unloading = null;
 
         FindObjectOfType<Camera>().backgroundColor = UIController.blackoutColour;
         yield return new WaitForSecondsRealtime(loadScreenDelay);
 
-        loading = SceneManager.LoadSceneAsync(targetSceneIndex);
+        loading = SceneManager.LoadSceneAsync(targetSceneIndex, LoadSceneMode.Additive);
         while (!loading.isDone)
         {
             yield return null;
         }
+        loading = null;
 
-        /*unloading = SceneManager.UnloadSceneAsync(SceneManager.GetActiveScene());
+        sceneToSetActive = SceneManager.GetSceneByPath(scenePaths.paths[targetSceneIndex]);
+        SceneManager.SetActiveScene(sceneToSetActive);
+
+        unloading = SceneManager.UnloadSceneAsync(scenePaths.paths[scenePaths.levelTransition]);
         while (!unloading.isDone)
         {
             yield return null;
-        }*/
+        }
+        unloading = null;
 
         /*AsyncOperation loading = SceneManager.LoadSceneAsync(targetSceneIndex);
         while (!loading.isDone)
@@ -554,6 +567,7 @@ public class GameManager : Core
             yield return null;
         }*/
 
+        OnAwake();
         OnSceneLoad(targetSceneIndex);
         GameDataHandler.GameStateToData();
 
@@ -562,7 +576,7 @@ public class GameManager : Core
         if (fadeIn)
         {
             UIController.BlackScreenFade(false, LevelController.levelFadeTime);
-            AudioController.MusicFade(false, LevelController.levelFadeTime);
+            AudioController.AudioFade(false, LevelController.levelFadeTime);
             yield return new WaitForSecondsRealtime(LevelController.levelFadeTime);
         }
     }

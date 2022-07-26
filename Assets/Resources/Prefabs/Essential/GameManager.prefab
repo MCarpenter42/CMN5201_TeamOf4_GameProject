@@ -139,6 +139,7 @@ MonoBehaviour:
   - {fileID: 102900000, guid: a28e03ddf07569e47ad780bb9b316d9e, type: 3}
   - {fileID: 102900000, guid: 6d4dc08bdfa08e548a9162409ddef292, type: 3}
   - {fileID: 102900000, guid: e7c5ab9cee0cd4e489add692cf08e408, type: 3}
+  blackoutColour: {r: 0.05882353, g: 0.05882353, b: 0.05882353, a: 1}
 --- !u!114 &-8650939316069208973
 MonoBehaviour:
   m_ObjectHideFlags: 0

@@ -124,13 +124,12 @@ public class AudioController : Core
 
     void Start()
     {
-        AudioClip music = SetupMusic();
-        musicPlayer.clip = music;
+        SetupMusic();
 
         musicPlayer.volume = 0.0f;
         musicPlayer.Play();
 
-        if (music != null && musicPlayer != null && GameManager.LevelController.useAudioMusic)
+        if (musicPlayer != null && musicPlayer.clip != null && GameManager.LevelController.useAudioMusic)
         {
             StartCoroutine(MusicVolumeCheck());
         }
@@ -176,7 +175,7 @@ public class AudioController : Core
         CopyListData(sources, sfxSources);
     }
 
-    private AudioClip SetupMusic()
+    private void SetupMusic()
     {
         if (!useAltMusic)
         {
@@ -184,30 +183,37 @@ public class AudioController : Core
             {
                 case SceneType.LevelGeneric:
                 default:
-                    return musicOther;
+                    musicPlayer.clip = musicOther;
+                    break;
 
                 case SceneType.MenuAndUI:
-                    return musicMenu;
+                    musicPlayer.clip = musicMenu;
+                    break;
 
                 case SceneType.CutsceneAndTransition:
-                    return musicSceneLoad;
+                    musicPlayer.clip = musicSceneLoad;
+                    break;
 
                 case SceneType.LevelBright:
-                    return musicLevelBright;
+                    musicPlayer.clip = musicLevelBright;
+                    break;
 
                 case SceneType.LevelDim:
-                    return musicLevelDim;
+                    musicPlayer.clip = musicLevelDim;
+                    break;
 
                 case SceneType.LevelDark:
-                    return musicLevelDark;
+                    musicPlayer.clip = musicLevelDark;
+                    break;
 
                 case SceneType.LevelSpecial:
-                    return musicOther;
+                    musicPlayer.clip = musicOther;
+                    break;
             }
         }
         else
         {
-            return musicOther;
+            musicPlayer.clip = musicOther;
         }
     }
 
@@ -490,12 +496,41 @@ public class AudioController : Core
 
     #endregion
 
+    public void AudioFade(bool fadeOut, float fadeTime)
+    {
+        StartCoroutine(IAudioFade(fadeOut, fadeTime));
+    }
+
+    private IEnumerator IAudioFade(bool fadeOut, float fadeTime)
+    {
+        float volStart = 0.0f;
+        float volTarget = 0.0f;
+        if (fadeOut)
+        {
+            volStart = 1.0f;
+        }
+        else
+        {
+            volTarget = 1.0f;
+        }
+
+        float timePassed = 0.0f;
+        while (timePassed <= fadeTime)
+        {
+            yield return null;
+            timePassed += Time.unscaledDeltaTime;
+            float delta = InterpDelta.CosCurve(timePassed / fadeTime);
+            AudioListener.volume = Mathf.Lerp(volStart, volTarget, delta);
+        }
+        AudioListener.volume = volTarget;
+    }
+
     #region [ MUSIC ]
 
     private IEnumerator MusicVolumeCheck()
     {
         yield return new WaitForSeconds(0.2f);
-        musicPlayer.clip = SetupMusic();
+        SetupMusic();
         if (musicPlayer.volume == 0.0f && defaultMusicVolume > 0.0f)
         {
             MusicFade(false, 0.4f);

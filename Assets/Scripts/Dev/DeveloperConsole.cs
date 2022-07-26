@@ -577,13 +577,20 @@ public class ConsoleCommand
         }
         else
         {
-            if (parentString != null && parentString.Length > 0)
+            if (noEvents)
             {
-                Debug.LogError("ERROR: Command \"" + parentString + cmdString + "\" requires an argument input!");
+                Debug.LogError("ERROR: Command \"" + parentString + cmdString + "\" cannot be used without a subcommand!");
             }
             else
             {
-                Debug.LogError("ERROR: Command \"" + cmdString + "\" requires an argument input!");
+                if (parentString != null && parentString.Length > 0)
+                {
+                    Debug.LogError("ERROR: Command \"" + parentString + cmdString + "\" requires an argument input!");
+                }
+                else
+                {
+                    Debug.LogError("ERROR: Command \"" + cmdString + "\" requires an argument input!");
+                }
             }
         }
 
