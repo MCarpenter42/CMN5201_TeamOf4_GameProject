@@ -417,7 +417,7 @@ public class GameManager : Core
         {
             try
             {
-                ChangeScene(scenePaths.mainMenu, true, true, 2.0f);
+                ChangeScene(scenePaths.mainMenu, true, true, 1.0f);
                 successful = true;
             }
             catch
@@ -437,7 +437,7 @@ public class GameManager : Core
         {
             try
             {
-                ChangeScene(scenePaths.levels[index], true, true, 2.0f);
+                ChangeScene(scenePaths.levels[index], true, true, 1.0f);
                 successful = true;
             }
             catch
@@ -463,9 +463,9 @@ public class GameManager : Core
 
     public void NextLevel()
     {
-        UnlockLevel(LevelController.levelIndex + 1);
-
-        ChangeScene(LevelController.sceneIndex + 1, true, true);
+        int n = LevelController.levelIndex + 1;
+        UnlockLevel(n);
+        LoadLevel(n);
     }
 
     public void UnlockLevel(int index)
@@ -521,43 +521,38 @@ public class GameManager : Core
 
         Resume();
 
-        /*AudioListener oldestListener = FindObjectOfType<AudioListener>();
-
-        AsyncOperation loading = SceneManager.LoadSceneAsync(scenePaths.levelTransition, LoadSceneMode.Additive);
+        AsyncOperation loading = SceneManager.LoadSceneAsync(scenePaths.levelTransition);
         while (!loading.isDone)
         {
             yield return null;
-            oldestListener.enabled = (FindObjectsOfType<AudioListener>().Length == 1);
         }
 
-        AsyncOperation unloading = SceneManager.UnloadSceneAsync(SceneManager.GetActiveScene());
-        while (!unloading.isDone)
-        {
-            yield return null;
-        }
-        oldestListener = FindObjectOfType<AudioListener>();
-
-        FindObjectOfType<Camera>().backgroundColor = UIController.blackoutColour;
-        yield return new WaitForSecondsRealtime(loadScreenDelay);
-
-        loading = SceneManager.LoadSceneAsync(targetSceneIndex, LoadSceneMode.Additive);
-        while (!loading.isDone)
-        {
-            yield return null;
-            oldestListener.enabled = (FindObjectsOfType<AudioListener>().Length == 1);
-        }
-
-        unloading = SceneManager.UnloadSceneAsync(SceneManager.GetActiveScene());
+        /*AsyncOperation unloading = SceneManager.UnloadSceneAsync(SceneManager.GetActiveScene());
         while (!unloading.isDone)
         {
             yield return null;
         }*/
 
-        AsyncOperation loading = SceneManager.LoadSceneAsync(targetSceneIndex);
+        FindObjectOfType<Camera>().backgroundColor = UIController.blackoutColour;
+        yield return new WaitForSecondsRealtime(loadScreenDelay);
+
+        loading = SceneManager.LoadSceneAsync(targetSceneIndex);
         while (!loading.isDone)
         {
             yield return null;
         }
+
+        /*unloading = SceneManager.UnloadSceneAsync(SceneManager.GetActiveScene());
+        while (!unloading.isDone)
+        {
+            yield return null;
+        }*/
+
+        /*AsyncOperation loading = SceneManager.LoadSceneAsync(targetSceneIndex);
+        while (!loading.isDone)
+        {
+            yield return null;
+        }*/
 
         OnSceneLoad(targetSceneIndex);
         GameDataHandler.GameStateToData();
