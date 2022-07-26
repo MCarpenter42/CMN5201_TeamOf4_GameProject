@@ -2863,10 +2863,40 @@ MonoBehaviour:
   fixedShowHideDelay: 0
   showHideType: 0
   transitionTime: 0.1
-  hiddenOffset: {x: 0, y: 0}
   slideMovementStyle: 0
   visiblePos: {x: 0, y: 0}
+  hiddenOffset: {x: 0, y: 0}
   opacity: 1
+  onShow:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 7457477489808862131}
+        m_TargetAssemblyTypeName: Core, Assembly-CSharp
+        m_MethodName: Pause
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+  onHide:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 7457477489808862131}
+        m_TargetAssemblyTypeName: Core, Assembly-CSharp
+        m_MethodName: Resume
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
   menuFrames: []
   activeFrame: -1
   menuFrame: {fileID: 7457477488264109448}

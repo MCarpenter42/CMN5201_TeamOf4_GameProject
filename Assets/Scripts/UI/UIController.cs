@@ -92,7 +92,7 @@ public class UIController : Core
     {
         if (Input.GetKeyDown(Controls.General.Pause.Key) && pauseMenu != null)
         {
-            pauseMenu.Show(!GameManager.isPaused);
+            pauseMenu.SetShown(!GameManager.isPaused);
         }
     }
 

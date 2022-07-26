@@ -43,7 +43,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e6b377f16b3849f408c5d478d534228f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  isGameplayLevel: 1
+  sceneType: 0
+  levelFadeTime: 0.8
+  useAudioMusic: 1
+  useAudioAtmospheric: 0
+  useAudioBreeze: 0
+  useAudioFauna: 0
+  useAudioFoliage: 0
   gridCellScale: 1
   worldGrid: {fileID: 0}
   levelObjects: []
