@@ -361,8 +361,7 @@ public class Core : MonoBehaviour
             for (int i = 0; i < parentObj.transform.childCount; i++)
             {
                 GameObject child = parentObj.transform.GetChild(i).gameObject;
-                T childComponent;
-                if (child.TryGetComponent<T>(out childComponent))
+                if (child.TryGetComponent<T>(out T childComponent))
                 {
                     childrenWithComponent.Add(child);
                 }
@@ -370,6 +369,26 @@ public class Core : MonoBehaviour
         }
 
         return childrenWithComponent;
+    }
+    
+    // I makes lists of children with a specific component often enough that
+    // this was worth creating as a static function.
+    public static List<T> GetComponentsInChildren<T>(GameObject parentObj)
+    {
+        List<T> componentsInChildren = new List<T>();
+        if (parentObj.transform.childCount > 0)
+        {
+            for (int i = 0; i < parentObj.transform.childCount; i++)
+            {
+                GameObject child = parentObj.transform.GetChild(i).gameObject;
+                if (child.TryGetComponent<T>(out T childComponent))
+                {
+                    componentsInChildren.Add(childComponent);
+                }
+            }
+        }
+
+        return componentsInChildren;
     }
 
     // Pretty much the same deal here as with the "children with component" function.

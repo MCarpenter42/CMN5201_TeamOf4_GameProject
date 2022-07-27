@@ -12,11 +12,16 @@ public class AudioButton : UIElement
 {
     public enum ButtonType { Standard, Heavy, Slider };
 
-    protected Button button;
+    protected Button button { get { return GetOrAddComponent<Button>(gameObject); } }
     [Header("Button Properties")]
     [SerializeField] Graphic targetGraphic;
     [SerializeField] ColorBlock colours = new ColorBlock
     {
+        normalColor = Color.white,
+        highlightedColor = new Color(0.9607843f, 0.9607843f, 0.9607843f, 1.0000000f),
+        pressedColor = new Color(0.7843137f, 0.7843137f, 0.7843137f, 1.0000000f),
+        selectedColor = new Color(0.9607843f, 0.9607843f, 0.9607843f, 1.0000000f),
+        disabledColor = new Color(0.7843137f, 0.7843137f, 0.7843137f, 0.5019608f),
         colorMultiplier = 1.0f,
         fadeDuration = 0.1f
     };
@@ -31,19 +36,21 @@ public class AudioButton : UIElement
     protected override void Awake()
     {
         base.Awake();
-        ButtonComponent();
+        ApplyButtonProperties();
     }
 
     protected override void Start()
     {
         base.Start();
-        AddListeners();
+        if (Application.isPlaying)
+        {
+            AddListeners();
+        }
     }
 
 #if UNITY_EDITOR
     protected override void Update()
     {
-        ButtonComponent();
         ApplyButtonProperties();
     }
 #endif
@@ -52,13 +59,19 @@ public class AudioButton : UIElement
 
     /* - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
 
+    public bool SetLabel(string text)
+    {
+        List<TMP_Text> textChildren = GetComponentsInChildren<TMP_Text>(button.gameObject);
+        if (textChildren.Count > 0)
+        {
+            textChildren[0].text = text;
+        }
+
+        return (textChildren.Count > 0);
+    }
+
     protected void ButtonComponent()
     {
-        button = gameObject.GetComponent<Button>();
-        if (button == null)
-        {
-            button = gameObject.AddComponent<Button>();
-        }
         ApplyButtonProperties();
     }
 

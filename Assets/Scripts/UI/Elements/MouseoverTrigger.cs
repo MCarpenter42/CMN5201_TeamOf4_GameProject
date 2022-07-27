@@ -8,7 +8,7 @@ using UnityEngine.EventSystems;
 using UnityEditor;
 using TMPro;
 
-public class MouseoverTrigger : UIElement
+public class MouseoverTrigger : UIElement, IPointerEnterHandler, IPointerExitHandler
 {
     public bool listenForMouseover = true;
 
@@ -20,16 +20,18 @@ public class MouseoverTrigger : UIElement
 
     #region [ BUILT-IN UNITY FUNCTIONS ]
 
-    public override void EventOnPointerEnter()
+    public override void OnPointerEnter(PointerEventData eventData)
     {
+        base.OnPointerEnter(eventData);
         if (listenForMouseover)
         {
             pointerEnterEvent.Invoke();
         }
     }
 
-    public override void EventOnPointerExit()
+    public override void OnPointerExit(PointerEventData eventData)
     {
+        base.OnPointerExit(eventData);
         if (listenForMouseover)
         {
             pointerExitEvent.Invoke();

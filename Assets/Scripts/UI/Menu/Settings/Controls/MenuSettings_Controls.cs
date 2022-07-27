@@ -29,24 +29,25 @@ public class MenuSettings_Controls : Menu
 
     #region [ BUILT-IN UNITY FUNCTIONS ]
 
-    void Awake()
+    protected override void Awake()
     {
+        base.Awake();
         GetComponents();
     }
 
-    void Start()
+    protected override void Start()
     {
-
+        base.Start();
     }
 
-    void Update()
+    protected override void Update()
     {
-
+        base.Update();
     }
 
-    void FixedUpdate()
+    protected override void FixedUpdate()
     {
-
+        base.FixedUpdate();
     }
 
     #endregion

@@ -14,10 +14,12 @@ public class UIElement : Core, IPointerEnterHandler, IPointerExitHandler
 
     public enum ShowHide { Instant, Fade, Slide };
 
-    [HideInInspector] public RectTransform rTransform;
+    public RectTransform rTransform { get { return gameObject.GetComponent<RectTransform>(); } }
     [HideInInspector] public List<Graphic> childGraphicElements = new List<Graphic>();
 
     [HideInInspector] public bool visible;
+
+    [HideInInspector] public bool mouseOver = false;
 
     [Header("UI Element Properties")]
     public float fixedShowHideDelay = 0.0f;
@@ -40,52 +42,44 @@ public class UIElement : Core, IPointerEnterHandler, IPointerExitHandler
 
     protected virtual void Awake()
     {
-        GetGenericComponents();
+        if (Application.isPlaying)
+        {
+            GetGenericComponents();
+        }
     }
 
     protected virtual void Start()
     {
 
     }
-    
+
     protected virtual void Update()
     {
 
     }
-    
+
     protected virtual void FixedUpdate()
     {
 
     }
 
-    public void OnPointerEnter(PointerEventData eventData)
+    public virtual void OnPointerEnter(PointerEventData eventData)
     {
-        EventOnPointerEnter();
+        mouseOver = true;
     }
-    
-    public void OnPointerExit(PointerEventData eventData)
+
+    public virtual void OnPointerExit(PointerEventData eventData)
     {
-        EventOnPointerExit();
+        mouseOver = false;
     }
+
     #endregion
-
-    /* - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
-
-    public virtual void EventOnPointerEnter()
-    {
-
-    }
-
-    public virtual void EventOnPointerExit()
-    {
-
-    }
 
     /* - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
 
     public void GetGenericComponents()
     {
-        rTransform = GetComponent<RectTransform>();
+        //rTransform = GetComponent<RectTransform>();
         if (visiblePos == Vector2.zero)
         {
             visiblePos = rTransform.anchoredPosition;

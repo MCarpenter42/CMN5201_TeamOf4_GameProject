@@ -3,16 +3,14 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
-using UnityEngine.EventSystems;
 using UnityEditor;
 using TMPro;
 
-public class ControlListItem : UIElement
+public class MenuSettings : Menu
 {
     #region [ PROPERTIES ]
 
-    [HideInInspector] public string targetInput;
-    [HideInInspector] public int index;
+
 
     #endregion
 
@@ -44,18 +42,4 @@ public class ControlListItem : UIElement
 
     /* - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
 
-    #region [ SETUP ]
-
-    public void ReceiveProperties(string targetInput, int index)
-    {
-        this.targetInput = targetInput;
-        this.index = index;
-    }
-
-    public void SetPosition()
-    {
-
-    }
-
-    #endregion
 }
