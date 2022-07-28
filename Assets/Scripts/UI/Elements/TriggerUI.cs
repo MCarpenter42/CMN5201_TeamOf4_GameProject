@@ -47,7 +47,7 @@ public class TriggerUI : MonoBehaviour
             Destroy(Jewel);
             Destroy(Scrolls);
             Destroy(GameObject.FindWithTag("gamemanager"));
-            SceneManager.LoadScene(19);
+            SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex +1);
             
             
         }
