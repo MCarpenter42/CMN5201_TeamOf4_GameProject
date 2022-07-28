@@ -87,6 +87,7 @@ public class DebugLogging : Core
         GameManager.Instance.OnLog();
     }
 
+#if UNITY_EDITOR
     public void LogToFile()
     {
         if (!AssetDatabase.IsValidFolder($"Assets/OutputLogs"))
@@ -106,4 +107,5 @@ public class DebugLogging : Core
 
         NewLog();
     }
+#endif
 }

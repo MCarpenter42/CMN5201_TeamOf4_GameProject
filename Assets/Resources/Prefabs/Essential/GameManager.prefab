@@ -51,7 +51,7 @@ GameObject:
   - component: {fileID: 150511034856731632}
   - component: {fileID: 8382263443209097981}
   - component: {fileID: 7696325542080762366}
-  - component: {fileID: -8650939316069208973}
+  - component: {fileID: 4379450877566455937}
   m_Layer: 0
   m_Name: GameManager
   m_TagString: gamemanager
@@ -132,8 +132,9 @@ MonoBehaviour:
   - {fileID: 102900000, guid: 7db983fabd6ebe341b6586835193ac8d, type: 3}
   - {fileID: 102900000, guid: 3981e56dc61ad224eb96f1241d85a6e6, type: 3}
   - {fileID: 102900000, guid: c60c34b3ef1b2c74fa2b8515c84d4c0f, type: 3}
+  scenePaths: {fileID: 0}
   blackoutColour: {r: 0.05882353, g: 0.05882353, b: 0.05882353, a: 1}
---- !u!114 &-8650939316069208973
+--- !u!114 &4379450877566455937
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -142,7 +143,11 @@ MonoBehaviour:
   m_GameObject: {fileID: 7696325542080762360}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 70abce7fb0c40dd4fa48889f54498e4b, type: 3}
+  m_Script: {fileID: 11500000, guid: 770af19c2a7cefb49a87abbaf0189e02, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  gameManager: {fileID: 7696325542080762366}
+  timeModified: 
+  paths: []
+  mainMenu: -1
+  levelTransition: -1
+  levels: 

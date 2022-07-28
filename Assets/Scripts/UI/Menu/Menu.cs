@@ -12,6 +12,7 @@ public class Menu : UIElement
 
     [Header("Components")]
     public List<GameObject> menuFrames;
+    private List<UIElement> frames;
 
     [HideInInspector] public int activeFrame = -1;
 
@@ -24,6 +25,10 @@ public class Menu : UIElement
     protected override void Awake()
     {
         base.Awake();
+        for (int i = 0; i < menuFrames.Count; i++)
+        {
+            frames.Add(GetOrAddComponent<UIElement>(menuFrames[i]));
+        }
     }
 
     protected override void Start()
@@ -48,26 +53,26 @@ public class Menu : UIElement
 
     public void SetActiveFrame(int index)
     {
-        if (InBounds(index, menuFrames) && index != activeFrame)
+        if (InBounds(index, frames) && index != activeFrame)
         {
-            for (int i = 0; i < menuFrames.Count; i++)
+            for (int i = 0; i < frames.Count; i++)
             {
-                menuFrames[i].SetActive(i == index);
+                frames[i].SetShown(i == index);
             }
             activeFrame = index;
         }
     }
     
-    public void SetActiveFrame(GameObject menuFrame)
+    public void SetActiveFrame(UIElement menuFrame)
     {
-        if (menuFrames.Contains(menuFrame))
+        if (frames.Contains(menuFrame))
         {
-            int index = menuFrames.IndexOf(menuFrame);
-            if (InBounds(index, menuFrames) && index != activeFrame)
+            int index = frames.IndexOf(menuFrame);
+            if (InBounds(index, frames) && index != activeFrame)
             {
-                for (int i = 0; i < menuFrames.Count; i++)
+                for (int i = 0; i < frames.Count; i++)
                 {
-                    menuFrames[i].SetActive(i == index);
+                    frames[i].SetShown(i == index);
                 }
                 activeFrame = index;
             }

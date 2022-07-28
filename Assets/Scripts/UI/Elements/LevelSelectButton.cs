@@ -35,13 +35,13 @@ public class LevelSelectButton : AudioButton
     protected override void Awake()
     {
         base.Awake();
-        button.enabled = CheckUnlockState();
-        UpdateVisuals();
     }
 
     protected override void Start()
     {
         base.Start();
+        button.enabled = CheckUnlockState();
+        UpdateVisuals();
     }
 
 #if UNITY_EDITOR
@@ -70,7 +70,7 @@ public class LevelSelectButton : AudioButton
         return GameManager.levelsUnlocked[index];
     }
 
-    private void UpdateVisuals()
+    public void UpdateVisuals()
     {
         if (level == 0)
         {

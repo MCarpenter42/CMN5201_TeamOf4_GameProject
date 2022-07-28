@@ -30,7 +30,7 @@ public class GameManager : Core
     public static GameObject Listener;
 
 #if UNITY_EDITOR
-    private EditorSceneHandler editorSceneHandler;
+    //private EditorSceneHandler editorSceneHandler;
 
     public SceneAsset MainMenuScene;
     public SceneAsset LevelTransitionScene;
@@ -53,9 +53,9 @@ public class GameManager : Core
 
     public static bool sceneChangeComplete = true;
 
-    public static string pathListLocalPath = "/Scripts/Data/ScenePathList.json";
-    public static string pathListFilepath { get { return Application.dataPath + "/Scripts/Data/ScenePathList.json"; } }
-    public static ScenePathList scenePaths = new ScenePathList();
+    public static string pathListLocalPath = "/Resources/Data/ScenePathList.json";
+    public static string pathListFilepath { get { return Application.dataPath + "/Resources/Data/ScenePathList.json"; } }
+    [SerializeField] public ScenePathList scenePaths { get { return GetOrAddComponent<ScenePathList>(gameObject); } }
 
     public static bool[] levelsUnlocked = new bool[0];
 
@@ -153,7 +153,7 @@ public class GameManager : Core
         }
         else
         {
-#if UNITY_EDITOR
+/*#if UNITY_EDITOR
             if (editorSceneHandler == null)
             {
                 if (gameObject.GetComponent<EditorSceneHandler>() == null)
@@ -171,12 +171,11 @@ public class GameManager : Core
             {
                 editorSceneHandler.gameManager = this;
             }
-#endif
-            if (scenePaths.paths.Length == 0)
-            {
-                GetScenePaths();
-            }
+#endif*/
         }
+#if UNITY_EDITOR
+        GetScenePaths();
+#endif
     }
 
     void OnApplicationQuit()
@@ -374,10 +373,34 @@ public class GameManager : Core
         }
     }
 
-    private void GetScenePaths()
+    /*private void GetScenePaths()
     {
         string jsonData = File.ReadAllText(pathListFilepath);
         scenePaths = JsonUtility.FromJson<ScenePathList>(jsonData);
+    }*/
+    
+    private void GetScenePaths()
+    {
+#if UNITY_EDITOR
+        string[] pathArray = new string[EditorBuildSettings.scenes.Length];
+        for (int i = 0; i < EditorBuildSettings.scenes.Length; i++)
+        {
+            pathArray[i] = EditorBuildSettings.scenes[i].path;
+        }
+
+        scenePaths.paths = pathArray;
+
+        scenePaths.mainMenu = SceneIndexFromName(MainMenuScene.name);
+        scenePaths.levelTransition = SceneIndexFromName(LevelTransitionScene.name);
+        scenePaths.levels = new int[LevelScenes.Count];
+        for (int i = 0; i < LevelScenes.Count; i++)
+        {
+            scenePaths.levels[i] = SceneIndexFromName(LevelScenes[i].name);
+        }
+
+        string jsonData = JsonUtility.ToJson(scenePaths);
+        File.WriteAllText(pathListFilepath, jsonData);
+#endif
     }
     
     public int SceneIndexFromName(string sceneName)
@@ -617,17 +640,17 @@ public class GameManager : Core
 
     public void DelayedQuit(float delay)
     {
-        GameEndProcess();
+        //GameEndProcess();
         StartCoroutine(IDelayedQuit(delay));
     }
 
     private IEnumerator IDelayedQuit(float delay)
     {
         yield return new WaitForSecondsRealtime(delay);
+        Application.Quit();
 #if UNITY_EDITOR
         EditorApplication.ExitPlaymode();
 #endif
-        Application.Quit();
     }
 
     private void GameEndProcess()

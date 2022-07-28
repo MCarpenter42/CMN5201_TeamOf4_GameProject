@@ -19,7 +19,7 @@ public class GameDataHandler : Core
 
     public static DataEncryptionKeys keys = new DataEncryptionKeys();
 
-    private string keysFilepath { get { return Application.dataPath + "/Scripts/Data/EncryptionKeys.json"; } }
+    private string keysFilepath { get { return Application.dataPath + "/Resources/Data/EncryptionKeys.json"; } }
     private string saveDataFilepath { get { return Application.dataPath + "/SaveData/GameSaveData.json"; } }
 #if UNITY_EDITOR
     private string saveDataFilepath_UNENC { get { return Application.dataPath + "/SaveData/GameSaveData_UNENC.json"; } }
@@ -134,7 +134,7 @@ public class GameDataHandler : Core
 
     private void SetupUnlockArray()
     {
-        int n = GameManager.scenePaths.levels.Length;
+        int n = GameManager.Instance.scenePaths.levels.Length;
         DataMaster.levelsUnlocked = new bool[n];
         for (int i = 0; i < n; i++)
         {

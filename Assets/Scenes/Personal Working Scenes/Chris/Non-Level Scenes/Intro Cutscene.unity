@@ -422,17 +422,6 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 85b2d1870fb31d94b8a979b9eaedff73, type: 3}
---- !u!114 &208946070 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 7478119667700999330, guid: 85b2d1870fb31d94b8a979b9eaedff73, type: 3}
-  m_PrefabInstance: {fileID: 208946069}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!224 &208946071 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 7478119667700999356, guid: 85b2d1870fb31d94b8a979b9eaedff73, type: 3}
@@ -518,6 +507,17 @@ RectTransform:
   m_AnchoredPosition: {x: -9.594992, y: -27.931293}
   m_SizeDelta: {x: 247.7253, y: 374.0471}
   m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &437333535 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 8632724035075559720, guid: 85b2d1870fb31d94b8a979b9eaedff73, type: 3}
+  m_PrefabInstance: {fileID: 208946069}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &618592796
 GameObject:
   m_ObjectHideFlags: 0
@@ -937,7 +937,8 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 5288744002764775976, guid: 7f3d74ffff9427443baefd1de0c1f8d7, type: 3}
   m_SourcePrefab: {fileID: 100100000, guid: 7f3d74ffff9427443baefd1de0c1f8d7, type: 3}
 --- !u!1 &939727262
 GameObject:
@@ -1387,7 +1388,7 @@ MonoBehaviour:
   mainMenu: {fileID: 0}
   pauseMenu: {fileID: 0}
   hud: {fileID: 0}
-  blackScreen: {fileID: 208946070}
+  blackScreen: {fileID: 437333535}
   devConsole: {fileID: 0}
   sfx: {fileID: 0}
   debugPanelInfo: 0

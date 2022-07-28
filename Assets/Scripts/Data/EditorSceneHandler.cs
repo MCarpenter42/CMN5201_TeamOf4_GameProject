@@ -102,14 +102,3 @@ public class EditorSceneHandler : Core
     }
 #endif
 }
-
-public class ScenePathList
-{
-    public string timeModified;
-
-    public string[] paths = new string[0];
-
-    public int mainMenu = -1;
-    public int levelTransition = -1;
-    public int[] levels = new int[0];
-}

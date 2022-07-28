@@ -27,6 +27,18 @@ EditorBuildSettings:
     path: Assets/Scenes/Game Scenes/Levels/Level 0.5.unity
     guid: be6cbf842cc1d754b9449e5d29fdefb3
   - enabled: 1
+    path: Assets/Scenes/Game Scenes/Levels/Level 5.unity
+    guid: 7167da0985a29e6488bf20b12fe2c996
+  - enabled: 1
+    path: Assets/Scenes/Game Scenes/Levels/Level 6.unity
+    guid: 7db983fabd6ebe341b6586835193ac8d
+  - enabled: 1
+    path: Assets/Scenes/Game Scenes/Levels/Level 7.unity
+    guid: 3981e56dc61ad224eb96f1241d85a6e6
+  - enabled: 1
+    path: Assets/Scenes/Game Scenes/Levels/Level 8.unity
+    guid: c60c34b3ef1b2c74fa2b8515c84d4c0f
+  - enabled: 1
     path: Assets/Scenes/Personal Working Scenes/Chris/Level 6.unity
     guid: 62f8216fb9f5ca04f84ea8d147180b66
   - enabled: 1
