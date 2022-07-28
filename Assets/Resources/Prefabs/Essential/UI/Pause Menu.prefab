@@ -170,8 +170,8 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 36
-  m_fontSizeBase: 36
+  m_fontSize: 30
+  m_fontSizeBase: 30
   m_fontWeight: 400
   m_enableAutoSizing: 0
   m_fontSizeMin: 18
@@ -1018,7 +1018,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -183.2688, y: -96}
+  m_AnchoredPosition: {x: -204.7688, y: -83.25}
   m_SizeDelta: {x: 100, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &3075486330603747372
@@ -1744,7 +1744,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -246.5188, y: -96}
+  m_AnchoredPosition: {x: -268.0188, y: -83.25}
   m_SizeDelta: {x: 100, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &6144327652233727002
@@ -3382,7 +3382,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -246.5188, y: 30.5}
+  m_AnchoredPosition: {x: -246.5188, y: 34.75}
   m_SizeDelta: {x: 100, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &5164020977036216195
@@ -3622,9 +3622,10 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: "CONTROLS:\n\n         = Move Up            = Turn Camera Right\n                                         
-    \n         = Move Down        = Turn Camera Left\n \n         = Move Left\n\n        
-    = Move Right\n\n         = Zoom In\n\n         = Zoom Out\n\n            "
+  m_text: "CONTROLS:\n\n              = Move Up                  =Turn Camera Right\n                                         
+    \n              = Move Down          =Turn Camera Left\n \n              = Move
+    Left\n\n              = Move Right\n\n              = Zoom In\n\n             
+    = Zoom Out\n\n            "
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: f81df524ac92ce3409ce9405cfa7c666, type: 2}
   m_sharedMaterial: {fileID: 1200416703602490024, guid: f81df524ac92ce3409ce9405cfa7c666, type: 2}
@@ -3651,8 +3652,8 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 36
-  m_fontSizeBase: 36
+  m_fontSize: 30
+  m_fontSizeBase: 30
   m_fontWeight: 400
   m_enableAutoSizing: 0
   m_fontSizeMin: 18
