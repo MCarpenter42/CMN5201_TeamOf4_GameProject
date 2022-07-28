@@ -7496,7 +7496,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5615331096769733741, guid: deebe3f5353b40143b1fc1c543a49233, type: 3}
       propertyPath: m_Name
-      value: Dropdown Menu
+      value: Dropdown Selector
       objectReference: {fileID: 0}
     - target: {fileID: 5615331097113314203, guid: deebe3f5353b40143b1fc1c543a49233, type: 3}
       propertyPath: eventOnSelectionMade.m_PersistentCalls.m_Calls.Array.size
