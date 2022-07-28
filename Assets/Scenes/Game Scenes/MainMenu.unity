@@ -317,9 +317,7 @@ MonoBehaviour:
   menuFrames: []
   activeFrame: -1
   scrollContent: {fileID: 735664641}
-  firstCategory: {fileID: 0}
-  controlCategoryPrefab: {fileID: 0}
-  controlListItemPrefab: {fileID: 0}
+  firstCategory: {fileID: 843396208}
 --- !u!1 &101753508
 GameObject:
   m_ObjectHideFlags: 0
@@ -2515,7 +2513,7 @@ GameObject:
   - component: {fileID: 843396207}
   - component: {fileID: 843396208}
   m_Layer: 5
-  m_Name: Ctrl_Cat_0
+  m_Name: Control Category
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2571,7 +2569,7 @@ MonoBehaviour:
   onHide:
     m_PersistentCalls:
       m_Calls: []
-  header: {fileID: 0}
+  header: {fileID: 1568329295}
   firstListItem: {fileID: 2143860219}
   categoryName: 
   categoryItems: []
@@ -8785,7 +8783,7 @@ GameObject:
   - component: {fileID: 2143860218}
   - component: {fileID: 2143860219}
   m_Layer: 5
-  m_Name: Ctrl_Item_0
+  m_Name: List Item
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

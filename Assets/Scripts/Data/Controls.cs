@@ -1,3 +1,4 @@
+using System.Reflection;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -37,13 +38,50 @@ using UnityEngine;
 public class Controls : Core
 {
 	public Controls_General General = new Controls_General();
-	public Controls_Movement Movement = new Controls_Movement();
-	public Controls_Interaction Interaction = new Controls_Interaction();
-	public Controls_Camera Camera = new Controls_Camera();
+    public Controls_Movement Movement = new Controls_Movement();
+    public Controls_Interaction Interaction = new Controls_Interaction();
+    public Controls_Camera Camera = new Controls_Camera();
 
-    public int categoryCount = 0;
-    public List<string> categoryNames = new List<string>();
-    public List<string> controlNames = new List<string>();
+    public int categoryCount = 4;
+    /*{
+        get {
+            int count = 0;
+            PropertyInfo[] properties = typeof(Controls).GetProperties();
+
+            foreach (PropertyInfo property in properties)
+            {
+                IEnumerable<System.Attribute> attr = property.GetCustomAttributes();
+                Debug.Log(attr.GetEnumerator());
+            }
+
+            for (int i = 0; i < properties.Length; i++)
+            {
+                string typeName = GetType().GetProperties()[i].ToString();
+                if (typeName.Contains("Controls_"))
+                {
+                    count++;
+                }
+            }
+            return count;
+        }
+    }*/
+    public List<string> categoryNames = new List<string>() { "General", "Movement", "Interaction", "Camera" };
+    public List<string> controlNames = new List<string>()
+    {
+        "Controls.General.Pause",
+        "Controls.General.ResetLevel",
+        "Controls.Movement.Up",
+        "Controls.Movement.Down",
+        "Controls.Movement.Left",
+        "Controls.Movement.Right",
+        "Controls.Interaction.Interact",
+        "Controls.Interaction.RotateCounterClockwise",
+        "Controls.Interaction.RotateClockwise",
+        "Controls.Camera.RotCamLeft",
+        "Controls.Camera.RotCamRight",
+        "Controls.Camera.ZoomCamIn",
+        "Controls.Camera.ZoomCamOut"
+    };
 
 	public Dictionary<KeyCode, string> KeyNames = new Dictionary<KeyCode, string>
     {
@@ -218,7 +256,7 @@ public class Controls : Core
 
     public List<string> GetNamesList()
     {
-        for (int i = 0; i < GetType().GetProperties().Length; i++)
+        /*for (int i = 0; i < GetType().GetProperties().Length; i++)
         {
             if (GetType().GetProperties()[i].PropertyType != typeof(int))
             {
@@ -235,9 +273,20 @@ public class Controls : Core
             string categoryName = "Controls.";
             categoryName += GetType().GetProperties()[i].Name;
             categoryNames.Add(categoryName);
-        }
+        }*/
 
-        foreach (string categoryName in categoryNames)
+        /*for (int i = 0; i < GetType().GetProperties().Length; i++)
+        {
+            System.Type propertyType = GetType().GetProperties()[i].PropertyType;
+            string typeName = propertyType.ToString();
+            if (typeName.Contains("Controls_"))
+            {
+                string categoryName = "Controls." + GetType().GetProperties()[i].Name;
+                categoryNames.Add(categoryName);
+            }
+        }*/
+
+        /*foreach (string categoryName in categoryNames)
         {
             object category = GetProperty(this, categoryName);
             int n = category.GetType().GetProperties().Length;
@@ -247,34 +296,175 @@ public class Controls : Core
                 controlName += category.GetType().GetProperties()[i].Name;
                 controlNames.Add(controlName);
             }
-        }
+        }*/
+
+        /*for (int i = 0; i < 4; i++)
+        {
+            object category = GetProperty(this, categoryNames[i]);
+            int n = category.GetType().GetProperties().Length;
+            for (int j = 0; j < n; j++)
+            {
+                string controlName = categoryNames[i] + ".";
+                controlName += category.GetType().GetProperties()[i].Name;
+                controlNames.Add(controlName);
+            }
+        }*/
 
         return controlNames;
     }
 
-    public KeyCode GetControlByName(string controlName)
+    /*public KeyCode GetControlByName(string controlName)
     {
-        string[] nameParts = controlName.Split(new char['.']);
+        string[] nameParts = controlName.Split('.');
         object category = GetProperty(this, nameParts[1]);
         ControlInput control = (ControlInput)GetProperty(category, nameParts[2]);
+
+        return control.Key;
+    }*/
+    
+    public KeyCode GetControlByName(string controlName)
+    {
+        string[] nameParts = controlName.Split('.');
+        ControlInput control;
+
+        List<string> inCategory = new List<string>();
+        for (int i = 0; i < controlNames.Count; i++)
+        {
+            string cat = controlNames[i].Split('.')[1];
+            if (nameParts[1] == cat)
+            {
+                inCategory.Add(controlNames[i]);
+            }
+        }
+
+        int index = 0;
+        for (int i = 0; i < inCategory.Count; i++)
+        {
+            string ctrl = controlNames[i].Split('.')[2];
+            if (nameParts[2] == ctrl)
+            {
+                index = i;
+                break;
+            }
+        }
+
+        switch (nameParts[1])
+        {
+            default:
+            case "General":
+                control = General.controls[index];
+                break;
+
+            case "Movement":
+                control = Movement.controls[index];
+                break;
+
+            case "Interaction":
+                control = Interaction.controls[index];
+                break;
+
+            case "Camera":
+                control = Camera.controls[index];
+                break;
+        }
 
         return control.Key;
     }
     
     public string GetControlDisplayName(string controlName)
     {
-        string[] nameParts = controlName.Split(new char['.']);
-        object category = GetProperty(this, nameParts[1]);
-        ControlInput control = (ControlInput)GetProperty(category, nameParts[2]);
+        string[] nameParts = controlName.Split('.');
+        ControlInput control;
+
+        List<string> inCategory = new List<string>();
+        for (int i = 0; i < controlNames.Count; i++)
+        {
+            string cat = controlNames[i].Split('.')[1];
+            if (nameParts[1] == cat)
+            {
+                inCategory.Add(controlNames[i]);
+            }
+        }
+
+        int index = 0;
+        for (int i = 0; i < inCategory.Count; i++)
+        {
+            string ctrl = controlNames[i].Split('.')[2];
+            if (nameParts[2] == ctrl)
+            {
+                index = i;
+                break;
+            }
+        }
+
+        switch (nameParts[1])
+        {
+            default:
+            case "General":
+                control = General.controls[index];
+                break;
+
+            case "Movement":
+                control = Movement.controls[index];
+                break;
+
+            case "Interaction":
+                control = Interaction.controls[index];
+                break;
+
+            case "Camera":
+                control = Camera.controls[index];
+                break;
+        }
 
         return control.ControlName;
     }
 
     public void SetControlByName(string controlName, KeyCode key)
     {
-        string[] nameParts = controlName.Split(new char['.']);
-        object category = GetProperty(this, nameParts[1]);
-        ControlInput control = (ControlInput)GetProperty(category, nameParts[2]);
+        string[] nameParts = controlName.Split('.');
+        ControlInput control;
+
+        List<string> inCategory = new List<string>();
+        for (int i = 0; i < controlNames.Count; i++)
+        {
+            string cat = controlNames[i].Split('.')[1];
+            if (nameParts[1] == cat)
+            {
+                inCategory.Add(controlNames[i]);
+            }
+        }
+
+        int index = 0;
+        for (int i = 0; i < inCategory.Count; i++)
+        {
+            string ctrl = controlNames[i].Split('.')[2];
+            if (nameParts[2] == ctrl)
+            {
+                index = i;
+                break;
+            }
+        }
+
+        switch (nameParts[1])
+        {
+            default:
+            case "General":
+                control = General.controls[index];
+                break;
+
+            case "Movement":
+                control = Movement.controls[index];
+                break;
+
+            case "Interaction":
+                control = Interaction.controls[index];
+                break;
+
+            case "Camera":
+                control = Camera.controls[index];
+                break;
+        }
 
         control.Key = key;
     }
@@ -284,6 +474,12 @@ public class Controls_General
 {
     public ControlInput Pause = new ControlInput("Pause Game", KeyCode.Escape);
 	public ControlInput ResetLevel = new ControlInput("Reset Level", KeyCode.Backspace);
+    public ControlInput[] controls;
+
+    public Controls_General()
+    {
+        controls = new ControlInput[] { Pause, ResetLevel };
+    }
 }
 
 public class Controls_Movement
@@ -292,6 +488,12 @@ public class Controls_Movement
 	public ControlInput Down = new ControlInput("Move Down", KeyCode.S);
 	public ControlInput Left = new ControlInput("Move Left", KeyCode.A);
 	public ControlInput Right = new ControlInput("Move Right", KeyCode.D);
+    public ControlInput[] controls;
+
+    public Controls_Movement()
+    {
+        controls = new ControlInput[] { Up, Down, Left, Right };
+    }
 }
 
 public class Controls_Interaction
@@ -299,6 +501,12 @@ public class Controls_Interaction
 	public ControlInput Interact = new ControlInput("Interact With Object", KeyCode.Space);
 	public ControlInput RotateCounterClockwise = new ControlInput("Activate", KeyCode.Q);
 	public ControlInput RotateClockwise = new ControlInput("Activate", KeyCode.E);
+    public ControlInput[] controls;
+
+    public Controls_Interaction()
+    {
+        controls = new ControlInput[] { Interact, RotateCounterClockwise, RotateClockwise };
+    }
 }
 
 public class Controls_Camera
@@ -307,6 +515,12 @@ public class Controls_Camera
     public ControlInput RotCamRight = new ControlInput("Rotate Camera Right", KeyCode.RightArrow);
     public ControlInput ZoomCamIn = new ControlInput("Zoom Camera In", KeyCode.R);
     public ControlInput ZoomCamOut = new ControlInput("Zoom Camera Out", KeyCode.F);
+    public ControlInput[] controls;
+
+    public Controls_Camera()
+    {
+        controls = new ControlInput[] { RotCamLeft, RotCamRight, ZoomCamIn, ZoomCamOut };
+    }
 }
 
 

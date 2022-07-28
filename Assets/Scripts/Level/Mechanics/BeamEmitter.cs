@@ -219,14 +219,14 @@ public class BeamEmitter : Core
             {
                 int c = beamAudio.Count;
                 int n = beamAudio.Count - beamPath.Count;
-                for (int i = 0 - 1; i < n; i++)
+                for (int i = 1; i <= n; i++)
                 {
                     Destroy(beamAudio[c - i].gameObject, 0.02f);
                     beamAudio.RemoveAt(c - i);
                 }
             }
         }
-        
+
         for (int i = 0; i < beamAudio.Count; i++)
         {
             if (posCountChanged || !beamAudio[i].source.isPlaying)

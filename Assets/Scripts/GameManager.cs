@@ -16,7 +16,7 @@ public class GameManager : Core
     public static GameDataHandler GameDataHandler;
 
     private static GameManager instance = null;
-    private Controls controlsInstance;
+    public static Controls controlsInstance;
     private VideoSettings vidSettingsInstance;
 
     public static EventSystem EventSystem;
@@ -215,7 +215,6 @@ public class GameManager : Core
 
         EventSystem = GetOrAddComponent<EventSystem>(gameObject);
         controlsInstance = GetOrAddComponent<Controls>(gameObject);
-        Controls = controlsInstance;
 
         vidSettingsInstance = GetOrAddComponent<VideoSettings>(gameObject);
         VideoSettings = vidSettingsInstance;

@@ -14,9 +14,6 @@ public class MenuSettings_Controls : Menu
     [SerializeField] RectTransform scrollContent;
     [SerializeField] ControlListCategory firstCategory;
 
-    [SerializeField] GameObject controlCategoryPrefab;
-    [SerializeField] GameObject controlListItemPrefab;
-
     private List<ControlListCategory> controlCategories = new List<ControlListCategory>();
 
     #endregion
@@ -62,46 +59,49 @@ public class MenuSettings_Controls : Menu
 
     private void GetComponents()
     {
-        for (int i = 0; i < Controls.categoryCount; i++)
+        /*for (int i = 0; i < Controls.categoryCount; i++)
         {
             string categoryName = Controls.GetType().GetProperties()[i].Name;
             categoryNames.Add(categoryName);
-        }
-        controlNames = Controls.GetNamesList();
+        }*/
+        categoryNames = Controls.categoryNames;
+        controlNames = Controls.controlNames;
     }
 
     private void CreateCategories()
     {
-        firstCategory.gameObject.name = "Ctrl_Cat_" + Controls.categoryNames[0];
-        firstCategory.SetName(Controls.categoryNames[0]);
+        firstCategory.gameObject.name = "Ctrl_Cat_" + categoryNames[0];
+        firstCategory.SetName(categoryNames[0]);
         firstCategory.gameObject.transform.SetParent(scrollContent);
         controlCategories.Add(firstCategory);
-        for (int i = 1; i < Controls.categoryCount; i++)
+        for (int i = 1; i < categoryNames.Count; i++)
         {
             ControlListCategory category = Instantiate(firstCategory, scrollContent);
-            category.gameObject.name = "Ctrl_Cat_" + Controls.categoryNames[i];
-            category.SetName(Controls.categoryNames[i]);
+            category.gameObject.name = "Ctrl_Cat_" + categoryNames[i];
+            category.SetName(categoryNames[i]);
             controlCategories.Add(category);
         }
 
         float posY = 0.0f;
-        List<string> controls = Controls.GetNamesList();
+
         for (int i = 0; i < controlCategories.Count; i++)
         {
             controlCategories[i].rTransform.anchoredPosition = new Vector2(0.0f, posY);
 
             string category = controlCategories[i].categoryName;
-            List<KeyValuePair<int, string>> itemProperties = new List<KeyValuePair<int, string>>();
+            List<int> itemIndices = new List<int>();
+            List<string> itemTargets = new List<string>();
 
-            for (int j = 0; j < controls.Count; i++)
+            for (int j = 0; j < controlNames.Count; j++)
             {
-                if (controls[j].Split('.')[1] == category)
+                if (controlNames[j].Split('.')[1] == category)
                 {
-                    itemProperties.Add(new KeyValuePair<int, string>(j, controls[j]));
+                    itemIndices.Add(j);
+                    itemTargets.Add(controlNames[j]);
                 }
             }
 
-            controlCategories[i].CreateItems(itemProperties);
+            controlCategories[i].CreateItems(itemIndices, itemTargets);
 
             posY -= controlCategories[i].totalHeight;
         }
@@ -111,6 +111,7 @@ public class MenuSettings_Controls : Menu
         {
             scrollContentHeight += controlCategories[i].totalHeight;
         }
+        scrollContent.sizeDelta = new Vector2(scrollContent.sizeDelta.x, scrollContentHeight);
     }
 
     #endregion

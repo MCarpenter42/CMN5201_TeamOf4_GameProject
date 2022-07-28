@@ -12,7 +12,15 @@ public class Core : MonoBehaviour
 {
     #region [ OBJECTS ]
 
-	public static Controls Controls;
+	public static Controls Controls {
+        get {
+            if (GameManager.controlsInstance == null)
+            {
+                GameManager.controlsInstance = new Controls();
+            }
+            return GameManager.controlsInstance;
+        }
+    }
     public static VideoSettings VideoSettings;
     public static EncryptionHandler Encryption;
 
