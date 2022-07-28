@@ -39,7 +39,7 @@ public class Controls : Core
 	public Controls_General General = new Controls_General();
 	public Controls_Movement Movement = new Controls_Movement();
 	public Controls_Interaction Interaction = new Controls_Interaction();
-	public Controls_Level Level = new Controls_Level();
+	public Controls_Camera Camera = new Controls_Camera();
 
     public int categoryCount = 0;
     public List<string> categoryNames = new List<string>();
@@ -260,6 +260,15 @@ public class Controls : Core
 
         return control.Key;
     }
+    
+    public string GetControlDisplayName(string controlName)
+    {
+        string[] nameParts = controlName.Split(new char['.']);
+        object category = GetProperty(this, nameParts[1]);
+        ControlInput control = (ControlInput)GetProperty(category, nameParts[2]);
+
+        return control.ControlName;
+    }
 
     public void SetControlByName(string controlName, KeyCode key)
     {
@@ -274,6 +283,7 @@ public class Controls : Core
 public class Controls_General
 {
     public ControlInput Pause = new ControlInput("Pause Game", KeyCode.Escape);
+	public ControlInput ResetLevel = new ControlInput("Reset Level", KeyCode.Backspace);
 }
 
 public class Controls_Movement
@@ -291,9 +301,8 @@ public class Controls_Interaction
 	public ControlInput RotateClockwise = new ControlInput("Activate", KeyCode.E);
 }
 
-public class Controls_Level
+public class Controls_Camera
 {
-	public ControlInput ResetLevel = new ControlInput("Reset Level", KeyCode.Backspace);
     public ControlInput RotCamLeft = new ControlInput("Rotate Camera Left", KeyCode.LeftArrow);
     public ControlInput RotCamRight = new ControlInput("Rotate Camera Right", KeyCode.RightArrow);
     public ControlInput ZoomCamIn = new ControlInput("Zoom Camera In", KeyCode.R);

@@ -10,11 +10,14 @@ public class MenuSettings_Controls : Menu
 {
     #region [ OBJECTS ]
 
+    [Header("Components")]
+    [SerializeField] RectTransform scrollContent;
+    [SerializeField] ControlListCategory firstCategory;
+
     [SerializeField] GameObject controlCategoryPrefab;
     [SerializeField] GameObject controlListItemPrefab;
 
-    private List<GameObject> controlCategories = new List<GameObject>();
-    private List<GameObject> controlListItems = new List<GameObject>();
+    private List<ControlListCategory> controlCategories = new List<ControlListCategory>();
 
     #endregion
 
@@ -33,6 +36,7 @@ public class MenuSettings_Controls : Menu
     {
         base.Awake();
         GetComponents();
+        CreateCategories();
     }
 
     protected override void Start()
@@ -66,22 +70,46 @@ public class MenuSettings_Controls : Menu
         controlNames = Controls.GetNamesList();
     }
 
-    private void CreateListItems()
+    private void CreateCategories()
     {
-        for (int i = 0; i < categoryNames.Count; i++)
+        firstCategory.gameObject.name = "Ctrl_Cat_" + Controls.categoryNames[0];
+        firstCategory.SetName(Controls.categoryNames[0]);
+        firstCategory.gameObject.transform.SetParent(scrollContent);
+        controlCategories.Add(firstCategory);
+        for (int i = 1; i < Controls.categoryCount; i++)
         {
-            GameObject category = Instantiate(controlCategoryPrefab, transform);
-            category.name = categoryNames[i];
+            ControlListCategory category = Instantiate(firstCategory, scrollContent);
+            category.gameObject.name = "Ctrl_Cat_" + Controls.categoryNames[i];
+            category.SetName(Controls.categoryNames[i]);
             controlCategories.Add(category);
         }
 
-        for (int i = 0; i < controlNames.Count; i++)
+        float posY = 0.0f;
+        List<string> controls = Controls.GetNamesList();
+        for (int i = 0; i < controlCategories.Count; i++)
         {
-            string[] itemName = controlNames[i].Split(new char['.']);
-            string itemCategory = itemName[itemName.Length - 2];
-            int categoryIndex = categoryNames.IndexOf(itemCategory);
-            GameObject listItem = Instantiate(controlListItemPrefab, controlCategories[categoryIndex].transform);
-            controlListItems.Add(listItem);
+            controlCategories[i].rTransform.anchoredPosition = new Vector2(0.0f, posY);
+
+            string category = controlCategories[i].categoryName;
+            List<KeyValuePair<int, string>> itemProperties = new List<KeyValuePair<int, string>>();
+
+            for (int j = 0; j < controls.Count; i++)
+            {
+                if (controls[j].Split('.')[1] == category)
+                {
+                    itemProperties.Add(new KeyValuePair<int, string>(j, controls[j]));
+                }
+            }
+
+            controlCategories[i].CreateItems(itemProperties);
+
+            posY -= controlCategories[i].totalHeight;
+        }
+
+        float scrollContentHeight = 0.0f;
+        for (int i = 0; i < controlCategories.Count; i++)
+        {
+            scrollContentHeight += controlCategories[i].totalHeight;
         }
     }
 

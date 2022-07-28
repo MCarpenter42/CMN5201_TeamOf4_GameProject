@@ -11,6 +11,11 @@ public class ControlListItem : UIElement
 {
     #region [ PROPERTIES ]
 
+    [Header("Components")]
+    [SerializeField] TMP_Text controlName;
+    [SerializeField] TMP_Text controlKey;
+
+    [HideInInspector] public string itemName;
     [HideInInspector] public string targetInput;
     [HideInInspector] public int index;
 
@@ -52,9 +57,10 @@ public class ControlListItem : UIElement
         this.index = index;
     }
 
-    public void SetPosition()
+    public void SetName(string name)
     {
-
+        itemName = name;
+        controlName.text = name;
     }
 
     #endregion

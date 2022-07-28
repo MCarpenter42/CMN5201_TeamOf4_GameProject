@@ -67,6 +67,7 @@ EditorUserSettings.asset
 
 # Generated JSON files
 *.json
+*.json.meta
 
 # INCLUDE THESE FILES
 !EncryptionKeys.json

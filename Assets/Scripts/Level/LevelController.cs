@@ -343,11 +343,11 @@ public class LevelController : Core
     {
         if (!levelCam.isRotating)
         {
-            if (GetInputDown(Controls.Level.RotCamLeft))
+            if (GetInputDown(Controls.Camera.RotCamLeft))
             {
                 levelCam.DoRotation(new Vector2Int(0, 1), 1.0f);
             }
-            else if (GetInputDown(Controls.Level.RotCamRight))
+            else if (GetInputDown(Controls.Camera.RotCamRight))
             {
                 levelCam.DoRotation(new Vector2Int(0, -1), 1.0f);
             }
@@ -355,11 +355,11 @@ public class LevelController : Core
 
         if (!levelCam.isZooming)
         {
-            if (GetInput(Controls.Level.ZoomCamIn))
+            if (GetInput(Controls.Camera.ZoomCamIn))
             {
                 levelCam.DoZoom(2, 0.4f);
             }
-            else if (GetInput(Controls.Level.ZoomCamOut))
+            else if (GetInput(Controls.Camera.ZoomCamOut))
             {
                 levelCam.DoZoom(-2, 0.4f);
             }

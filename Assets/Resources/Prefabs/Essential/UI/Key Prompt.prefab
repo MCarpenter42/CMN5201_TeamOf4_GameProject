@@ -67,8 +67,8 @@ MonoBehaviour:
       m_Calls: []
   m_text: Label
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
-  m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 1b608bfd55551dc4095ef0dca6c2607c, type: 2}
+  m_sharedMaterial: {fileID: 8360043594268344386, guid: 1b608bfd55551dc4095ef0dca6c2607c, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -184,13 +184,22 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4510a9ae94798db4f9557113099c1dd5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  childGraphicElements: []
   visible: 0
+  mouseOver: 0
   fixedShowHideDelay: 0
   showHideType: 2
   transitionTime: 0.4
-  hiddenOffset: {x: 0, y: 0}
   slideMovementStyle: 5
+  visiblePos: {x: 0, y: 0}
+  hiddenOffset: {x: 0, y: 0}
   opacity: 1
+  onShow:
+    m_PersistentCalls:
+      m_Calls: []
+  onHide:
+    m_PersistentCalls:
+      m_Calls: []
   minTextPadding: 30
   twoParts: 1
 --- !u!1 &3950075119065115114
@@ -260,8 +269,8 @@ MonoBehaviour:
       m_Calls: []
   m_text: '[?]'
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
-  m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 1b608bfd55551dc4095ef0dca6c2607c, type: 2}
+  m_sharedMaterial: {fileID: 8360043594268344386, guid: 1b608bfd55551dc4095ef0dca6c2607c, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []

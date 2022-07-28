@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.EventSystems;
 using UnityEngine.SceneManagement;
 using UnityEditor;
 using TMPro;
@@ -18,6 +19,7 @@ public class GameManager : Core
     private Controls controlsInstance;
     private VideoSettings vidSettingsInstance;
 
+    public static EventSystem EventSystem;
     public static Player Player;
     public static LevelController LevelController;
 
@@ -211,6 +213,7 @@ public class GameManager : Core
     {
         GameDataHandler = GetOrAddComponent<GameDataHandler>(gameObject);
 
+        EventSystem = GetOrAddComponent<EventSystem>(gameObject);
         controlsInstance = GetOrAddComponent<Controls>(gameObject);
         Controls = controlsInstance;
 

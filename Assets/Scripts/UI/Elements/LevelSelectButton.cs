@@ -123,6 +123,7 @@ public class LevelSelectButton : AudioButton
     {
         //GameManager.Instance.LoadUnlockedLevel(level - 1);
         GameManager.Instance.LoadLevel(level - 1);
+        Debug.Log(level);
     }
 
     private Color GetDisableColour(Color clr)

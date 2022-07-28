@@ -714,6 +714,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 3286927214531253994, guid: 8c5cf8f8c1a6a7a4a81e68903a2a8d86, type: 3}
+      propertyPath: m_Navigation.m_Mode
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 4055774360699095939, guid: 8c5cf8f8c1a6a7a4a81e68903a2a8d86, type: 3}
       propertyPath: m_Name
       value: Dev Console
