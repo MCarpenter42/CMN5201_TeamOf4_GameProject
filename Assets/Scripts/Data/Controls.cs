@@ -35,7 +35,7 @@ using UnityEngine;
 
 */
 
-public class Controls : Core
+public class Controls
 {
 	public Controls_General General = new Controls_General();
     public Controls_Movement Movement = new Controls_Movement();
@@ -65,14 +65,15 @@ public class Controls : Core
             return count;
         }
     }*/
+
     public List<string> categoryNames = new List<string>() { "General", "Movement", "Interaction", "Camera" };
     public List<string> controlNames = new List<string>()
     {
         "Controls.General.Pause",
         "Controls.General.ResetLevel",
         "Controls.Movement.Up",
-        "Controls.Movement.Down",
         "Controls.Movement.Left",
+        "Controls.Movement.Down",
         "Controls.Movement.Right",
         "Controls.Interaction.Interact",
         "Controls.Interaction.RotateCounterClockwise",
@@ -83,7 +84,7 @@ public class Controls : Core
         "Controls.Camera.ZoomCamOut"
     };
 
-	public Dictionary<KeyCode, string> KeyNames = new Dictionary<KeyCode, string>
+	public static Dictionary<KeyCode, string> KeyNames = new Dictionary<KeyCode, string>
     {
         // JOYSTICK BUTTONS HAVE BEEN TEMPORARILY EXCLUDED
         // UNITY DOCUMENTATION SUGGESTS HANDLING THEM THROUGH A DIFFERENT MEANS
@@ -251,7 +252,7 @@ public class Controls : Core
         { KeyCode.Mouse6, "Mouse Button 7" },
 
         // NO KEY
-        { KeyCode.None, "[ No Key ]" },
+        { KeyCode.None, " " },
     };
 
     public List<string> GetNamesList()
@@ -322,10 +323,9 @@ public class Controls : Core
         return control.Key;
     }*/
     
-    public KeyCode GetControlByName(string controlName)
+    public ControlInput GetControlByName(string controlName)
     {
         string[] nameParts = controlName.Split('.');
-        ControlInput control;
 
         List<string> inCategory = new List<string>();
         for (int i = 0; i < controlNames.Count; i++)
@@ -336,139 +336,42 @@ public class Controls : Core
                 inCategory.Add(controlNames[i]);
             }
         }
-
+        
         int index = 0;
         for (int i = 0; i < inCategory.Count; i++)
         {
-            string ctrl = controlNames[i].Split('.')[2];
+            string ctrl = inCategory[i].Split('.')[2];
             if (nameParts[2] == ctrl)
             {
                 index = i;
                 break;
             }
         }
-
+        
         switch (nameParts[1])
         {
             default:
             case "General":
-                control = General.controls[index];
-                break;
+                return General.controls[index];
 
             case "Movement":
-                control = Movement.controls[index];
-                break;
+                return Movement.controls[index];
 
             case "Interaction":
-                control = Interaction.controls[index];
-                break;
+                return Interaction.controls[index];
 
             case "Camera":
-                control = Camera.controls[index];
-                break;
+                return Camera.controls[index];
         }
-
-        return control.Key;
     }
     
-    public string GetControlDisplayName(string controlName)
-    {
-        string[] nameParts = controlName.Split('.');
-        ControlInput control;
-
-        List<string> inCategory = new List<string>();
-        for (int i = 0; i < controlNames.Count; i++)
-        {
-            string cat = controlNames[i].Split('.')[1];
-            if (nameParts[1] == cat)
-            {
-                inCategory.Add(controlNames[i]);
-            }
-        }
-
-        int index = 0;
-        for (int i = 0; i < inCategory.Count; i++)
-        {
-            string ctrl = controlNames[i].Split('.')[2];
-            if (nameParts[2] == ctrl)
-            {
-                index = i;
-                break;
-            }
-        }
-
-        switch (nameParts[1])
-        {
-            default:
-            case "General":
-                control = General.controls[index];
-                break;
-
-            case "Movement":
-                control = Movement.controls[index];
-                break;
-
-            case "Interaction":
-                control = Interaction.controls[index];
-                break;
-
-            case "Camera":
-                control = Camera.controls[index];
-                break;
-        }
-
-        return control.ControlName;
-    }
-
     public void SetControlByName(string controlName, KeyCode key)
     {
-        string[] nameParts = controlName.Split('.');
-        ControlInput control;
-
-        List<string> inCategory = new List<string>();
-        for (int i = 0; i < controlNames.Count; i++)
-        {
-            string cat = controlNames[i].Split('.')[1];
-            if (nameParts[1] == cat)
-            {
-                inCategory.Add(controlNames[i]);
-            }
-        }
-
-        int index = 0;
-        for (int i = 0; i < inCategory.Count; i++)
-        {
-            string ctrl = controlNames[i].Split('.')[2];
-            if (nameParts[2] == ctrl)
-            {
-                index = i;
-                break;
-            }
-        }
-
-        switch (nameParts[1])
-        {
-            default:
-            case "General":
-                control = General.controls[index];
-                break;
-
-            case "Movement":
-                control = Movement.controls[index];
-                break;
-
-            case "Interaction":
-                control = Interaction.controls[index];
-                break;
-
-            case "Camera":
-                control = Camera.controls[index];
-                break;
-        }
-
-        control.Key = key;
+        GetControlByName(controlName).Key = key;
     }
 }
+
+
 
 public class Controls_General
 {
@@ -492,7 +395,7 @@ public class Controls_Movement
 
     public Controls_Movement()
     {
-        controls = new ControlInput[] { Up, Down, Left, Right };
+        controls = new ControlInput[] { Up, Left, Down, Right };
     }
 }
 

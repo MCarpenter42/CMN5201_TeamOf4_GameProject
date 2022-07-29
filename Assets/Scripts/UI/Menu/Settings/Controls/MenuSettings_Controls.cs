@@ -14,7 +14,8 @@ public class MenuSettings_Controls : Menu
     [SerializeField] RectTransform scrollContent;
     [SerializeField] ControlListCategory firstCategory;
 
-    private List<ControlListCategory> controlCategories = new List<ControlListCategory>();
+    [HideInInspector] public List<ControlListCategory> controlCategories = new List<ControlListCategory>();
+    [HideInInspector] public List<ControlListItem> controlListItems = new List<ControlListItem>();
 
     #endregion
 
@@ -34,11 +35,13 @@ public class MenuSettings_Controls : Menu
         base.Awake();
         GetComponents();
         CreateCategories();
+        UpdateAllLabels();
     }
 
     protected override void Start()
     {
         base.Start();
+        UpdateAllLabels();
     }
 
     protected override void Update()
@@ -59,11 +62,6 @@ public class MenuSettings_Controls : Menu
 
     private void GetComponents()
     {
-        /*for (int i = 0; i < Controls.categoryCount; i++)
-        {
-            string categoryName = Controls.GetType().GetProperties()[i].Name;
-            categoryNames.Add(categoryName);
-        }*/
         categoryNames = Controls.categoryNames;
         controlNames = Controls.controlNames;
     }
@@ -73,12 +71,15 @@ public class MenuSettings_Controls : Menu
         firstCategory.gameObject.name = "Ctrl_Cat_" + categoryNames[0];
         firstCategory.SetName(categoryNames[0]);
         firstCategory.gameObject.transform.SetParent(scrollContent);
+        firstCategory.parent = this;
         controlCategories.Add(firstCategory);
+
         for (int i = 1; i < categoryNames.Count; i++)
         {
             ControlListCategory category = Instantiate(firstCategory, scrollContent);
             category.gameObject.name = "Ctrl_Cat_" + categoryNames[i];
             category.SetName(categoryNames[i]);
+            category.parent = this;
             controlCategories.Add(category);
         }
 
@@ -89,19 +90,17 @@ public class MenuSettings_Controls : Menu
             controlCategories[i].rTransform.anchoredPosition = new Vector2(0.0f, posY);
 
             string category = controlCategories[i].categoryName;
-            List<int> itemIndices = new List<int>();
             List<string> itemTargets = new List<string>();
 
             for (int j = 0; j < controlNames.Count; j++)
             {
                 if (controlNames[j].Split('.')[1] == category)
                 {
-                    itemIndices.Add(j);
                     itemTargets.Add(controlNames[j]);
                 }
             }
 
-            controlCategories[i].CreateItems(itemIndices, itemTargets);
+            controlCategories[i].CreateItems(itemTargets);
 
             posY -= controlCategories[i].totalHeight;
         }
@@ -114,22 +113,28 @@ public class MenuSettings_Controls : Menu
         scrollContent.sizeDelta = new Vector2(scrollContent.sizeDelta.x, scrollContentHeight);
     }
 
-    #endregion
-
-    public void UpdateControlsList()
+    public void AddListItems(List<ControlListItem> items)
     {
-
+        for (int i = 0; i < items.Count; i++)
+        {
+            items[i].index = controlListItems.Count;
+            controlListItems.Add(items[i]);
+        }
     }
+
+    #endregion
 
     #region [ SET CONTROL ]
 
-    public void SetControl(ControlInput targetInput)
+    public void SetControl(ControlListItem trigger)
     {
-        StartCoroutine(ListenForKeypress(targetInput));
+        StartCoroutine(ISetControl(trigger));
     }
 
-    public IEnumerator ListenForKeypress(ControlInput targetInput)
+    public IEnumerator ISetControl(ControlListItem trigger)
     {
+        trigger.SetLabel("...");
+
         KeyCode pressedKey = KeyCode.None;
         bool setNewKey = true;
 
@@ -153,27 +158,46 @@ public class MenuSettings_Controls : Menu
                 break;
             }
 
-            yield return new WaitForEndOfFrame();
+            yield return null;
         }
-
+        
         if (setNewKey)
         {
-            for (int i = 0; i < controlNames.Count; i++)
-            {
-                KeyCode control = Controls.GetControlByName(controlNames[i]);
+            int n = Controls.controlNames.IndexOf(trigger.targetInput);
 
-                if (pressedKey == control)
+            for (int i = 0; i < Controls.controlNames.Count; i++)
+            {
+                KeyCode control = Controls.GetControlByName(Controls.controlNames[i]).Key;
+
+                if (pressedKey == control && Controls.controlNames[i] != trigger.targetInput)
                 {
-                    Controls.SetControlByName(controlNames[i], KeyCode.None);
+                    Controls.SetControlByName(Controls.controlNames[i], KeyCode.None);
+                    controlListItems[i].UpdateLabel();
                 }
             }
 
-            targetInput.Key = pressedKey;
+            Controls.SetControlByName(trigger.targetInput, pressedKey);
+            Debug.Log(pressedKey + ", " + trigger.targetInput + ", " + Controls.GetControlByName(trigger.targetInput).Key);
+
+            GameManager.Instance.SaveControls();
         }
 
-        UpdateControlsList();
+        trigger.UpdateLabel();
     }
 
     #endregion
 
+    public void ResetControls()
+    {
+        GameManager.Instance.ResetControls();
+        UpdateAllLabels();
+    }
+
+    public void UpdateAllLabels()
+    {
+        foreach (ControlListItem item in controlListItems)
+        {
+            item.UpdateLabel();
+        }
+    }
 }

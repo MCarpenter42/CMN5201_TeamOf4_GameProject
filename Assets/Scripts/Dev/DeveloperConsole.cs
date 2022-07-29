@@ -21,6 +21,8 @@ public class DeveloperConsole : Core
         String, StringArray
     };
 
+    [HideInInspector] public bool consoleEnabled = false;
+
     [Header("Components")]
     [SerializeField] RectTransform overlayRect;
     [HideInInspector] public UIElement console;
@@ -66,10 +68,10 @@ public class DeveloperConsole : Core
     {
         console.SetShown(false, UIElement.ShowHide.Instant);
 
-        //showHideButton.SetActive(false);
 #if UNITY_EDITOR
-        showHideButton.SetActive(true);
+        consoleEnabled = true;
 #endif
+        EnableConsole(consoleEnabled);
     }
 
     void Update()
@@ -136,13 +138,30 @@ public class DeveloperConsole : Core
 
     /* - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
 	
+    public void EnableConsole(bool enable)
+    {
+        consoleEnabled = enable;
+        showHideButton.SetActive(enable);
+        if (!enable)
+        {
+            console.SetShown(false, showHideType);
+        }
+    }
+
     public void ToggleConsole()
     {
-        if (!console.gameObject.activeSelf)
+        if (consoleEnabled)
         {
-            console.gameObject.SetActive(true);
+            if (!console.gameObject.activeSelf)
+            {
+                console.gameObject.SetActive(true);
+            }
+            console.SetShown(!console.visible, showHideType);
         }
-        console.SetShown(!console.visible, showHideType);
+        else
+        {
+            console.SetShown(false, showHideType);
+        }
     }
 
     public void UpdateLog()

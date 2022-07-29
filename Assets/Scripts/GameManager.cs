@@ -21,10 +21,10 @@ public class GameManager : Core
     public static Player Player;
     public static LevelController LevelController;
 
-    public static UIController UIController { get { return FindObjectOfType<UIController>(); } }
+    public static UIController UIController;
     public static PauseMenu PauseMenu;
 
-    public static AudioController AudioController { get { return FindObjectOfType<AudioController>(); } }
+    public static AudioController AudioController;
     public GameObject Listener;
 
 #if UNITY_EDITOR
@@ -53,12 +53,15 @@ public class GameManager : Core
     public int scenes_LoadScreen;
     public int[] scenes_Levels;
 
+    public static DataEncryptionKeys EncryptionKeys = new DataEncryptionKeys();
+
     #endregion
 
     public PersistentData PersistentData { get { return GetOrAddComponent<PersistentData>(gameObject); } }
-    public static DataEncryptionKeys EncryptionKeys = new DataEncryptionKeys();
 
     public static bool onGameLoad = true;
+
+    private Controls defaultControls = new Controls();
 
     public static float FPS;
     private List<float> frameTimes = new List<float>();
@@ -138,7 +141,6 @@ public class GameManager : Core
         
             if (onGameLoad)
             {
-                OnAwake();
                 Setup();
             }
             else
@@ -176,23 +178,11 @@ public class GameManager : Core
 
     /* - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
 
-    public void OnAwake()
-    {
-        LevelController = FindObjectOfType<LevelController>();
-        if (LevelController.isGameplayLevel)
-        {
-            Player = FindObjectOfType<Player>();
-        }
-
-        if (UIController.pauseMenu != null)
-        {
-            UIController.pauseMenu.Show(false);
-        }
-        UIController.blackoutColour = blackoutColour;
-    }
-
     private void Setup()
     {
+        OnAwake();
+        LoadSettings();
+
         onGameLoad = false;
 
         DebugLogging = GetOrAddComponent<DebugLogging>(gameObject);
@@ -204,13 +194,30 @@ public class GameManager : Core
         GameDataHandler.GameStateFromData();
 
         EventSystem = GetOrAddComponent<EventSystem>(gameObject);
-        controlsInstance = GetOrAddComponent<Controls>(gameObject);
 
         vidSettingsInstance = GetOrAddComponent<VideoSettings>(gameObject);
         VideoSettings = vidSettingsInstance;
 
         Listener = GetChildrenWithComponent<AudioListener>(gameObject)[0];
         OnSceneLoad();
+    }
+
+    public void OnAwake()
+    {
+        LevelController = FindObjectOfType<LevelController>();
+        if (LevelController.isGameplayLevel)
+        {
+            Player = FindObjectOfType<Player>();
+        }
+
+        UIController = FindObjectOfType<UIController>();
+        AudioController = FindObjectOfType<AudioController>();
+
+        if (UIController.pauseMenu != null)
+        {
+            UIController.pauseMenu.Show(false);
+        }
+        UIController.blackoutColour = blackoutColour;
     }
 
     public void OnPause()
@@ -259,6 +266,10 @@ public class GameManager : Core
         {
             LevelController.PlayerInputs();
             LevelController.CameraInputs();
+            if (GetInputDown(Controls.General.ResetLevel))
+            {
+                LevelController.RestartLevel();
+            }
         }
 
         UIController.UIInputs();
@@ -281,17 +292,18 @@ public class GameManager : Core
 
     public void LoadControls()
     {
-        List<string> controlNames = Controls.GetNamesList();
-        foreach (string name in controlNames)
+        foreach (string name in Controls.controlNames)
         {
             if (PlayerPrefs.HasKey(name))
             {
                 int keyIndex = PlayerPrefs.GetInt(name);
+                Debug.Log("1: " + name + ", " + keyIndex + ", " + (KeyCode)keyIndex);
                 Controls.SetControlByName(name, (KeyCode)keyIndex);
+                Debug.Log("2: " + name + ", " + keyIndex + ", " + (KeyCode)keyIndex);
             }
             else
             {
-                int keyIndex = (int)Controls.GetControlByName(name);
+                int keyIndex = (int)Controls.GetControlByName(name).Key;
                 PlayerPrefs.SetInt(name, keyIndex);
             }
         }
@@ -299,12 +311,23 @@ public class GameManager : Core
 
     public void SaveControls()
     {
-        List<string> controlNames = Controls.GetNamesList();
-        foreach (string name in controlNames)
+        Debug.Log("Saving controls...");
+        foreach (string name in Controls.controlNames)
         {
-            int keyIndex = (int)Controls.GetControlByName(name);
+            int keyIndex = (int)Controls.GetControlByName(name).Key;
+            Debug.Log("3: " + name + ", " + keyIndex + ", " + (KeyCode)keyIndex);
             PlayerPrefs.SetInt(name, keyIndex);
         }
+    }
+
+    public void ResetControls()
+    {
+        for (int i = 0; i < Controls.controlNames.Count; i++)
+        {
+            string ctrl = Controls.controlNames[i];
+            Controls.SetControlByName(ctrl, defaultControls.GetControlByName(ctrl).Key);
+        }
+        SaveControls();
     }
 
     #endregion
@@ -616,6 +639,7 @@ public class GameManager : Core
 
     private void GameEndProcess()
     {
+        SaveSettings();
         GameDataHandler.DataToDisk();
 #if UNITY_EDITOR
         DebugLogging.LogToFile();

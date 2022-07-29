@@ -11,6 +11,8 @@ public class ControlListCategory : UIElement
 {
     #region [ PROPERTIES ]
 
+    [HideInInspector] public MenuSettings_Controls parent;
+
     [Header("Components")]
     [SerializeField] TMP_Text header;
     [SerializeField] ControlListItem firstListItem;
@@ -60,40 +62,35 @@ public class ControlListCategory : UIElement
 
     /* - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
 
-    #region [ SETUP ]
-
     public void SetName(string name)
     {
         categoryName = name;
         header.text = categoryName;
     }
 
-    public void CreateItems(List<int> itemIndices, List<string> itemTargets)
+    public void CreateItems(List<string> itemTargets)
     {
-        //string[] itemName = controlNames[i].Split(new char['.']);
-        //string itemCategory = itemName[itemName.Length - 2];
-
-        int n = itemIndices.Count;
+        int n = itemTargets.Count;
 
         firstListItem.rTransform.SetParent(rTransform, false);
-        firstListItem.rTransform.anchorMin = new Vector2(0, 0);
-        firstListItem.rTransform.anchorMax = new Vector2(1, 0);
-        firstListItem.gameObject.name = "Ctrl_Item_" + categoryName + "_0";
-        firstListItem.index = itemIndices[0];
-        firstListItem.targetInput = itemTargets[0];
-        firstListItem.SetName(Controls.GetControlDisplayName(itemTargets[0]));
         categoryItems.Add(firstListItem);
 
         for (int i = 1; i < n; i++)
         {
             ControlListItem item = Instantiate(firstListItem, rTransform);
-            item.rTransform.anchorMin = new Vector2(0, 0);
-            item.rTransform.anchorMax = new Vector2(1, 0);
-            item.gameObject.name = "Ctrl_Item_" + categoryName + "_" + i;
-            item.index = itemIndices[i];
-            item.targetInput = itemTargets[i];
-            item.SetName(Controls.GetControlDisplayName(itemTargets[i]));
             categoryItems.Add(item);
+        }
+
+        for (int i = 0; i < categoryItems.Count; i++)
+        {
+            categoryItems[i].rTransform.anchorMin = new Vector2(0, 0);
+            categoryItems[i].rTransform.anchorMax = new Vector2(1, 0);
+            categoryItems[i].gameObject.name = "Ctrl_Item_" + categoryName + "_" + i;
+            categoryItems[i].targetInput = itemTargets[i];
+            categoryItems[i].SetName(Controls.GetControlByName(itemTargets[i]).ControlName);
+            categoryItems[i].category = this;
+
+            //Debug.Log(categoryName + ", " + i + ", " + itemTargets[i] + ", " + Controls.GetControlByName(itemTargets[i]).ControlName);
         }
 
         float posY = 0.0f;
@@ -102,7 +99,10 @@ public class ControlListCategory : UIElement
             categoryItems[i].rTransform.anchoredPosition = new Vector2(0.0f, posY);
             posY -= categoryItems[i].rTransform.sizeDelta.y;
         }
-    }
 
-    #endregion
+        if (parent != null)
+        {
+            parent.AddListItems(categoryItems);
+        }
+    }
 }

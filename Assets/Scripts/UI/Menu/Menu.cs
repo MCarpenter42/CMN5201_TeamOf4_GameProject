@@ -83,5 +83,4 @@ public class Menu : UIElement
             throw new Exception("ERROR: Object \"" + menuFrame.name + "\" is not a valid frame of menu \"" + gameObject.name + "\"!");
         }
     }
-    
 }

@@ -11,6 +11,8 @@ public class ControlListItem : UIElement
 {
     #region [ PROPERTIES ]
 
+    [HideInInspector] public ControlListCategory category;
+
     [Header("Components")]
     [SerializeField] TMP_Text controlName;
     [SerializeField] TMP_Text controlKey;
@@ -49,13 +51,11 @@ public class ControlListItem : UIElement
 
     /* - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
 
-    #region [ SETUP ]
-
-    public void ReceiveProperties(string targetInput, int index)
+    /*public void ReceiveProperties(string targetInput, int index)
     {
         this.targetInput = targetInput;
         this.index = index;
-    }
+    }*/
 
     public void SetName(string name)
     {
@@ -63,5 +63,21 @@ public class ControlListItem : UIElement
         controlName.text = name;
     }
 
-    #endregion
+    public void SetLabel(string label)
+    {
+        controlKey.text = label;
+    }
+
+    public void UpdateLabel()
+    {
+        KeyCode keyCode = Controls.GetControlByName(targetInput).Key;
+        Controls.KeyNames.TryGetValue(keyCode, out string keyText);
+        //Debug.Log(targetInput + ", " + keyCode + ", " + keyText);
+        SetLabel(keyText);
+    }
+
+    public void TriggerSetControl()
+    {
+        category.parent.SetControl(this);
+    }
 }

@@ -95,9 +95,17 @@ public class UIController : Core
     
     public void UIInputs()
     {
-        if (Input.GetKeyDown(Controls.General.Pause.Key) && pauseMenu != null)
+        if (GetInputDown(Controls.General.Pause) && pauseMenu != null)
         {
             pauseMenu.SetShown(!GameManager.isPaused);
+        }
+
+        if (Input.GetKey(KeyCode.LeftControl) && Input.GetKeyDown(KeyCode.F5))
+        {
+            if (devConsole != null)
+            {
+                devConsole.EnableConsole(!devConsole.consoleEnabled);
+            }
         }
     }
 
