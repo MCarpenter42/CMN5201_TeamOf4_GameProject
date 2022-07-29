@@ -103,7 +103,7 @@ public class SFXSource : Core
     {
         distanceRange = maxDistance - minDistance;
 
-        float distance = (GameManager.Listener.transform.position - transform.position).magnitude;
+        float distance = (GameManager.Instance.Listener.transform.position - transform.position).magnitude;
         float volume;
 
         if (distance <= minDistance)

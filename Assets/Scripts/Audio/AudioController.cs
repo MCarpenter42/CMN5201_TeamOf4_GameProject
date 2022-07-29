@@ -26,7 +26,7 @@ public class AudioController : Core
     [HideInInspector] public SFXSource playerSFX;
     [HideInInspector] public List<SFXSource> beamSFX = new List<SFXSource>();
     [HideInInspector] public SFXSource doorSFX;
-    [HideInInspector] public SFXSource uiSFX;
+    [HideInInspector] public SFXSource uiSFX { get { return GameManager.UIController.sfx; } }
 
     #endregion
 
@@ -162,10 +162,6 @@ public class AudioController : Core
         if (GameObject.FindGameObjectWithTag("ExitDoor") != null)
         {
             doorSFX = GameObject.FindGameObjectWithTag("ExitDoor").GetComponent<SFXSource>();
-        }
-        if (GameManager.UIController.sfx != null)
-        {
-            uiSFX = GameManager.UIController.sfx;
         }
     }
 

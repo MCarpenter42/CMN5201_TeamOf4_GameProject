@@ -41,8 +41,8 @@ public class DebugLogging : Core
 
     public void StartLogging()
     {
-        NewLog();
         Application.logMessageReceived += Log;
+        NewLog();
     }
 
     public void NewLog()
@@ -66,11 +66,13 @@ public class DebugLogging : Core
 
     public void LogCommand(string logString)
     {
+        stack = "";
         SendLogMessage(logString, "ConsoleCommand");
     }
     
     public void LogSystemMessage(string logString)
     {
+        stack = "";
         SendLogMessage(logString, "SystemMessage");
     }
 
@@ -82,6 +84,7 @@ public class DebugLogging : Core
         debugLog.Add(logLineHeader);
         logLineContent = ">>> " + logString;
         debugLog.Add(logLineContent);
+        debugLog.Add(stack);
         debugLog.Add("");
 
         GameManager.Instance.OnLog();
@@ -98,6 +101,7 @@ public class DebugLogging : Core
         logEnd = DateTime.Now.ToString();
         debugLog.Add("");
         debugLog.Add(">>  LOGGING ENDED: " + logEnd + "  <<");
+        debugLog.Add("");
         debugLog.Add("");
 
         string timestamp = logEnd.Replace(':', '-').Replace(' ', '_').Replace('/', '-');

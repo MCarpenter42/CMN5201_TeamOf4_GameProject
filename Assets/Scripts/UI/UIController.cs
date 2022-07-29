@@ -192,7 +192,7 @@ public class UIController : Core
         {
             yield return null;
             timePassed += Time.unscaledDeltaTime;
-            float delta = timePassed / duration;
+            float delta = InterpDelta.CosSlowDownSpeedUp(timePassed / duration, show);
             blackScreen.color = Color.Lerp(clrStart, clrEnd, delta);
         }
         blackScreen.color = clrEnd;
@@ -200,6 +200,7 @@ public class UIController : Core
 
     public void GoToMainMenu()
     {
+        Debug.Log(GameManager.Instance.PersistentData.scenes_MainMenu);
         GameManager.Instance.GoToMainMenu();
     }
 }

@@ -67,7 +67,14 @@ public class LevelSelectButton : AudioButton
     private bool CheckUnlockState()
     {
         int index = level - 1;
-        return GameManager.levelsUnlocked[index];
+        if (InBounds(index, GameManager.levelsUnlocked))
+        {
+            return GameManager.levelsUnlocked[index];
+        }
+        else
+        {
+            return false;
+        }
     }
 
     public void UpdateVisuals()
@@ -121,7 +128,7 @@ public class LevelSelectButton : AudioButton
 
     private void ButtonLevelLoad()
     {
-        //GameManager.Instance.LoadUnlockedLevel(level - 1);
+        //GameManager.LoadUnlockedLevel(level - 1);
         GameManager.Instance.LoadLevel(level - 1);
     }
 

@@ -726,9 +726,9 @@ MonoBehaviour:
         m_MethodName: SetActiveFrame
         m_Mode: 2
         m_Arguments:
-          m_ObjectArgument: {fileID: 391936694}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.GameObject, UnityEngine
-          m_IntArgument: 0
+          m_ObjectArgument: {fileID: 391936696}
+          m_ObjectArgumentAssemblyTypeName: UIElement, Assembly-CSharp
+          m_IntArgument: 2
           m_FloatArgument: 0
           m_StringArgument: 
           m_BoolArgument: 0
@@ -1575,8 +1575,8 @@ MonoBehaviour:
         m_MethodName: SetActiveFrame
         m_Mode: 2
         m_Arguments:
-          m_ObjectArgument: {fileID: 189636819}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.GameObject, UnityEngine
+          m_ObjectArgument: {fileID: 189636821}
+          m_ObjectArgumentAssemblyTypeName: UIElement, Assembly-CSharp
           m_IntArgument: 0
           m_FloatArgument: 0
           m_StringArgument: 
@@ -4124,9 +4124,9 @@ MonoBehaviour:
         m_MethodName: SetActiveFrame
         m_Mode: 2
         m_Arguments:
-          m_ObjectArgument: {fileID: 1396853818}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.GameObject, UnityEngine
-          m_IntArgument: 0
+          m_ObjectArgument: {fileID: 1396853820}
+          m_ObjectArgumentAssemblyTypeName: UIElement, Assembly-CSharp
+          m_IntArgument: 3
           m_FloatArgument: 0
           m_StringArgument: 
           m_BoolArgument: 0
@@ -4871,9 +4871,9 @@ MonoBehaviour:
         m_MethodName: SetActiveFrame
         m_Mode: 2
         m_Arguments:
-          m_ObjectArgument: {fileID: 34147653}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.GameObject, UnityEngine
-          m_IntArgument: 0
+          m_ObjectArgument: {fileID: 34147655}
+          m_ObjectArgumentAssemblyTypeName: UIElement, Assembly-CSharp
+          m_IntArgument: 1
           m_FloatArgument: 0
           m_StringArgument: 
           m_BoolArgument: 0
@@ -5369,8 +5369,8 @@ MonoBehaviour:
         m_MethodName: SetActiveFrame
         m_Mode: 2
         m_Arguments:
-          m_ObjectArgument: {fileID: 189636819}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.GameObject, UnityEngine
+          m_ObjectArgument: {fileID: 189636821}
+          m_ObjectArgumentAssemblyTypeName: UIElement, Assembly-CSharp
           m_IntArgument: 0
           m_FloatArgument: 0
           m_StringArgument: 
@@ -6935,8 +6935,8 @@ MonoBehaviour:
         m_MethodName: SetActiveFrame
         m_Mode: 2
         m_Arguments:
-          m_ObjectArgument: {fileID: 189636819}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.GameObject, UnityEngine
+          m_ObjectArgument: {fileID: 189636821}
+          m_ObjectArgumentAssemblyTypeName: UIElement, Assembly-CSharp
           m_IntArgument: 0
           m_FloatArgument: 0
           m_StringArgument: 

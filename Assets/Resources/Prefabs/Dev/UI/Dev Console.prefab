@@ -59,7 +59,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
   m_Color: {r: 0.24705882, g: 0.24705882, b: 0.24705882, a: 0.84313726}
-  m_RaycastTarget: 1
+  m_RaycastTarget: 0
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
   m_OnCullStateChanged:
@@ -319,8 +319,8 @@ MonoBehaviour:
   showHideType: 2
   transitionTime: 0.5
   slideMovementStyle: 5
-  visiblePos: {x: 0, y: 290}
-  hiddenOffset: {x: 0, y: 510}
+  visiblePos: {x: 0, y: 90}
+  hiddenOffset: {x: 0, y: 1000}
   onShow:
     m_PersistentCalls:
       m_Calls:
@@ -1107,8 +1107,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0.5}
   m_AnchorMax: {x: 1, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: 800}
-  m_SizeDelta: {x: 0, y: 500}
+  m_AnchoredPosition: {x: 0, y: 1000}
+  m_SizeDelta: {x: 0, y: 900}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &7333858081647793318
 MonoBehaviour:
@@ -1122,9 +1122,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b526bc7009c66c9498d52544a08e93a0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  rTransform: {fileID: 0}
   childGraphicElements: []
   visible: 0
+  mouseOver: 0
   fixedShowHideDelay: 0
   showHideType: 0
   transitionTime: 0.1

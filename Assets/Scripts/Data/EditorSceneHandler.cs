@@ -10,13 +10,13 @@ using TMPro;
 [ExecuteInEditMode]
 public class EditorSceneHandler : Core
 {
-    [HideInInspector] public GameManager gameManager;
+/*    [HideInInspector] public GameManager gameManager;
 
     [HideInInspector] public ScenePathList scenePaths = new ScenePathList();
 
     private bool scenesChanged = false;
 
-    /* - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
+    *//* - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - *//*
 
 #if UNITY_EDITOR
     void Awake()
@@ -34,7 +34,7 @@ public class EditorSceneHandler : Core
         }
     }
 
-    /* - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
+    *//* - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - *//*
 
     public bool GetScenePaths()
     {
@@ -100,5 +100,5 @@ public class EditorSceneHandler : Core
         string jsonData = JsonUtility.ToJson(scenePaths);
         File.WriteAllText(GameManager.pathListFilepath, jsonData);
     }
-#endif
+#endif*/
 }

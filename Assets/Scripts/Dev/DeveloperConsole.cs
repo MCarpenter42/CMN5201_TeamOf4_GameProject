@@ -39,7 +39,7 @@ public class DeveloperConsole : Core
     [SerializeField] UnityEvent onShow = new UnityEvent();
     [SerializeField] UnityEvent onHide = new UnityEvent();
 
-    private string[] logLines = new string[24];
+    private string[] logLines = new string[80];
     private bool logConsoleState = false;
 
     private List<ConsoleCommand> commands = new List<ConsoleCommand>();
@@ -66,7 +66,7 @@ public class DeveloperConsole : Core
     {
         console.SetShown(false, UIElement.ShowHide.Instant);
 
-        showHideButton.SetActive(false);
+        //showHideButton.SetActive(false);
 #if UNITY_EDITOR
         showHideButton.SetActive(true);
 #endif

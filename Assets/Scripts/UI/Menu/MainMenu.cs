@@ -19,25 +19,7 @@ public class MainMenu : Menu
 
     #region [ BUILT-IN UNITY FUNCTIONS ]
 
-    void Awake()
-    {
 
-    }
-
-    void Start()
-    {
-
-    }
-
-    void Update()
-    {
-
-    }
-
-    void FixedUpdate()
-    {
-
-    }
 
     #endregion
 

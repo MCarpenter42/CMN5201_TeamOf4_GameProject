@@ -561,6 +561,7 @@ public class Encryption_XOR
 
 /* - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
 
+[Serializable]
 public class EncryptedObject
 {
     public string objectType;

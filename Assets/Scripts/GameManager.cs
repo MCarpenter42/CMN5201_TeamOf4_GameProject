@@ -13,8 +13,6 @@ public class GameManager : Core
 {
     #region [ OBJECTS ]
 
-    public static GameDataHandler GameDataHandler;
-
     private static GameManager instance = null;
     public static Controls controlsInstance;
     private VideoSettings vidSettingsInstance;
@@ -23,11 +21,11 @@ public class GameManager : Core
     public static Player Player;
     public static LevelController LevelController;
 
-    public static UIController UIController;
+    public static UIController UIController { get { return FindObjectOfType<UIController>(); } }
     public static PauseMenu PauseMenu;
 
-    public static AudioController AudioController;
-    public static GameObject Listener;
+    public static AudioController AudioController { get { return FindObjectOfType<AudioController>(); } }
+    public GameObject Listener;
 
 #if UNITY_EDITOR
     //private EditorSceneHandler editorSceneHandler;
@@ -43,6 +41,23 @@ public class GameManager : Core
 
     #region [ PROPERTIES ]
 
+    #region [ PERSISTENT DATA ]
+
+    public string encryption_AES_Key;
+    public string encryption_AES_IV;
+    public string encryption_DES_Key;
+    public int encryption_XOR_Key;
+
+    public string[] buildScenePaths;
+    public int scenes_MainMenu;
+    public int scenes_LoadScreen;
+    public int[] scenes_Levels;
+
+    #endregion
+
+    public PersistentData PersistentData { get { return GetOrAddComponent<PersistentData>(gameObject); } }
+    public static DataEncryptionKeys EncryptionKeys = new DataEncryptionKeys();
+
     public static bool onGameLoad = true;
 
     public static float FPS;
@@ -53,11 +68,7 @@ public class GameManager : Core
 
     public static bool sceneChangeComplete = true;
 
-    public static string pathListLocalPath = "/Resources/Data/ScenePathList.json";
-    public static string pathListFilepath { get { return Application.dataPath + "/Resources/Data/ScenePathList.json"; } }
-    [SerializeField] public ScenePathList scenePaths { get { return GetOrAddComponent<ScenePathList>(gameObject); } }
-
-    public static bool[] levelsUnlocked = new bool[0];
+    public static bool[] levelsUnlocked = new bool[16];
 
     public Color blackoutColour;
 
@@ -102,7 +113,7 @@ public class GameManager : Core
     // Initialiser function, serves a similar purpose to a constructor
     private void Init()
     {
-        Setup();
+        //Setup();
     }
 
     #endregion
@@ -151,31 +162,6 @@ public class GameManager : Core
 
             DebugOnUpdate();
         }
-        else
-        {
-/*#if UNITY_EDITOR
-            if (editorSceneHandler == null)
-            {
-                if (gameObject.GetComponent<EditorSceneHandler>() == null)
-                {
-                    editorSceneHandler = gameObject.AddComponent<EditorSceneHandler>();
-                    editorSceneHandler.gameManager = this;
-                }
-                else
-                {
-                    editorSceneHandler = gameObject.GetComponent<EditorSceneHandler>();
-                    editorSceneHandler.gameManager = this;
-                }
-            }
-            else if (editorSceneHandler.gameManager == null)
-            {
-                editorSceneHandler.gameManager = this;
-            }
-#endif*/
-        }
-#if UNITY_EDITOR
-        GetScenePaths();
-#endif
     }
 
     void OnApplicationQuit()
@@ -198,39 +184,30 @@ public class GameManager : Core
             Player = FindObjectOfType<Player>();
         }
 
-        UIController = FindObjectOfType<UIController>();
         if (UIController.pauseMenu != null)
         {
             UIController.pauseMenu.Show(false);
         }
         UIController.blackoutColour = blackoutColour;
-
-        AudioController = FindObjectOfType<AudioController>();
     }
 
     private void Setup()
     {
-        GameDataHandler = GetOrAddComponent<GameDataHandler>(gameObject);
+        onGameLoad = false;
+
+        DebugLogging = GetOrAddComponent<DebugLogging>(gameObject);
+        DebugLogging.StartLogging();
+
+        PersistentData.GetPersistentData();
+
+        GameDataHandler.DataFromDisk();
+        GameDataHandler.GameStateFromData();
 
         EventSystem = GetOrAddComponent<EventSystem>(gameObject);
         controlsInstance = GetOrAddComponent<Controls>(gameObject);
 
         vidSettingsInstance = GetOrAddComponent<VideoSettings>(gameObject);
         VideoSettings = vidSettingsInstance;
-
-        DebugLogging = GetOrAddComponent<DebugLogging>(gameObject);
-
-        GetScenePaths();
-
-        if (onGameLoad)
-        {
-            DebugLogging.StartLogging();
-
-            GameDataHandler.LoadEncryptionKeys();
-            GameDataHandler.DataFromDisk();
-            GameDataHandler.GameStateFromData();
-            onGameLoad = false;
-        }
 
         Listener = GetChildrenWithComponent<AudioListener>(gameObject)[0];
         OnSceneLoad();
@@ -286,12 +263,6 @@ public class GameManager : Core
 
         UIController.UIInputs();
     }
-
-    #region [ GAME DATA ]
-
-
-
-    #endregion
 
     #region [ SETTINGS ]
 
@@ -349,23 +320,13 @@ public class GameManager : Core
     
     public void OnSceneLoad(int sceneIndex)
     {
-        if (LevelController.isGameplayLevel)
-        {
-            Listener.transform.SetParent(Player.gameObject.transform, false);
-            Listener.transform.localPosition = new Vector3(0.0f, 0.4f, 0.0f);
-        }
-        else
-        {
-            Listener.transform.localPosition = new Vector3(0.0f, 200.0f, 0.0f);
-        }
-
         LevelController.sceneIndex = sceneIndex;
 
         if (LevelController.isGameplayLevel)
         {
-            for (int i = 0; i < scenePaths.levels.Length; i++)
+            for (int i = 0; i < scenes_Levels.Length; i++)
             {
-                if (sceneIndex == scenePaths.levels[i])
+                if (sceneIndex == scenes_Levels[i])
                 {
                     LevelController.levelIndex = i;
                 }
@@ -373,55 +334,10 @@ public class GameManager : Core
         }
     }
 
-    /*private void GetScenePaths()
-    {
-        string jsonData = File.ReadAllText(pathListFilepath);
-        scenePaths = JsonUtility.FromJson<ScenePathList>(jsonData);
-    }*/
-    
-    private void GetScenePaths()
-    {
-#if UNITY_EDITOR
-        string[] pathArray = new string[EditorBuildSettings.scenes.Length];
-        for (int i = 0; i < EditorBuildSettings.scenes.Length; i++)
-        {
-            pathArray[i] = EditorBuildSettings.scenes[i].path;
-        }
-
-        scenePaths.paths = pathArray;
-
-        scenePaths.mainMenu = SceneIndexFromName(MainMenuScene.name);
-        scenePaths.levelTransition = SceneIndexFromName(LevelTransitionScene.name);
-        scenePaths.levels = new int[LevelScenes.Count];
-        for (int i = 0; i < LevelScenes.Count; i++)
-        {
-            scenePaths.levels[i] = SceneIndexFromName(LevelScenes[i].name);
-        }
-
-        string jsonData = JsonUtility.ToJson(scenePaths);
-        File.WriteAllText(pathListFilepath, jsonData);
-#endif
-    }
-    
-    public int SceneIndexFromName(string sceneName)
-    {
-        for (int i = 0; i < scenePaths.paths.Length; i++)
-        {
-            string buildSceneName = scenePaths.paths[i];
-            int n1 = buildSceneName.LastIndexOf('/') + 1;
-            int n2 = buildSceneName.LastIndexOf('.') - n1;
-            if (buildSceneName.Substring(n1, n2) == sceneName)
-            {
-                return i;
-            }
-        }
-        return -1;
-    }
-    
     public bool IsLevelScene(int sceneIndex)
     {
         bool isLevelScene = false;
-        foreach (int index in scenePaths.levels)
+        foreach (int index in PersistentData.scenes_Levels)
         {
             if (sceneIndex == index)
             {
@@ -432,19 +348,34 @@ public class GameManager : Core
         return isLevelScene;
     }
 
+    public int SceneIndexFromName(string sceneName)
+    {
+        for (int i = 0; i < buildScenePaths.Length; i++)
+        {
+            string buildSceneName = buildScenePaths[i];
+            int n1 = buildSceneName.LastIndexOf('/') + 1;
+            int n2 = buildSceneName.LastIndexOf('.') - n1;
+            if (buildSceneName.Substring(n1, n2) == sceneName)
+            {
+                return i;
+            }
+        }
+        return -1;
+    }
+
     #endregion
 
     #region [ SCENE CATEGORIES ]
 
     public bool GoToMainMenu()
-    {
+    {   
         bool successful = false;
 
-        if (scenePaths.mainMenu != -1)
+        if (scenes_MainMenu != -1)
         {
             try
             {
-                ChangeScene(scenePaths.mainMenu, true, true, 1.0f);
+                ChangeScene(scenes_MainMenu, true, true, 1.0f);
                 successful = true;
             }
             catch
@@ -460,11 +391,11 @@ public class GameManager : Core
     {
         bool successful = false;
 
-        if (InBounds(index, scenePaths.levels))
+        if (InBounds(index, scenes_Levels))
         {
             try
             {
-                ChangeScene(scenePaths.levels[index], true, true, 1.0f);
+                ChangeScene(scenes_Levels[index], true, true, 1.0f);
                 successful = true;
             }
             catch
@@ -475,7 +406,7 @@ public class GameManager : Core
 
         return successful;
     }
-    
+
     public bool LoadUnlockedLevel(int index)
     {
         if (InBounds(index, levelsUnlocked) && levelsUnlocked[index])
@@ -516,7 +447,7 @@ public class GameManager : Core
     {
         ChangeScene(targetSceneIndex, true, true, loadScreenDelay);
     }
-    
+
     public void ChangeScene(int targetSceneIndex, bool fadeOut, bool fadeIn)
     {
         if (sceneChangeComplete)
@@ -525,7 +456,7 @@ public class GameManager : Core
             StartCoroutine(IChangeScene(targetSceneIndex, fadeOut, fadeIn, 0.5f));
         }
     }
-    
+
     public void ChangeScene(int targetSceneIndex, bool fadeOut, bool fadeIn, float loadScreenDelay)
     {
         if (sceneChangeComplete)
@@ -537,9 +468,6 @@ public class GameManager : Core
     
     private IEnumerator IChangeScene(int targetSceneIndex, bool fadeOut, bool fadeIn, float loadScreenDelay)
     {
-        Listener.transform.SetParent(gameObject.transform);
-        int currentSceneIndex = LevelController.sceneIndex;
-
         if (fadeOut)
         {
             UIController.BlackScreenFade(true, LevelController.levelFadeTime);
@@ -549,17 +477,56 @@ public class GameManager : Core
 
         Resume();
 
-        AsyncOperation loading = SceneManager.LoadSceneAsync(scenePaths.levelTransition, LoadSceneMode.Additive);
+        AsyncOperation loading = SceneManager.LoadSceneAsync(targetSceneIndex, LoadSceneMode.Single);
         while (!loading.isDone)
         {
             yield return null;
         }
         loading = null;
 
-        Scene sceneToSetActive = SceneManager.GetSceneByPath(scenePaths.paths[scenePaths.levelTransition]);
+        OnAwake();
+        OnSceneLoad(targetSceneIndex);
+        GameDataHandler.GameStateToData();
+
+        sceneChangeComplete = true;
+
+        if (fadeIn)
+        {
+            UIController.BlackScreenFade(false, LevelController.levelFadeTime);
+            AudioController.AudioFade(false, LevelController.levelFadeTime);
+            yield return new WaitForSecondsRealtime(LevelController.levelFadeTime);
+        }
+    }
+    
+    /*private IEnumerator IChangeScene(int targetSceneIndex, bool fadeOut, bool fadeIn, float loadScreenDelay)
+    {
+        Listener.transform.SetParent(gameObject.transform);
+        int currentSceneIndex = LevelController.sceneIndex;
+        if (currentSceneIndex == -1)
+        {
+            currentSceneIndex = PersistentData.SceneIndexFromName(SceneManager.GetActiveScene().name);
+        }
+        Debug.Log("Current scene index: " + currentSceneIndex);
+        if (fadeOut)
+        {
+            UIController.BlackScreenFade(true, LevelController.levelFadeTime);
+            AudioController.AudioFade(true, LevelController.levelFadeTime);
+            yield return new WaitForSecondsRealtime(LevelController.levelFadeTime);
+        }
+
+        Resume();
+
+        AsyncOperation loading = SceneManager.LoadSceneAsync(PersistentData.scenes_LoadScreen, LoadSceneMode.Additive);
+        while (!loading.isDone)
+        {
+            yield return null;
+        }
+        loading = null;
+
+        Scene sceneToSetActive = SceneManager.GetSceneByPath(PersistentData.buildScenePaths[PersistentData.scenes_LoadScreen]);
         SceneManager.SetActiveScene(sceneToSetActive);
 
-        AsyncOperation unloading = SceneManager.UnloadSceneAsync(scenePaths.paths[currentSceneIndex]);
+        AsyncOperation unloading = SceneManager.UnloadSceneAsync(PersistentData.buildScenePaths[currentSceneIndex]);
         while (!unloading.isDone)
         {
             yield return null;
@@ -576,21 +543,15 @@ public class GameManager : Core
         }
         loading = null;
 
-        sceneToSetActive = SceneManager.GetSceneByPath(scenePaths.paths[targetSceneIndex]);
+        sceneToSetActive = SceneManager.GetSceneByPath(PersistentData.buildScenePaths[targetSceneIndex]);
         SceneManager.SetActiveScene(sceneToSetActive);
 
-        unloading = SceneManager.UnloadSceneAsync(scenePaths.paths[scenePaths.levelTransition]);
+        unloading = SceneManager.UnloadSceneAsync(PersistentData.buildScenePaths[PersistentData.scenes_LoadScreen]);
         while (!unloading.isDone)
         {
             yield return null;
         }
         unloading = null;
-
-        /*AsyncOperation loading = SceneManager.LoadSceneAsync(targetSceneIndex);
-        while (!loading.isDone)
-        {
-            yield return null;
-        }*/
 
         OnAwake();
         OnSceneLoad(targetSceneIndex);
@@ -604,7 +565,7 @@ public class GameManager : Core
             AudioController.AudioFade(false, LevelController.levelFadeTime);
             yield return new WaitForSecondsRealtime(LevelController.levelFadeTime);
         }
-    }
+    }*/
 
     private IEnumerator DelayedChangeScene(float delay)
     {
@@ -640,7 +601,7 @@ public class GameManager : Core
 
     public void DelayedQuit(float delay)
     {
-        //GameEndProcess();
+        GameEndProcess();
         StartCoroutine(IDelayedQuit(delay));
     }
 

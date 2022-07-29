@@ -113,9 +113,9 @@ public class AmbientSource : SFXSource
 
     private IEnumerator AmbientLoop()
     {
-        int triggerAttempts = 0;
+        /*int triggerAttempts = 0;
         string percent;
-        float timeToTrigger = 0.0f;
+        float timeToTrigger = 0.0f;*/
 
         float tickingTriggerChance = triggerChance;
         float randInterval;
@@ -124,41 +124,41 @@ public class AmbientSource : SFXSource
             source.Stop();
 
             randInterval = interval * Random.Range(minInclusive, maxInclusive);
-            if (doReadout)
-            { debug_Interval.text = "        Check interval: " + DecimalPlacesString(randInterval, 3) + " (" + DecimalPlacesString(interval, 3) + ") "; }
+            /*if (doReadout)
+            { debug_Interval.text = "        Check interval: " + DecimalPlacesString(randInterval, 3) + " (" + DecimalPlacesString(interval, 3) + ") "; }*/
             yield return new WaitForSeconds(randInterval);
-            timeToTrigger += randInterval;
+            //timeToTrigger += randInterval;
 
-            triggerAttempts++;
+            /*triggerAttempts++;
             if (doReadout)
-            { debug_TriggerAttempts.text = "      Trigger attempts: " + triggerAttempts; }
+            { debug_TriggerAttempts.text = "      Trigger attempts: " + triggerAttempts; }*/
 
             if (Random.value <= tickingTriggerChance)
             {
                 AudioClip clip = PickFromList(clips);
                 PlayAudioClip(clip);
 
-                triggerTimeTotal += timeToTrigger;
+                /*triggerTimeTotal += timeToTrigger;
                 triggerCount++;
                 timesToTrigger += DecimalPlacesString(timeToTrigger, 2) + "s, ";
                 Debug.Log("Average trigger time over " + triggerCount + " instances: " + (triggerTimeTotal / (float)triggerCount));
-                timeToTrigger = 0.0f;
+                timeToTrigger = 0.0f;*/
 
-                if (doReadout)
-                { debug_IsPlaying.text = "        Playing status: Playing"; }
+                /*if (doReadout)
+                { debug_IsPlaying.text = "        Playing status: Playing"; }*/
                 yield return new WaitForSeconds(clip.length);
-                if (doReadout)
-                { debug_IsPlaying.text = "        Playing status: Not playing"; }
+                /*if (doReadout)
+                { debug_IsPlaying.text = "        Playing status: Not playing"; }*/
 
                 tickingTriggerChance = triggerChance;
-                percent = DecimalPlacesString(tickingTriggerChance * 100.0f, 2) + "%";
+                //percent = DecimalPlacesString(tickingTriggerChance * 100.0f, 2) + "%";
                 
-                if (doReadout)
-                { debug_TriggerChance.text = "Current trigger chance: " + percent; }
+                /*if (doReadout)
+                { debug_TriggerChance.text = "Current trigger chance: " + percent; }*/
 
-                triggerAttempts = 0;
+                /*triggerAttempts = 0;
                 if (doReadout)
-                { debug_TriggerAttempts.text = "      Trigger attempts: " + triggerAttempts; }
+                { debug_TriggerAttempts.text = "      Trigger attempts: " + triggerAttempts; }*/
 
                 cooldownTracker = cooldown;
                 onCooldown = true;
@@ -167,9 +167,9 @@ public class AmbientSource : SFXSource
             }
             else
             {
-                percent = DecimalPlacesString(tickingTriggerChance * 100.0f, 2) + "%";
+                /*percent = DecimalPlacesString(tickingTriggerChance * 100.0f, 2) + "%";
                 if (doReadout)
-                { debug_TriggerChance.text = "Current trigger chance: " + percent; }
+                { debug_TriggerChance.text = "Current trigger chance: " + percent; }*/
                 tickingTriggerChance = Mathf.Clamp(tickingTriggerChance * (1.0f + adjustPerCheck), 0.0f, 1.0f);
             }
         }

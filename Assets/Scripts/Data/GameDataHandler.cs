@@ -11,7 +11,7 @@ public class GameDataHandler : Core
 {
     #region [ OBJECTS ]
 
-    public GameData DataMaster { get; private set; }
+    public static GameData DataMaster = new GameData();
 
     #endregion
 
@@ -19,13 +19,12 @@ public class GameDataHandler : Core
 
     public static DataEncryptionKeys keys = new DataEncryptionKeys();
 
-    private string keysFilepath { get { return Application.dataPath + "/Resources/Data/EncryptionKeys.json"; } }
-    private string saveDataFilepath { get { return Application.dataPath + "/SaveData/GameSaveData.json"; } }
+    private static string keysFilepath { get { return Application.dataPath + "/Resources/Data/EncryptionKeys.json"; } }
+    /*private string saveDataFilepath { get { return Application.dataPath + "/SaveData/GameSaveData.json"; } }
 #if UNITY_EDITOR
     private string saveDataFilepath_UNENC { get { return Application.dataPath + "/SaveData/GameSaveData_UNENC.json"; } }
-#endif
-
-    private bool keysLoaded = false;
+#endif*/
+    private static string saveDataFileName = "SaveData.dat";
 
     #endregion
 
@@ -46,7 +45,7 @@ public class GameDataHandler : Core
 
     /* - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
 
-    public void LoadEncryptionKeys()
+    /*public static void LoadEncryptionKeys()
     {
         if (!keysLoaded)
         {
@@ -64,16 +63,16 @@ public class GameDataHandler : Core
 
             keysLoaded = true;
         }
-    }
+    }*/
 
     #region [ GAME STATE <-> LOCAL DATA ]
 
-    public void GameStateToData()
+    public static void GameStateToData()
     {
         DataMaster.levelsUnlocked = GameManager.levelsUnlocked;
     }
 
-    public void GameStateFromData()
+    public static void GameStateFromData()
     {
         GameManager.levelsUnlocked = DataMaster.levelsUnlocked;
     }
@@ -82,7 +81,7 @@ public class GameDataHandler : Core
     
     #region [ LOCAL DATA <-> SAVE FILES ]
 
-    public void DataToDisk()
+    public static void DataToDisk()
     {
 #if UNITY_EDITOR
         if (!AssetDatabase.IsValidFolder($"Assets/SaveData"))
@@ -90,25 +89,32 @@ public class GameDataHandler : Core
             AssetDatabase.CreateFolder("Assets", "SaveData");
         }
 #endif
-        if (!keysLoaded)
-        {
-            LoadEncryptionKeys();
-        }
+        EncryptedObject encData = EncryptionHandler.AES.Encrypt(DataMaster, GameManager.EncryptionKeys.aesKey, GameManager.EncryptionKeys.aesIV);
+        FileHandler.SaveData(encData, saveDataFileName);
 
-        File.WriteAllText(saveDataFilepath, JsonUtility.ToJson(EncryptionHandler.AES.Encrypt(DataMaster, keys.aesKey, keys.aesIV)));
+        /*File.WriteAllText(saveDataFilepath, JsonUtility.ToJson(EncryptionHandler.AES.Encrypt(DataMaster, keys.aesKey, keys.aesIV)));
 #if UNITY_EDITOR
         File.WriteAllText(saveDataFilepath_UNENC, JsonUtility.ToJson(DataMaster));
-#endif
+#endif*/
     }
 
-    public void DataFromDisk()
+    public static void DataFromDisk()
     {
-        if (!keysLoaded)
+        EncryptedObject encData = FileHandler.LoadData(saveDataFileName) as EncryptedObject;
+        if (encData == null)
         {
-            LoadEncryptionKeys();
+            DataMaster = new GameData();
+        }
+        else
+        {
+            DataMaster = EncryptionHandler.AES.Decrypt<GameData>(encData, GameManager.EncryptionKeys.aesKey, GameManager.EncryptionKeys.aesIV);
+        }
+        if (DataMaster.levelsUnlocked.Length == 0)
+        {
+            SetupUnlockArray();
         }
 
-        if (File.Exists(saveDataFilepath))
+        /*if (File.Exists(saveDataFilepath))
         {
             string encString = File.ReadAllText(saveDataFilepath);
             EncryptedObject encData = JsonUtility.FromJson<EncryptedObject>(encString);
@@ -125,16 +131,16 @@ public class GameDataHandler : Core
             SetupUnlockArray();
             
             DataToDisk();
-        }
+        }*/
     }
 
     #endregion
     
     #region [ OTHER ]
 
-    private void SetupUnlockArray()
+    private static void SetupUnlockArray()
     {
-        int n = GameManager.Instance.scenePaths.levels.Length;
+        int n = GameManager.Instance.scenes_Levels.Length;
         DataMaster.levelsUnlocked = new bool[n];
         for (int i = 0; i < n; i++)
         {
@@ -153,39 +159,9 @@ public class GameDataHandler : Core
 
 }
 
+[Serializable]
 public class GameData
 {
     public bool firstTimePlaying = true;
     public bool[] levelsUnlocked = new bool[0];
-}
-
-public class DataEncryptionKeys
-{
-    public string aesKey;
-    public string aesIV;
-    public string desKey;
-    public int xorKey;
-
-    /* - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
-
-    public DataEncryptionKeys()
-    { }
-    
-    public DataEncryptionKeys(string aesKey, string aesIV, string desKey, int xorKey)
-    {
-        this.aesKey = aesKey;
-        this.aesIV = aesIV;
-        this.desKey = desKey;
-        this.xorKey = xorKey;
-    }
-
-    /* - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
-
-    public void SetKeys(string aesKey, string aesIV, string desKey, int xorKey)
-    {
-        this.aesKey = aesKey;
-        this.aesIV = aesIV;
-        this.desKey = desKey;
-        this.xorKey = xorKey;
-    }
 }

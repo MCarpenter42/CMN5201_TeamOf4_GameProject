@@ -12,7 +12,7 @@ public class Menu : UIElement
 
     [Header("Components")]
     public List<GameObject> menuFrames;
-    private List<UIElement> frames;
+    private List<UIElement> frames = new List<UIElement>();
 
     [HideInInspector] public int activeFrame = -1;
 
@@ -27,6 +27,7 @@ public class Menu : UIElement
         base.Awake();
         for (int i = 0; i < menuFrames.Count; i++)
         {
+            menuFrames[i].SetActive(true);
             frames.Add(GetOrAddComponent<UIElement>(menuFrames[i]));
         }
     }

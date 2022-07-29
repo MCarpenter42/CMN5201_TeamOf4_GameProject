@@ -10,6 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 3093236502035432787}
   - component: {fileID: 806377536611140145}
+  - component: {fileID: 810742058276847175}
   m_Layer: 0
   m_Name: Audio Listener
   m_TagString: Untagged
@@ -39,6 +40,18 @@ AudioListener:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4718703234066767865}
   m_Enabled: 1
+--- !u!114 &810742058276847175
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4718703234066767865}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c9bd7282b8b0a5540b2da59c3caf5b58, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &7696325542080762360
 GameObject:
   m_ObjectHideFlags: 0
@@ -51,7 +64,7 @@ GameObject:
   - component: {fileID: 150511034856731632}
   - component: {fileID: 8382263443209097981}
   - component: {fileID: 7696325542080762366}
-  - component: {fileID: 4379450877566455937}
+  - component: {fileID: 6060281489979802949}
   m_Layer: 0
   m_Name: GameManager
   m_TagString: gamemanager
@@ -120,6 +133,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 08f9bf63f5c22b146906fc0d2fde3773, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  Listener: {fileID: 4718703234066767865}
   MainMenuScene: {fileID: 102900000, guid: 103a30cbe9b50d84ab477fd1db8bffbe, type: 3}
   LevelTransitionScene: {fileID: 102900000, guid: 14da18f761c3c9745bbf942647bf8b5f, type: 3}
   LevelScenes:
@@ -132,9 +146,41 @@ MonoBehaviour:
   - {fileID: 102900000, guid: 7db983fabd6ebe341b6586835193ac8d, type: 3}
   - {fileID: 102900000, guid: 3981e56dc61ad224eb96f1241d85a6e6, type: 3}
   - {fileID: 102900000, guid: c60c34b3ef1b2c74fa2b8515c84d4c0f, type: 3}
-  scenePaths: {fileID: 0}
+  encryption_AES_Key: yrb6lrgockron39ug0jahunwg05xquww
+  encryption_AES_IV: z9b5gv1sj7ottuux
+  encryption_DES_Key: ec3tjg5v
+  encryption_XOR_Key: 840
+  buildScenePaths:
+  - Assets/Scenes/Game Scenes/MainMenu.unity
+  - Assets/Scenes/Game Scenes/Levels/Level 0.1.unity
+  - Assets/Scenes/Game Scenes/Levels/Level 0.2.unity
+  - Assets/Scenes/Game Scenes/Levels/Level 0.3.unity
+  - Assets/Scenes/Game Scenes/Levels/Level 0.4.unity
+  - Assets/Scenes/Game Scenes/Levels/Level 0.5.unity
+  - Assets/Scenes/Game Scenes/Levels/Level 5.unity
+  - Assets/Scenes/Game Scenes/Levels/Level 6.unity
+  - Assets/Scenes/Game Scenes/Levels/Level 7.unity
+  - Assets/Scenes/Game Scenes/Levels/Level 8.unity
+  - Assets/Scenes/Personal Working Scenes/Chris/Level 6.unity
+  - Assets/Scenes/Personal Working Scenes/Chris/Level 7.unity
+  - Assets/Scenes/Personal Working Scenes/Chris/Level 8.unity
+  - Assets/Scenes/Personal Working Scenes/Chris/Level 9.unity
+  - Assets/Scenes/Personal Working Scenes/Chris/Level 10.unity
+  - Assets/Scenes/Personal Working Scenes/Chris/Level 11.unity
+  - Assets/Scenes/Personal Working Scenes/Chris/Level 12.unity
+  - Assets/Scenes/Personal Working Scenes/Chris/Level 13.unity
+  - Assets/Scenes/Personal Working Scenes/Chris/Level 14.unity
+  - Assets/Scenes/Personal Working Scenes/Chris/Level 15.unity
+  - Assets/Scenes/Personal Working Scenes/Chris/Level 16.unity
+  - Assets/Scenes/Personal Working Scenes/Chris/Treasure Room.unity
+  - Assets/Scenes/Personal Working Scenes/Chris/Non-Level Scenes/Ending Cutscene.unity
+  - Assets/Scenes/Game Scenes/LevelTransition.unity
+  - Assets/Scenes/Personal Working Scenes/Chris/Non-Level Scenes/Intro Cutscene.unity
+  scenes_MainMenu: 0
+  scenes_LoadScreen: 23
+  scenes_Levels: 010000000200000003000000040000000500000006000000070000000800000009000000
   blackoutColour: {r: 0.05882353, g: 0.05882353, b: 0.05882353, a: 1}
---- !u!114 &4379450877566455937
+--- !u!114 &6060281489979802949
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -143,11 +189,40 @@ MonoBehaviour:
   m_GameObject: {fileID: 7696325542080762360}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 770af19c2a7cefb49a87abbaf0189e02, type: 3}
+  m_Script: {fileID: 11500000, guid: d25c0dfea0473a242af8a4d3a825b27f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  timeModified: 
-  paths: []
-  mainMenu: -1
-  levelTransition: -1
-  levels: 
+  encryption_KeysFileName: EncryptionKeys.json
+  encryption_AES_Key: yrb6lrgockron39ug0jahunwg05xquww
+  encryption_AES_IV: z9b5gv1sj7ottuux
+  encryption_DES_Key: ec3tjg5v
+  encryption_XOR_Key: 840
+  buildScenePaths:
+  - Assets/Scenes/Game Scenes/MainMenu.unity
+  - Assets/Scenes/Game Scenes/Levels/Level 0.1.unity
+  - Assets/Scenes/Game Scenes/Levels/Level 0.2.unity
+  - Assets/Scenes/Game Scenes/Levels/Level 0.3.unity
+  - Assets/Scenes/Game Scenes/Levels/Level 0.4.unity
+  - Assets/Scenes/Game Scenes/Levels/Level 0.5.unity
+  - Assets/Scenes/Game Scenes/Levels/Level 5.unity
+  - Assets/Scenes/Game Scenes/Levels/Level 6.unity
+  - Assets/Scenes/Game Scenes/Levels/Level 7.unity
+  - Assets/Scenes/Game Scenes/Levels/Level 8.unity
+  - Assets/Scenes/Personal Working Scenes/Chris/Level 6.unity
+  - Assets/Scenes/Personal Working Scenes/Chris/Level 7.unity
+  - Assets/Scenes/Personal Working Scenes/Chris/Level 8.unity
+  - Assets/Scenes/Personal Working Scenes/Chris/Level 9.unity
+  - Assets/Scenes/Personal Working Scenes/Chris/Level 10.unity
+  - Assets/Scenes/Personal Working Scenes/Chris/Level 11.unity
+  - Assets/Scenes/Personal Working Scenes/Chris/Level 12.unity
+  - Assets/Scenes/Personal Working Scenes/Chris/Level 13.unity
+  - Assets/Scenes/Personal Working Scenes/Chris/Level 14.unity
+  - Assets/Scenes/Personal Working Scenes/Chris/Level 15.unity
+  - Assets/Scenes/Personal Working Scenes/Chris/Level 16.unity
+  - Assets/Scenes/Personal Working Scenes/Chris/Treasure Room.unity
+  - Assets/Scenes/Personal Working Scenes/Chris/Non-Level Scenes/Ending Cutscene.unity
+  - Assets/Scenes/Game Scenes/LevelTransition.unity
+  - Assets/Scenes/Personal Working Scenes/Chris/Non-Level Scenes/Intro Cutscene.unity
+  scenes_MainMenu: 0
+  scenes_LoadScreen: 23
+  scenes_Levels: 010000000200000003000000040000000500000006000000070000000800000009000000

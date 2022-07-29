@@ -6,9 +6,6 @@ EditorBuildSettings:
   serializedVersion: 2
   m_Scenes:
   - enabled: 1
-    path: Assets/Scenes/Personal Working Scenes/Chris/Non-Level Scenes/Intro Cutscene.unity
-    guid: af15a7c2901e0794cb1c38a01dc5121a
-  - enabled: 1
     path: Assets/Scenes/Game Scenes/MainMenu.unity
     guid: 103a30cbe9b50d84ab477fd1db8bffbe
   - enabled: 1
@@ -80,4 +77,7 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/Game Scenes/LevelTransition.unity
     guid: 14da18f761c3c9745bbf942647bf8b5f
+  - enabled: 1
+    path: Assets/Scenes/Personal Working Scenes/Chris/Non-Level Scenes/Intro Cutscene.unity
+    guid: af15a7c2901e0794cb1c38a01dc5121a
   m_configObjects: {}
