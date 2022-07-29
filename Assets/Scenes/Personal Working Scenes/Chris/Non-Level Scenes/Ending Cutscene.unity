@@ -1075,9 +1075,9 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 0}
-        m_TargetAssemblyTypeName: PauseMenu, Assembly-CSharp
-        m_MethodName: LoadMenu
+      - m_Target: {fileID: 2015599594}
+        m_TargetAssemblyTypeName: ChrisMenu, Assembly-CSharp
+        m_MethodName: LoadNext
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -1139,6 +1139,7 @@ GameObject:
   - component: {fileID: 2015599588}
   - component: {fileID: 2015599592}
   - component: {fileID: 2015599593}
+  - component: {fileID: 2015599594}
   m_Layer: 5
   m_Name: Canvas
   m_TagString: Untagged
@@ -1277,7 +1278,7 @@ MonoBehaviour:
   mainMenu: {fileID: 0}
   pauseMenu: {fileID: 0}
   hud: {fileID: 0}
-  blackScreen: {fileID: 2108439825}
+  blackScreen: {fileID: 0}
   devConsole: {fileID: 0}
   sfx: {fileID: 0}
   debugPanelInfo: 0
@@ -1285,6 +1286,34 @@ MonoBehaviour:
   fps: 0
   blackoutColour: {r: 0, g: 0, b: 0, a: 1}
   blackoutOnLoad: 1
+--- !u!114 &2015599594
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2015599587}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a1f922a442d416341bf53a5d9b5b4b41, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  childGraphicElements: []
+  visible: 0
+  mouseOver: 0
+  fixedShowHideDelay: 0
+  showHideType: 0
+  transitionTime: 0.1
+  slideMovementStyle: 0
+  visiblePos: {x: 0, y: 0}
+  hiddenOffset: {x: 0, y: 0}
+  opacity: 1
+  onShow:
+    m_PersistentCalls:
+      m_Calls: []
+  onHide:
+    m_PersistentCalls:
+      m_Calls: []
 --- !u!1001 &2108439824
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1382,17 +1411,6 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 85b2d1870fb31d94b8a979b9eaedff73, type: 3}
---- !u!114 &2108439825 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 7478119667700999330, guid: 85b2d1870fb31d94b8a979b9eaedff73, type: 3}
-  m_PrefabInstance: {fileID: 2108439824}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!224 &2108439826 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 7478119667700999356, guid: 85b2d1870fb31d94b8a979b9eaedff73, type: 3}

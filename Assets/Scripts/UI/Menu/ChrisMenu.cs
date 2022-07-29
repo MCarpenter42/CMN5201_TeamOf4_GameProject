@@ -74,4 +74,8 @@ public class ChrisMenu : UIElement
     {
         SceneManager.LoadScene(17);
     }
+    public void LoadNext()
+    {
+        SceneManager.LoadScene(1);
+    }
 }
