@@ -41,7 +41,8 @@ public class DeveloperConsole : Core
     [SerializeField] UnityEvent onShow = new UnityEvent();
     [SerializeField] UnityEvent onHide = new UnityEvent();
 
-    private string[] logLines = new string[80];
+    [SerializeField] int maxLogLines = 40;
+    private string[] logLines;
     private bool logConsoleState = false;
 
     private List<ConsoleCommand> commands = new List<ConsoleCommand>();
@@ -60,6 +61,7 @@ public class DeveloperConsole : Core
 
     void Awake()
     {
+        logLines = new string[maxLogLines];
         GetComponents();
         DefineCommands();
     }
