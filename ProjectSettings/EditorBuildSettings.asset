@@ -36,38 +36,26 @@ EditorBuildSettings:
     path: Assets/Scenes/Game Scenes/Levels/Level 9.unity
     guid: c60c34b3ef1b2c74fa2b8515c84d4c0f
   - enabled: 1
-    path: Assets/Scenes/Personal Working Scenes/Chris/Level 6.unity
-    guid: 62f8216fb9f5ca04f84ea8d147180b66
+    path: Assets/Scenes/Game Scenes/Levels/Level 10.unity
+    guid: 61c128dfc57e0784db22adbee04794e3
   - enabled: 1
-    path: Assets/Scenes/Personal Working Scenes/Chris/Level 7.unity
-    guid: eb471fde0b3c98b45be105c3eca22ba3
+    path: Assets/Scenes/Game Scenes/Levels/Level 11.unity
+    guid: f9695c3329a4f4648aa215fe842fb1ba
   - enabled: 1
-    path: Assets/Scenes/Personal Working Scenes/Chris/Level 8.unity
-    guid: 51d86be651a02694fa463c7a866f24fa
+    path: Assets/Scenes/Game Scenes/Levels/Level 12.unity
+    guid: 6e3b2f849ce65354386afd4c12f0bcdd
   - enabled: 1
-    path: Assets/Scenes/Personal Working Scenes/Chris/Level 9.unity
-    guid: c80c83b6009f5c74a87b5632116fdd32
+    path: Assets/Scenes/Game Scenes/Levels/Level 13.unity
+    guid: cfd2bd4f5380ddb4a8e13b99c464a76c
   - enabled: 1
-    path: Assets/Scenes/Personal Working Scenes/Chris/Level 10.unity
-    guid: ceb620796fb92004f8bd211f0f91843d
+    path: Assets/Scenes/Game Scenes/Levels/Level 14.unity
+    guid: 691755533b06b3b43bb62885ae98da06
   - enabled: 1
-    path: Assets/Scenes/Personal Working Scenes/Chris/Level 11.unity
-    guid: 75e86427da7c55247b2633c9fcddb5a3
+    path: Assets/Scenes/Game Scenes/Levels/Level 15.unity
+    guid: 12e4850ae9bd7724a9921cad0a8af30e
   - enabled: 1
-    path: Assets/Scenes/Personal Working Scenes/Chris/Level 12.unity
-    guid: 4df581ed3b1187f4cbd2a5fa42015333
-  - enabled: 1
-    path: Assets/Scenes/Personal Working Scenes/Chris/Level 13.unity
-    guid: a60b58a28306601498aeba4ac3bdcf16
-  - enabled: 1
-    path: Assets/Scenes/Personal Working Scenes/Chris/Level 14.unity
-    guid: a28e03ddf07569e47ad780bb9b316d9e
-  - enabled: 1
-    path: Assets/Scenes/Personal Working Scenes/Chris/Level 15.unity
-    guid: 6d4dc08bdfa08e548a9162409ddef292
-  - enabled: 1
-    path: Assets/Scenes/Personal Working Scenes/Chris/Level 16.unity
-    guid: e7c5ab9cee0cd4e489add692cf08e408
+    path: Assets/Scenes/Game Scenes/Levels/Level 16.unity
+    guid: d933d40c313218d4a9803267abf7242c
   - enabled: 1
     path: Assets/Scenes/Personal Working Scenes/Chris/Treasure Room.unity
     guid: c143a438523bc0a48a5949e13146c632
