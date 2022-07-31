@@ -157,28 +157,24 @@ MonoBehaviour:
   - Assets/Scenes/Game Scenes/Levels/Level 0.3.unity
   - Assets/Scenes/Game Scenes/Levels/Level 0.4.unity
   - Assets/Scenes/Game Scenes/Levels/Level 0.5.unity
-  - Assets/Scenes/Game Scenes/Levels/Level 5.unity
   - Assets/Scenes/Game Scenes/Levels/Level 6.unity
   - Assets/Scenes/Game Scenes/Levels/Level 7.unity
   - Assets/Scenes/Game Scenes/Levels/Level 8.unity
-  - Assets/Scenes/Personal Working Scenes/Chris/Level 6.unity
-  - Assets/Scenes/Personal Working Scenes/Chris/Level 7.unity
-  - Assets/Scenes/Personal Working Scenes/Chris/Level 8.unity
-  - Assets/Scenes/Personal Working Scenes/Chris/Level 9.unity
-  - Assets/Scenes/Personal Working Scenes/Chris/Level 10.unity
-  - Assets/Scenes/Personal Working Scenes/Chris/Level 11.unity
-  - Assets/Scenes/Personal Working Scenes/Chris/Level 12.unity
-  - Assets/Scenes/Personal Working Scenes/Chris/Level 13.unity
-  - Assets/Scenes/Personal Working Scenes/Chris/Level 14.unity
-  - Assets/Scenes/Personal Working Scenes/Chris/Level 15.unity
-  - Assets/Scenes/Personal Working Scenes/Chris/Level 16.unity
+  - Assets/Scenes/Game Scenes/Levels/Level 9.unity
+  - Assets/Scenes/Game Scenes/Levels/Level 10.unity
+  - Assets/Scenes/Game Scenes/Levels/Level 11.unity
+  - Assets/Scenes/Game Scenes/Levels/Level 12.unity
+  - Assets/Scenes/Game Scenes/Levels/Level 13.unity
+  - Assets/Scenes/Game Scenes/Levels/Level 14.unity
+  - Assets/Scenes/Game Scenes/Levels/Level 15.unity
+  - Assets/Scenes/Game Scenes/Levels/Level 16.unity
   - Assets/Scenes/Personal Working Scenes/Chris/Treasure Room.unity
   - Assets/Scenes/Personal Working Scenes/Chris/Non-Level Scenes/Ending Cutscene.unity
   - Assets/Scenes/Game Scenes/LevelTransition.unity
   - Assets/Scenes/Personal Working Scenes/Chris/Non-Level Scenes/Intro Cutscene.unity
   scenes_MainMenu: 0
-  scenes_LoadScreen: 23
-  scenes_Levels: 010000000200000003000000040000000500000006000000070000000800000009000000
+  scenes_LoadScreen: 19
+  scenes_Levels: 0100000002000000030000000400000005000000060000000700000008000000090000000a0000000b0000000c0000000d0000000e0000000f00000010000000
   blackoutColour: {r: 0.05882353, g: 0.05882353, b: 0.05882353, a: 1}
 --- !u!114 &6060281489979802949
 MonoBehaviour:
@@ -204,25 +200,21 @@ MonoBehaviour:
   - Assets/Scenes/Game Scenes/Levels/Level 0.3.unity
   - Assets/Scenes/Game Scenes/Levels/Level 0.4.unity
   - Assets/Scenes/Game Scenes/Levels/Level 0.5.unity
-  - Assets/Scenes/Game Scenes/Levels/Level 5.unity
   - Assets/Scenes/Game Scenes/Levels/Level 6.unity
   - Assets/Scenes/Game Scenes/Levels/Level 7.unity
   - Assets/Scenes/Game Scenes/Levels/Level 8.unity
-  - Assets/Scenes/Personal Working Scenes/Chris/Level 6.unity
-  - Assets/Scenes/Personal Working Scenes/Chris/Level 7.unity
-  - Assets/Scenes/Personal Working Scenes/Chris/Level 8.unity
-  - Assets/Scenes/Personal Working Scenes/Chris/Level 9.unity
-  - Assets/Scenes/Personal Working Scenes/Chris/Level 10.unity
-  - Assets/Scenes/Personal Working Scenes/Chris/Level 11.unity
-  - Assets/Scenes/Personal Working Scenes/Chris/Level 12.unity
-  - Assets/Scenes/Personal Working Scenes/Chris/Level 13.unity
-  - Assets/Scenes/Personal Working Scenes/Chris/Level 14.unity
-  - Assets/Scenes/Personal Working Scenes/Chris/Level 15.unity
-  - Assets/Scenes/Personal Working Scenes/Chris/Level 16.unity
+  - Assets/Scenes/Game Scenes/Levels/Level 9.unity
+  - Assets/Scenes/Game Scenes/Levels/Level 10.unity
+  - Assets/Scenes/Game Scenes/Levels/Level 11.unity
+  - Assets/Scenes/Game Scenes/Levels/Level 12.unity
+  - Assets/Scenes/Game Scenes/Levels/Level 13.unity
+  - Assets/Scenes/Game Scenes/Levels/Level 14.unity
+  - Assets/Scenes/Game Scenes/Levels/Level 15.unity
+  - Assets/Scenes/Game Scenes/Levels/Level 16.unity
   - Assets/Scenes/Personal Working Scenes/Chris/Treasure Room.unity
   - Assets/Scenes/Personal Working Scenes/Chris/Non-Level Scenes/Ending Cutscene.unity
   - Assets/Scenes/Game Scenes/LevelTransition.unity
   - Assets/Scenes/Personal Working Scenes/Chris/Non-Level Scenes/Intro Cutscene.unity
   scenes_MainMenu: 0
-  scenes_LoadScreen: 23
+  scenes_LoadScreen: 19
   scenes_Levels: 010000000200000003000000040000000500000006000000070000000800000009000000
