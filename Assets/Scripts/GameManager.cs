@@ -49,9 +49,11 @@ public class GameManager : Core
     public int encryption_XOR_Key;
 
     public string[] buildScenePaths;
+    public int scenes_Intro;
     public int scenes_MainMenu;
     public int scenes_LoadScreen;
     public int[] scenes_Levels;
+    public int scenes_Ending;
 
     public static DataEncryptionKeys EncryptionKeys = new DataEncryptionKeys();
 
