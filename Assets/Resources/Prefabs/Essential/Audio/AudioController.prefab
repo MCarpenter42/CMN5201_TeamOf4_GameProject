@@ -557,9 +557,8 @@ MonoBehaviour:
   playerSFX: {fileID: 0}
   beamSFX: []
   doorSFX: {fileID: 0}
-  uiSFX: {fileID: 0}
   musicMenu: {fileID: 8300000, guid: f2d8d7477430e54449c8b5861a240db3, type: 3}
-  musicSceneLoad: {fileID: 8300000, guid: 350c0666d810963489b2b3a5eff59e4d, type: 3}
+  musicSceneLoad: {fileID: 8300000, guid: 3194da6ff2b3924488de7b9f5f30bf12, type: 3}
   musicLevelBright: {fileID: 8300000, guid: 188506d41caad634fbd615a738b67daf, type: 3}
   musicLevelDim: {fileID: 8300000, guid: 0de17470a0b8d4444897c856ecc7779d, type: 3}
   musicLevelDark: {fileID: 8300000, guid: 71a3a0068fa54704d9bb4084fb1e06b4, type: 3}
@@ -646,11 +645,41 @@ MonoBehaviour:
   beamHitNormal: {fileID: 8300000, guid: 46b816742af2de24d92eed335381e68c, type: 3}
   beamHitReflect: {fileID: 8300000, guid: aabd292b0c3014f40954b8da4c98507c, type: 3}
   buttonStandard:
-  - {fileID: 8300000, guid: 71b25e40dc3520349a89d8087e4b923c, type: 3}
+  - {fileID: 8300000, guid: bffded6219f480c4cb0e0825a1e31ee0, type: 3}
+  - {fileID: 8300000, guid: 1e49a8734eec4994bb107034fced5b97, type: 3}
+  - {fileID: 8300000, guid: 04fcf843398b9a0499f43f04c220de27, type: 3}
+  - {fileID: 8300000, guid: a1c4f38528a70dd4a8e0100e3b17978a, type: 3}
+  - {fileID: 8300000, guid: 0c8e07c049422aa4f8ed3f6ac9d75b59, type: 3}
+  - {fileID: 8300000, guid: fc96e91fc06ab69499caec8b0c88bc1c, type: 3}
+  - {fileID: 8300000, guid: 7135dc57170d4ce4881fe1835b91a7af, type: 3}
+  - {fileID: 8300000, guid: acb291384b19fe446b4a154d7158bdc4, type: 3}
+  - {fileID: 8300000, guid: c37eccfb31373bb4da48dbd4369c14dc, type: 3}
+  - {fileID: 8300000, guid: e3b17bba7c6d2ab42b063ef25003aa08, type: 3}
+  - {fileID: 8300000, guid: a1170af1b6613a449982a28f00ac535c, type: 3}
+  - {fileID: 8300000, guid: e01003c076286f04399c7646ee81666e, type: 3}
+  - {fileID: 8300000, guid: 0aa2d5029061ac54e9b6061bc374ce54, type: 3}
+  - {fileID: 8300000, guid: ad4a9728b8b7d744ab283ef8af6d2c3c, type: 3}
   buttonHeavy:
-  - {fileID: 8300000, guid: b922db980e5030f4781fb005d7d67133, type: 3}
+  - {fileID: 8300000, guid: 169f0e15fc09c9040a1bd16e76e9b420, type: 3}
+  - {fileID: 8300000, guid: a4128adb570d5ac418ff5ddb5957f69f, type: 3}
+  - {fileID: 8300000, guid: ff26ff9ce53f38c40bf3ccec028d9dbd, type: 3}
+  - {fileID: 8300000, guid: 7e3afafacdf5567448388342748f4bb9, type: 3}
+  - {fileID: 8300000, guid: 6b3151206be92ce4a94111145d09d692, type: 3}
+  - {fileID: 8300000, guid: ec1d634ffa871f24f8a0bb9906e20a80, type: 3}
+  - {fileID: 8300000, guid: 70beb8c768acf7e45b388d70f3496fb4, type: 3}
+  - {fileID: 8300000, guid: 3410770329de650478d4279b6a95e353, type: 3}
+  - {fileID: 8300000, guid: 7faab771716142449b7ab0641fd10511, type: 3}
+  - {fileID: 8300000, guid: c26299e7f8c6ab845b686eed652e31c1, type: 3}
   slider:
+  - {fileID: 8300000, guid: 647d7cf32e295d343aff712e6006c4c8, type: 3}
+  - {fileID: 8300000, guid: 19d68cc802e7ae841a562170eb9af832, type: 3}
+  - {fileID: 8300000, guid: 879e5922a9e776e4fbb1a0246131bf67, type: 3}
+  - {fileID: 8300000, guid: b49278532f004f7428aec17c8b4c8088, type: 3}
+  - {fileID: 8300000, guid: dd2c65fb6ef1ae846bf3d4f98ff60f54, type: 3}
+  - {fileID: 8300000, guid: dfd41d53f9c1e77459667c064784ebf9, type: 3}
+  - {fileID: 8300000, guid: 9140db67a3f2c9b4a94ba69e15662701, type: 3}
   - {fileID: 8300000, guid: 974b0f28bde7fbb42a0fb1934682c0b9, type: 3}
+  - {fileID: 8300000, guid: a508550f5f59a2d438c0e0f19e202a39, type: 3}
   buttonVolumeScale: 0.4
   stingersBright:
   - {fileID: 8300000, guid: 5360319cd81ba8f42b5a8d5c5395f498, type: 3}
