@@ -33,6 +33,7 @@ public class AudioController : Core
     #region < Music >
 
     [Header("Music")]
+    [SerializeField] AudioClip musicIntro;
     [SerializeField] AudioClip musicMenu;
     [SerializeField] AudioClip musicSceneLoad;
     [SerializeField] AudioClip musicLevelBright;
@@ -40,9 +41,10 @@ public class AudioController : Core
     [SerializeField] AudioClip musicLevelDark;
     [SerializeField] bool useAltMusic = false;
     [SerializeField] AudioClip musicOther;
-    private AudioSource musicPlayer;
+    [HideInInspector] public AudioSource musicPlayer;
     private float defaultMusicVolume = 0.2f;
     private bool musicPlaying = false;
+    public enum MusicTrack { None, Intro, Menu, Loading, Bright, Dim, Dark };
 
     #endregion
 
@@ -120,17 +122,16 @@ public class AudioController : Core
             zone.transform.position = levelCentre;
         }
         GetExistingSFX();
+        SetupMusic();
+
     }
 
     void Start()
     {
-        SetupMusic();
-
-        musicPlayer.volume = 0.0f;
-        musicPlayer.Play();
-
         if (musicPlayer != null && musicPlayer.clip != null && GameManager.LevelController.useAudioMusic)
         {
+            musicPlayer.volume = 0.0f;
+            musicPlayer.Play();
             StartCoroutine(MusicVolumeCheck());
         }
 
@@ -211,6 +212,55 @@ public class AudioController : Core
         {
             musicPlayer.clip = musicOther;
         }
+    }
+
+    public void ChangeMusic(MusicTrack track)
+    {
+        musicPlayer.Stop();
+        switch (track)
+        {
+            default:
+            case MusicTrack.None:
+                musicPlayer.clip = null;
+                break;
+
+            case MusicTrack.Intro:
+                musicPlayer.clip = musicIntro;
+                break;
+
+            case MusicTrack.Menu:
+                musicPlayer.clip = musicMenu;
+                break;
+
+            case MusicTrack.Loading:
+                musicPlayer.clip = musicSceneLoad;
+                break;
+
+            case MusicTrack.Bright:
+                musicPlayer.clip = musicLevelBright;
+                break;
+
+            case MusicTrack.Dim:
+                musicPlayer.clip = musicLevelDim;
+                break;
+
+            case MusicTrack.Dark:
+                musicPlayer.clip = musicLevelDark;
+                break;
+        }
+        musicPlayer.Play();
+        musicPlayer.loop = true;
+    }
+
+    public void DelayedPlayMusic(float delay)
+    {
+        StartCoroutine(IDelayedPlayMusic(delay));
+    }
+    
+    private IEnumerator IDelayedPlayMusic(float delay)
+    {
+        yield return new WaitForSeconds(delay);
+        musicPlayer.Play();
     }
 
     private void SetupAmbient()

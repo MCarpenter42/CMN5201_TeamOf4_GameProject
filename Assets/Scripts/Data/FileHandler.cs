@@ -15,7 +15,7 @@ public class FileHandler
         }
         path += fileSubPath;
 
-        Debug.Log("Saving data to \"" + path + "\"");
+        //Debug.Log("Saving data to \"" + path + "\"");
         FileStream stream = new FileStream(path, FileMode.Create);
 
         formatter.Serialize(stream, data);
@@ -30,7 +30,7 @@ public class FileHandler
             path += "/";
         }
         path += fileSubPath;
-        Debug.Log("Loading data from \"" + path + "\"");
+        //Debug.Log("Loading data from \"" + path + "\"");
         if (File.Exists(path))
         {
             BinaryFormatter formatter = new BinaryFormatter();

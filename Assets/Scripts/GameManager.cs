@@ -62,6 +62,7 @@ public class GameManager : Core
     public PersistentData PersistentData { get { return GetOrAddComponent<PersistentData>(gameObject); } }
 
     public static bool onGameLoad = true;
+    public static bool introPlayed = false;
 
     private Controls defaultControls = new Controls();
 
@@ -299,9 +300,7 @@ public class GameManager : Core
             if (PlayerPrefs.HasKey(name))
             {
                 int keyIndex = PlayerPrefs.GetInt(name);
-                Debug.Log("1: " + name + ", " + keyIndex + ", " + (KeyCode)keyIndex);
                 Controls.SetControlByName(name, (KeyCode)keyIndex);
-                Debug.Log("2: " + name + ", " + keyIndex + ", " + (KeyCode)keyIndex);
             }
             else
             {
@@ -313,11 +312,9 @@ public class GameManager : Core
 
     public void SaveControls()
     {
-        Debug.Log("Saving controls...");
         foreach (string name in Controls.controlNames)
         {
             int keyIndex = (int)Controls.GetControlByName(name).Key;
-            Debug.Log("3: " + name + ", " + keyIndex + ", " + (KeyCode)keyIndex);
             PlayerPrefs.SetInt(name, keyIndex);
         }
     }

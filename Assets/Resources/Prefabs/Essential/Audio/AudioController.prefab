@@ -557,6 +557,7 @@ MonoBehaviour:
   playerSFX: {fileID: 0}
   beamSFX: []
   doorSFX: {fileID: 0}
+  musicIntro: {fileID: 8300000, guid: 5aea570b5bd42704f85457f05f883a88, type: 3}
   musicMenu: {fileID: 8300000, guid: f2d8d7477430e54449c8b5861a240db3, type: 3}
   musicSceneLoad: {fileID: 8300000, guid: 3194da6ff2b3924488de7b9f5f30bf12, type: 3}
   musicLevelBright: {fileID: 8300000, guid: 188506d41caad634fbd615a738b67daf, type: 3}
